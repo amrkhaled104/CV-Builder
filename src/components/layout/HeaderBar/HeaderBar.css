@@ -1,0 +1,100 @@
+/* ========================================
+   HEADER
+======================================== */
+.header-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+/* ========================================
+ BUTTON GROUP
+======================================== */
+
+.headerButtons {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.headerButtons button {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 10px 18px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  transition: var(--transition);
+}
+
+/* ========================================
+   PDF BUTTON
+======================================== */
+
+.pdfDownload,
+.sampleCV {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.pdfDownload:hover,
+.sampleCV:hover,
+.theme-toggle-handle:hover {
+  background: var(--primary-hover);
+}
+/* ========================================
+theme toggle button
+======================================== */
+
+.theme-toggle-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  width: 45px;
+  height: 65px;
+  touch-action: none;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .logo {
+    font-size: 1.25rem;
+  }
+  .headerButtons {
+    gap: 8px;
+  }
+  .headerButtons button {
+    padding: 8px 14px;
+    font-size: 0.85rem;
+  }
+}
