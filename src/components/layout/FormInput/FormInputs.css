@@ -1,0 +1,36 @@
+/* ========================================
+   SIDEBAR
+======================================== */
+
+.leftSidebarForm {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+.leftSidebarForm::-webkit-scrollbar {
+  width: 8px;
+}
+
+.leftSidebarForm::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.leftSidebarForm::-webkit-scrollbar-thumb {
+  background: var(--primary-color);
+
+  border-radius: 999px;
+}
+
+.leftSidebarForm::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-color);
+}
