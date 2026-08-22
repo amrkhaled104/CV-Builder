@@ -1,0 +1,24 @@
+
+.form-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+    padding: 20px;
+}
+
+.form-card-title {
+    color: var(--text-primary);
+    margin-bottom: 18px;
+    font-size: 1.35rem;
+    font-weight: 700;
+}
+
+.form-card-content {
+    flex-direction: column;
+    gap: 18px;
+    display: flex;
+}
+.form-card + .form-card {
+    margin-top: 20px;
+}
