@@ -9,6 +9,14 @@ function App() {
     lastName: "",
     email:"",
     bio:"",
+    links: [
+      {
+        id: crypto.randomUUID(),
+        title: "",
+        customTitle: "",
+        url: "",
+      },
+    ],
   });
   return (
     <>
