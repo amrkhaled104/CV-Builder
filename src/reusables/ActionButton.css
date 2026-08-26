@@ -1,0 +1,54 @@
+.action-buttons {
+  display: flex;
+
+  gap: 10px;
+}
+
+.action-buttons.left {
+  justify-content: flex-start;
+}
+
+.action-buttons.right {
+  justify-content: flex-end;
+}
+
+.action-buttons.center {
+  justify-content: center;
+}
+
+.btn {
+  border: none;
+  border-radius: var(--radius-sm);
+
+  padding: 10px 18px;
+
+  font-size: 0.9rem;
+  font-weight: 600;
+
+  transition: var(--transition);
+
+  cursor: pointer;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  background: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ffb4b4;
+  border: 1px solid rgba(239, 68, 68, 0.25);
+}
+
+.btn-secondary:hover {
+  background: rgba(239, 68, 68, 0.22);
+}
