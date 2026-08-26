@@ -2,6 +2,7 @@ import FormCard from "../reusables/FormCard.jsx";
 import SectionTitle from "../reusables/SectionTitle.jsx";
 import InputRow from "../reusables/InptRow.jsx";
 import FormBox from "../reusables/FormBox.jsx";
+import { Input } from "@mui/icons-material";
 
 export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
   function handleChange(field, value) {
@@ -31,7 +32,15 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
       </InputRow>
 
       <SectionTitle title="Contact Information" />
-
+      <InputRow>
+        <FormBox labeel="Email">
+          <input
+            type="email"
+            value={generalInfo.email}
+            onChange={(e) => handleChange("email", e.target.value)}
+          />
+        </FormBox>
+      </InputRow>
       <SectionTitle
         title="Professional Bio"
         subtitle="Write a short introduction about yourself."
