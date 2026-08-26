@@ -23,9 +23,12 @@
   --accent-hover: #60a5fa;
   --primary-color: #3b82f6;
   --primary-hover: #60a5fa;
+  --danger-color: #ef4444;
+  --danger-hover: #dc2626;
 
   --border-color: #334155;
   --shadow: rgba(2, 6, 23, 0.45);
+  --placeholder-color: #8e88a7;
 }
 
 .light-theme {
