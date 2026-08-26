@@ -16,7 +16,8 @@
   color: var(--danger-color);
 }
 
-.FormBox input {
+.FormBox input
+,.form-group textarea {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid var(--border-color);
@@ -30,11 +31,13 @@
   -o-transition: var(--transition);
 }
 
-.form-group input::placeholder {
+.form-group input::placeholder
+,.form-group textarea::placeholder {
   color: var(--placeholder-color);
 }
 
-.form-group input:focus {
+.form-group input:focus
+,.form-group textarea:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);

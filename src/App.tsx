@@ -8,6 +8,7 @@ function App() {
     firstName: "",
     lastName: "",
     email:"",
+    bio:"",
   });
   return (
     <>

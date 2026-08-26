@@ -52,7 +52,12 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         title="Professional Bio"
         subtitle="Write a short introduction about yourself."
       />
-
+      <textarea
+        rows={5}
+        placeholder="Passionate software developer with experience in..."
+        value={generalInfo.bio}
+        onChange={(e) => handleChange("bio", e.target.value)}
+      />
       <SectionTitle
         title="Useful Links"
         subtitle="Portfolio, GitHub, LinkedIn, etc."
