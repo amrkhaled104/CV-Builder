@@ -40,6 +40,13 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
             onChange={(e) => handleChange("email", e.target.value)}
           />
         </FormBox>
+        <FormGroup label="Phone Number">
+          <input
+            type="tel"
+            value={generalInfo.phone}
+            onChange={(e) => handleChange("phone", e.target.value)}
+          />
+        </FormGroup>
       </InputRow>
       <SectionTitle
         title="Professional Bio"
