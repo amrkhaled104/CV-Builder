@@ -1,0 +1,4 @@
+.input-row {
+    display: grid;
+    gap: 16px;
+}

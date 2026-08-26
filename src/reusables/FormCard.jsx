@@ -1,4 +1,4 @@
-import './FormCard.css';
+import "./FormCard.css";
 export default function FormCard({ title, children, className = "" }) {
   return (
     <div className={`formCard ${className}`}>
