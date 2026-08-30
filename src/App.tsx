@@ -1,14 +1,16 @@
 import "./App.css";
 import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
-import { useState } from "react";
+import CvPreview from "./components/layout/CvReview/CvPreview.jsx";
+import { useRef, useState } from "react";
 
 function App() {
+   const cvRef = useRef(null);
   const [generalInfo, setGeneralInfo] = useState({
     firstName: "",
     lastName: "",
-    email:"",
-    bio:"",
+    email: "",
+    bio: "",
     links: [
       {
         id: crypto.randomUUID(),
@@ -23,6 +25,7 @@ function App() {
       <HeaderBar />
       <div className="mainContent">
         <FormInputs generalInfo={generalInfo} setGeneralInfo={setGeneralInfo} />
+        <CvPreview generalInfo={generalInfo} ref={cvRef} />
       </div>
     </>
   );

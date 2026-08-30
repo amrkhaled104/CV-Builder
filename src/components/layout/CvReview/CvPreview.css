@@ -1,0 +1,77 @@
+/* ========================================
+   CV PREVIEW
+======================================== */
+.cvPreview {
+  width: 210mm;
+  min-width: 210mm;
+  margin: 30px auto;
+  padding: 28px 36px;
+  background: #fff;
+  color: #111;
+  font-family: "Times New Roman", serif;
+  font-size: 14px;
+  line-height: 1.4;
+  box-shadow: 0 5px 18px rgba(138, 92, 246, 0.5);
+}
+/* ========================================
+   HEADER
+======================================== */
+
+.cv-header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.cv-name {
+    margin: 0;
+    font-size: 44px;
+    font-weight: bold;
+    line-height: 1.1;
+}
+
+.cv-contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 15px;
+}
+.cv-contact span {
+
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.cv-contact span:not(:last-child)::after {
+
+    content: "|";
+    margin-left: 8px;
+    margin-right: 8px;
+    color: #777;
+}
+/* ========================================
+   PROFILE
+======================================== */
+
+.cv-summary {
+    margin-top: 10px;
+    text-align: justify;
+    line-height: 1.55;
+    color: #333;
+}
+/* ========================================
+   SECTION TITLE
+======================================== */
+
+.cv-section-title {
+    margin: 10px 0 10px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #111;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 22px;
+    font-weight: normal;
+    text-align: left;
+}
