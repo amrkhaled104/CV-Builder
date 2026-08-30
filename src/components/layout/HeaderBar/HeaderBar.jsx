@@ -1,13 +1,16 @@
 import "./HeaderBar.css";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
+import { useReactToPrint } from "react-to-print";
 import { useState, useEffect } from "react";
-export default function HeaderBar() {
-  
+export default function HeaderBar({cvRef}) {
   const [theme, setTheme] = useState(false);
   const toggleTheme = () => {
     setTheme((prev) => !prev);
   };
+  const handlePrint = useReactToPrint({
+    contentRef: cvRef,
+  });
   useEffect(() => {
     const root = document.documentElement;
     if (theme) {
@@ -27,7 +30,9 @@ export default function HeaderBar() {
       <div className="logo">CV Builder</div>
       <div className="headerButtons">
         <button className="sampleCV">Sample Cv</button>
-        <button className="pdfDownload">PDF</button>
+        <button className="pdfDownload" onClick={handlePrint}>
+          PDF
+        </button>
       </div>
     </div>
   );
