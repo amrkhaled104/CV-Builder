@@ -28,14 +28,6 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
       links: prev.links.filter((link) => link.id !== id),
     }));
   }
-  function updateLink(id, field, value) {
-    setGeneralInfo((prev) => ({
-      ...prev,
-      links: prev.links.map((link) =>
-        link.id === id ? { ...link, [field]: value } : link,
-      ),
-    }));
-  }
 
   function addLink() {
     setGeneralInfo((prev) => ({
