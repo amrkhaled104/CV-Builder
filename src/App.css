@@ -169,11 +169,31 @@ html {
     overflow: visible;
   }
 
-  /* .previewCV {
-        display: inline-flex;
-    }
-
+  .previewCV {
+    display: inline-flex;
+  }
+  /*
     .mainContent > .hideMobile {
         display: none;
     } */
+}
+
+@media (max-width: 768px) {
+  .input-row,
+  .date-row {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .action-buttons {
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    width: 100%;
+  }
 }

@@ -4,11 +4,30 @@ import DynamicList from "../reusables/DynamicList.jsx";
 import FormBox from "../reusables/FormBox.jsx";
 import InputRow from "../reusables/InptRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
+import DurationInput from "../reusables/DurationInput.jsx";
+import { Add } from "@mui/icons-material";
 
 export default function EducationalExperience({
   educationList,
   setEducationList,
 }) {
+  function addEducation() {
+    setEducationList([
+      ...educationList,
+      {
+        id: crypto.randomUUID(),
+        schoolName: "",
+        study: "",
+        place: "",
+        grade: "",
+        durationType: "date",
+        startDate: "",
+        endDate: "",
+        customDuration: "",
+        isCurrent: false,
+      },
+    ]);
+  }
   function updateEntry(id, field, value) {
     setEducationList(
       educationList.map((entry) =>
@@ -29,14 +48,26 @@ export default function EducationalExperience({
       <DynamicList
         items={educationList}
         renderItem={(education) => (
-          <EducationInfo key={education.id} entry={education} />
+          <EducationInfo
+            key={education.id}
+            entry={education}
+            updateEntry={updateEntry}
+            removeEntry={removeEntry}
+          />
         )}
       />
+      <div className="action-buttons left">
+        <ActionButtons
+          text="+ Add Education"
+          variant="primary"
+          onClick={addEducation}
+        />
+      </div>
     </FormCard>
   );
 }
 
-function EducationInfo({ entry }) {
+function EducationInfo({ entry, updateEntry, removeEntry }) {
   return (
     <>
       <InputRow>
@@ -74,7 +105,7 @@ function EducationInfo({ entry }) {
           />
         </FormBox>
       </InputRow>
-      
+      <DurationInput entry={entry} updateEntry={updateEntry} />
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Education"

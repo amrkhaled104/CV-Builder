@@ -1,0 +1,32 @@
+.duration-toggle {
+  display: flex;
+  margin-top: 16px;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  -webkit-border-radius: 8px;
+  -moz-border-radius: 8px;
+  -ms-border-radius: 8px;
+  -o-border-radius: 8px;
+}
+
+.duration-toggle button {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  color: var(--text-primary);
+  border: none;
+  transition: 0.2s;
+}
+
+.duration-toggle button.active {
+  background: var(--accent-primary);
+  color: var(--text-secondary);
+}
+
+.current-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+}
