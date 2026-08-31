@@ -20,13 +20,32 @@ function App() {
       },
     ],
   });
+  const [educationList, setEducationList] = useState([
+    {
+      id: crypto.randomUUID(),
+      schoolName: "",
+      study: "",
+      place: "",
+      grade: "",
+      durationType: "date",
+      startDate: "",
+      endDate: "",
+      customDuration: "",
+      isCurrent: false,
+    },
+  ]);
   return (
     <>
       <HeaderBar
         cvRef={cvRef} //Now HeaderBar can print that element.
       />
       <div className="mainContent">
-        <FormInputs generalInfo={generalInfo} setGeneralInfo={setGeneralInfo} />
+        <FormInputs
+          generalInfo={generalInfo}
+          setGeneralInfo={setGeneralInfo}
+          educationList={educationList}
+          setEducationList={setEducationList}
+        />
         <CvPreview generalInfo={generalInfo} ref={cvRef} />
       </div>
     </>
