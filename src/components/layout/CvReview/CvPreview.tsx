@@ -1,5 +1,5 @@
 import "./CvPreview.css";
-import { forwardRef } from "react";
+// import { forwardRef } from "react";
 
 type LinkInfo = {
   id: string;
@@ -19,10 +19,10 @@ type GeneralInfo = {
 
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
+  ref?: React.Ref<HTMLDivElement>;
 };
 
-const CvPreview = forwardRef<HTMLElement, CvPreviewProps>(
-  ({ generalInfo }, ref) => {
+function CvPreview({ generalInfo, ref }: CvPreviewProps){
     return (
       <section className="cvPreview" ref={ref}>
         <header className="cv-header">
@@ -62,7 +62,6 @@ const CvPreview = forwardRef<HTMLElement, CvPreviewProps>(
         </header>
       </section>
     );
-  },
-);
+}
 
 export default CvPreview;
