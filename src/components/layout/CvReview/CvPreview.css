@@ -18,60 +18,58 @@
 ======================================== */
 
 .cv-header {
-    text-align: center;
-    margin-bottom: 15px;
+  text-align: center;
+  margin-bottom: 15px;
 }
 
 .cv-name {
-    margin: 0;
-    font-size: 44px;
-    font-weight: bold;
-    line-height: 1.1;
+  margin: 0;
+  font-size: 44px;
+  font-weight: bold;
+  line-height: 1.1;
 }
 
 .cv-contact {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin-top: 10px;
-    font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  font-size: 15px;
 }
 .cv-contact span {
-
-    white-space: nowrap;
-    flex-shrink: 0;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .cv-contact span:not(:last-child)::after {
-
-    content: "|";
-    margin-left: 8px;
-    margin-right: 8px;
-    color: #777;
+  content: "|";
+  margin-left: 8px;
+  margin-right: 8px;
+  color: #777;
 }
 /* ========================================
    PROFILE
 ======================================== */
 
 .cv-summary {
-    margin-top: 10px;
-    text-align: justify;
-    line-height: 1.55;
-    color: #333;
+  margin-top: 10px;
+  text-align: justify;
+  line-height: 1.55;
+  color: #333;
 }
 /* ========================================
    SECTION TITLE
 ======================================== */
 
 .cv-section-title {
-    margin: 10px 0 10px;
-    padding-bottom: 3px;
-    border-bottom: 1px solid #111;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-size: 22px;
-    font-weight: normal;
-    text-align: left;
+  margin: 10px 0 10px;
+  padding-bottom: 3px;
+  border-bottom: 1px solid #111;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 22px;
+  font-weight: normal;
+  text-align: left;
 }
