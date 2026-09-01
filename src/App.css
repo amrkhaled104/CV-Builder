@@ -130,36 +130,9 @@ html {
   scroll-behavior: smooth;
 }
 
-@media (max-width: 770px) {
-  .section {
-    min-height: auto;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .skills-section h2 {
-    font-size: 2rem;
-  }
-}
-
-/* ========================================
-   RESPONSIVE
-======================================== */
-
-@media (max-width: 1024px) {
-  .mainContent {
-    grid-template-columns: 360px 1fr;
-
-    gap: 20px;
-    padding: 20px;
-  }
-}
-
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .mainContent {
     grid-template-columns: 1fr;
-
     padding: 16px;
   }
 
@@ -167,33 +140,5 @@ html {
     position: static;
     max-height: none;
     overflow: visible;
-  }
-
-  .previewCV {
-    display: inline-flex;
-  }
-  /*
-    .mainContent > .hideMobile {
-        display: none;
-    } */
-}
-
-@media (max-width: 768px) {
-  .input-row,
-  .date-row {
-    grid-template-columns: 1fr;
-  }
-
-  .skill-item {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .action-buttons {
-    flex-wrap: wrap;
-  }
-
-  .btn {
-    width: 100%;
   }
 }

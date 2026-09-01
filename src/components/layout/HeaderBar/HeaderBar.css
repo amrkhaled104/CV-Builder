@@ -82,17 +82,20 @@ theme toggle button
 ======================================== */
 
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 10px;
-    padding: 14px 16px;
+  .header-bar {
+    flex-direction: row;
+    justify-content: space-between;
   }
+
   .logo {
     font-size: 1.25rem;
+    justify-content: right;
   }
+
   .headerButtons {
-    gap: 8px;
+    justify-content: right;
   }
+
   .headerButtons button {
     padding: 8px 14px;
     font-size: 0.85rem;

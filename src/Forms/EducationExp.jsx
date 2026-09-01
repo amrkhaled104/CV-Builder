@@ -5,7 +5,6 @@ import FormBox from "../reusables/FormBox.jsx";
 import InputRow from "../reusables/InptRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import DurationInput from "../reusables/DurationInput.jsx";
-import { Add } from "@mui/icons-material";
 
 export default function EducationalExperience({
   educationList,

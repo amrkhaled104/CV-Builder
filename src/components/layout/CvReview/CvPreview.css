@@ -2,8 +2,8 @@
    CV PREVIEW
 ======================================== */
 .cvPreview {
-  width: 210mm;
-  min-width: 210mm;
+  width: min(100%, 210mm);
+  min-width: 0;
   margin: 30px auto;
   padding: 28px 36px;
   background: #fff;
@@ -72,4 +72,24 @@
   font-size: 22px;
   font-weight: normal;
   text-align: left;
+}
+
+@media (max-width: 768px) {
+  .cvPreview {
+    width: 100%;
+    padding: 20px 18px;
+    margin: 12px auto;
+  }
+
+  .cv-name {
+    font-size: 30px;
+  }
+
+  .cv-contact {
+    font-size: 13px;
+  }
+
+  .cv-section-title {
+    font-size: 18px;
+  }
 }
