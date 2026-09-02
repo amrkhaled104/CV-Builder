@@ -8,7 +8,6 @@
   padding: 28px 36px;
   background: #fff;
   color: #111;
-  font-family: "Times New Roman", serif;
   font-size: 14px;
   line-height: 1.4;
   box-shadow: 0 5px 18px rgba(138, 92, 246, 0.5);
@@ -91,5 +90,65 @@
 
   .cv-section-title {
     font-size: 18px;
+  }
+}
+
+.entry {
+  margin-bottom: 10px;
+}
+
+.entry:last-child {
+  margin-bottom: 0;
+}
+
+.entry-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 15px;
+}
+
+.entry-left {
+  flex: 1;
+}
+
+.entry-left strong {
+  font-weight: 600;
+}
+
+.entry-right {
+  flex-shrink: 0;
+  text-align: right;
+  font-weight: 400;
+}
+
+.entry-details {
+  margin: 2px 0 6px;
+  color: #444;
+}
+
+.entry-details em {
+  font-style: italic;
+}
+
+.education-section-title {
+  margin: 10px 0 6px;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #000;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: 400;
+  text-align: left;
+}
+
+@media (max-width: 768px) {
+  .entry-header {
+    flex-wrap: wrap;
+    gap: 2px 12px;
+  }
+
+  .entry-right {
+    margin-left: auto;
   }
 }

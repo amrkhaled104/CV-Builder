@@ -46,7 +46,7 @@ function App() {
           educationList={educationList}
           setEducationList={setEducationList}
         />
-        <CvPreview generalInfo={generalInfo} ref={cvRef} />
+        <CvPreview generalInfo={generalInfo} ref={cvRef} educationList={educationList}  />
       </div>
     </>
   );
