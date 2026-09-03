@@ -34,6 +34,20 @@ function App() {
       isCurrent: false,
     },
   ]);
+  const [workList, setWorkList] = useState([
+    {
+      id: crypto.randomUUID(),
+      companyName: "",
+      position: "",
+      responsibilities: "",
+      durationType: "date",
+      startDate: "",
+      endDate: "",
+      customDuration: "",
+      isCurrent: false,
+    },
+  ]);
+
   return (
     <>
       <HeaderBar
@@ -45,8 +59,14 @@ function App() {
           setGeneralInfo={setGeneralInfo}
           educationList={educationList}
           setEducationList={setEducationList}
+          workList={workList}
+          setWorkList={setWorkList}
         />
-        <CvPreview generalInfo={generalInfo} ref={cvRef} educationList={educationList}  />
+        <CvPreview
+          generalInfo={generalInfo}
+          ref={cvRef}
+          educationList={educationList}
+        />
       </div>
     </>
   );
