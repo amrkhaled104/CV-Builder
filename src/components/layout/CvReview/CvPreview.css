@@ -72,6 +72,19 @@
   font-weight: normal;
   text-align: left;
 }
+/* ========================================
+   BULLET LIST
+======================================== */
+
+.bullet-list {
+  margin-top: 6px;
+  margin-left: 22px;
+}
+
+.bullet-list li {
+  margin-bottom: 5px;
+  text-align: justify;
+}
 
 @media (max-width: 768px) {
   .cvPreview {

@@ -66,6 +66,7 @@ function App() {
           generalInfo={generalInfo}
           ref={cvRef}
           educationList={educationList}
+          workList={workList}
         />
       </div>
     </>

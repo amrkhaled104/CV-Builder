@@ -30,13 +30,30 @@ type EducationItem = {
   customDuration: string;
   isCurrent: boolean;
 };
+type ExperienceItem = {
+  id: string;
+  companyName: string;
+  position: string;
+  responsibilities: string;
+  durationType: "date" | string;
+  startDate: string;
+  endDate: string;
+  customDuration: string;
+  isCurrent: boolean;
+};
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
-  educationList: EducationItem[]; // Replace 'any' with the actual type of your education list
+  educationList: EducationItem[];
+  workList: ExperienceItem[];
 };
 
-function CvPreview({ generalInfo, ref, educationList }: CvPreviewProps) {
+function CvPreview({
+  generalInfo,
+  ref,
+  educationList,
+  workList,
+}: CvPreviewProps) {
   function formatDate(date: string) {
     if (!date) return "";
 
@@ -62,7 +79,12 @@ function CvPreview({ generalInfo, ref, educationList }: CvPreviewProps) {
     return `${monthName} ${year}`;
   }
 
-  function getDuration(entry: EducationItem) {
+  function getDuration(
+    entry: Pick<
+      EducationItem | ExperienceItem,
+      "durationType" | "customDuration" | "isCurrent" | "startDate" | "endDate"
+    >,
+  ) {
     if (entry.durationType === "custom") return entry.customDuration;
 
     if (entry.isCurrent) {
@@ -135,6 +157,42 @@ function CvPreview({ generalInfo, ref, educationList }: CvPreviewProps) {
             </div>
           ))}
         </section>
+      )}
+      {/* ================= EXPERIENCE ================= */}
+      {workList.length > 0 && (
+        <>
+          <h2 className="cv-section-title">Experience</h2>
+          {workList.map((work) => (
+            <div className="entry" key={work.id}>
+              <div className="entry-header">
+                <div className="entry-left">
+                  <h3>{work.position}</h3>
+                </div>
+
+                <div className="entry-right">
+                  <p>{getDuration(work)}</p>
+                </div>
+              </div>
+
+              <div className="entry-subheader">
+                <div className="entry-left">
+                  <em>{work.companyName}</em>
+                </div>
+              </div>
+
+              {work.responsibilities && (
+                <ul className="bullet-list">
+                  {work.responsibilities
+                    .split("\n")
+                    .filter((line) => line.trim() !== "")
+                    .map((item, index) => (
+                      <li key={index}>{item}</li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </>
       )}
     </section>
   );
