@@ -47,6 +47,7 @@ function App() {
       isCurrent: false,
     },
   ]);
+  const [projectList, setProjectList] = useState([]);
 
   return (
     <>
@@ -61,6 +62,8 @@ function App() {
           setEducationList={setEducationList}
           workList={workList}
           setWorkList={setWorkList}
+          projectList={projectList}
+          setProjectList={setProjectList}
         />
         <CvPreview
           generalInfo={generalInfo}
