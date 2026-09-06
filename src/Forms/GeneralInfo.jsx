@@ -67,6 +67,26 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         </FormBox>
       </InputRow>
 
+      <InputRow>
+        <FormBox label="Headline">
+          <input
+            type="text"
+            placeholder="Software Engineer ⋄ Electrical Engineer"
+            value={generalInfo.headline}
+            onChange={(e) => handleChange("headline", e.target.value)}
+          />
+        </FormBox>
+
+        <FormBox label="Location">
+          <input
+            type="text"
+            placeholder="City, Country"
+            value={generalInfo.location}
+            onChange={(e) => handleChange("location", e.target.value)}
+          />
+        </FormBox>
+      </InputRow>
+
       <SectionTitle title="Contact Information" />
 
       <InputRow>

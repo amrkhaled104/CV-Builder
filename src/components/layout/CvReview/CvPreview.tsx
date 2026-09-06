@@ -10,8 +10,10 @@ type LinkInfo = {
 type GeneralInfo = {
   firstName: string;
   lastName: string;
+  headline: string;
   phone?: string;
   email: string;
+  location: string;
   bio: string;
   links: LinkInfo[];
 };
@@ -111,6 +113,22 @@ function CvPreview({
 
     return `${formatDate(entry.startDate)}${entry.startDate && entry.endDate ? " – " : ""}${formatDate(entry.endDate)}`;
   }
+
+  function getLinkLabel(link: LinkInfo) {
+    if (link.title === "Other") return link.customTitle || link.url;
+
+    try {
+      const url = new URL(link.url);
+      return `${url.hostname.replace(/^www\./, "")}${url.pathname.replace(/\/$/, "")}`;
+    } catch {
+      return link.url;
+    }
+  }
+
+  const visibleLinks = generalInfo.links.filter(
+    (link) => link.title && link.url,
+  );
+
   return (
     <section className="cvPreview" ref={ref}>
       {/* ================= HEADER ================= */}
@@ -118,29 +136,37 @@ function CvPreview({
         <h1 className="cv-name">
           {generalInfo.firstName} {generalInfo.lastName}
         </h1>
-        <div className="cv-contact">
-          {generalInfo.phone && <span>{generalInfo.phone}</span>}
-          {generalInfo.email && (
-            <span>
-              <a
-                href={`mailto:${generalInfo.email}`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                {generalInfo.email}
-              </a>
-            </span>
-          )}
-          {generalInfo.links
-            .filter((link) => link.title && link.url)
-            .map((link) => (
+        {generalInfo.headline && (
+          <div className="cv-headline">{generalInfo.headline}</div>
+        )}
+        {(generalInfo.phone || generalInfo.email || generalInfo.location) && (
+          <div className="cv-header-row cv-contact">
+            {generalInfo.phone && <span>{generalInfo.phone}</span>}
+            {generalInfo.email && (
+              <span>
+                <a
+                  href={`mailto:${generalInfo.email}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {generalInfo.email}
+                </a>
+              </span>
+            )}
+            {generalInfo.location && <span>{generalInfo.location}</span>}
+          </div>
+        )}
+        {visibleLinks.length > 0 && (
+          <div className="cv-header-row cv-links">
+            {visibleLinks.map((link) => (
               <span key={link.id}>
                 <a href={link.url} target="_blank" rel="noreferrer">
-                  {link.title === "Other" ? link.customTitle : link.title}
+                  {getLinkLabel(link)}
                 </a>
               </span>
             ))}
-        </div>
+          </div>
+        )}
 
         {generalInfo.bio && (
           <>

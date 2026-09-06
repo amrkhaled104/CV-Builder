@@ -18,35 +18,61 @@
 
 .cv-header {
   text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
 .cv-name {
   margin: 0;
-  font-size: 44px;
+  font-size: 1.8rem;
   font-weight: bold;
-  line-height: 1.1;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
-.cv-contact {
+.cv-headline {
+  margin-top: 3px;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.cv-header-row {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
   flex-wrap: wrap;
-  margin-top: 10px;
-  font-size: 15px;
+  line-height: 1.35;
 }
+
+.cv-contact {
+  margin-top: 5px;
+  font-size: 0.9rem;
+}
+
+.cv-links {
+  margin-top: 2px;
+  font-size: 0.85rem;
+}
+
+.cv-header-row span + span::before {
+  content: "⋄";
+  margin: 0 8px;
+  color: #777;
+}
+
+.cv-header-row a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.cv-header-row a:hover {
+  color: #333;
+}
+
 .cv-contact span {
   white-space: nowrap;
   flex-shrink: 0;
-}
-
-.cv-contact span:not(:last-child)::after {
-  content: "|";
-  margin-left: 8px;
-  margin-right: 8px;
-  color: #777;
 }
 /* ========================================
    PROFILE
@@ -94,7 +120,7 @@
   }
 
   .cv-name {
-    font-size: 30px;
+    font-size: 1.8rem;
   }
 
   .cv-contact {

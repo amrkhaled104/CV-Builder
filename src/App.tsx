@@ -9,8 +9,10 @@ function App() {
   const [generalInfo, setGeneralInfo] = useState({
     firstName: "",
     lastName: "",
+    headline: "",
     phone: "",
     email: "",
+    location: "",
     bio: "",
     links: [
       {
