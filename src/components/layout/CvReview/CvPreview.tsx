@@ -41,11 +41,29 @@ type ExperienceItem = {
   customDuration: string;
   isCurrent: boolean;
 };
+type ProjectLink = {
+  id: string;
+  title: string;
+  customTitle: string;
+  url: string;
+};
+type ProjectItem = {
+  id: string;
+  title: string;
+  description: string;
+  durationType: "date" | "hours" | "custom" | string;
+  startDate: string;
+  endDate: string;
+  customDuration: string;
+  isCurrent: boolean;
+  links: ProjectLink[];
+};
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
   educationList: EducationItem[];
   workList: ExperienceItem[];
+  projectList: ProjectItem[];
 };
 
 function CvPreview({
@@ -53,6 +71,7 @@ function CvPreview({
   ref,
   educationList,
   workList,
+  projectList,
 }: CvPreviewProps) {
   function formatDate(date: string) {
     if (!date) return "";
@@ -187,6 +206,54 @@ function CvPreview({
                     .filter((line) => line.trim() !== "")
                     .map((item, index) => (
                       <li key={index}>{item}</li>
+                    ))}
+                </ul>
+              )}
+            </div>
+          ))}
+        </>
+      )}
+
+      {/* ================= PROJECTS ================= */}
+      {projectList.length > 0 && (
+        <>
+          <h2 className="cv-section-title">Projects</h2>
+
+          {projectList.map((project) => (
+            <div className="entry" key={project.id}>
+              <div className="entry-header">
+                <div className="entry-left">
+                  <h3>{project.title}</h3>
+                </div>
+
+                <div className="entry-right">
+                  <p>{getDuration(project)}</p>
+                </div>
+              </div>
+
+              {project.links.length > 0 && (
+                <div className="project-links">
+                  {project.links.map((link, index) => (
+                    <a
+                      key={link.id}
+                      href={link.url}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {index !== 0 && " | "}
+                      {link.title === "Other" ? link.customTitle : link.title}
+                    </a>
+                  ))}
+                </div>
+              )}
+
+              {project.description && (
+                <ul className="bullet-list">
+                  {project.description
+                    .split("\n")
+                    .filter((line) => line.trim() !== "")
+                    .map((line, index) => (
+                      <li key={index}>{line}</li>
                     ))}
                 </ul>
               )}

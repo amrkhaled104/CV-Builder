@@ -48,6 +48,7 @@ function App() {
     },
   ]);
   const [projectList, setProjectList] = useState([]);
+  // const [skillList, setSkillList] = useState([]);
 
   return (
     <>
@@ -64,12 +65,15 @@ function App() {
           setWorkList={setWorkList}
           projectList={projectList}
           setProjectList={setProjectList}
+          // skillList={skillList}
+          // setSkillList={setSkillList}
         />
         <CvPreview
           generalInfo={generalInfo}
           ref={cvRef}
           educationList={educationList}
           workList={workList}
+          projectList={projectList}
         />
       </div>
     </>
