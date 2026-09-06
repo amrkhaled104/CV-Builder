@@ -24,7 +24,10 @@ type EducationItem = {
   study: string;
   place: string;
   grade: string;
-  courses?: string;
+  subTitle?: string;
+  linkText?: string;
+  linkUrl?: string;
+  bullets?: string;
   durationType: "date" | "hours" | string;
   startDate: string;
   endDate: string;
@@ -125,6 +128,18 @@ function CvPreview({
     }
   }
 
+  function renderBullet(bullet: string) {
+    const colonIndex = bullet.indexOf(":");
+    if (colonIndex === -1) return <>{bullet}</>;
+
+    return (
+      <>
+        <strong>{bullet.slice(0, colonIndex)}:</strong>
+        {bullet.slice(colonIndex + 1)}
+      </>
+    );
+  }
+
   const visibleLinks = generalInfo.links.filter(
     (link) => link.title && link.url,
   );
@@ -178,29 +193,68 @@ function CvPreview({
       {/* ================= EDUCATION ================= */}
       {educationList.length > 0 && (
         <section className="education-section">
-          <h2 className="education-section-title">
-            Education &amp; Specializations
-          </h2>
-          {educationList.map((edu) => (
-            <div className="entry" key={edu.id}>
-              <div className="entry-header">
-                <div className="entry-left">
-                  <strong>
-                    {edu.study}
-                    {edu.study && edu.schoolName ? ", " : ""}
+          <h2 className="cv-section-title">Education</h2>
+          {educationList.map((edu) => {
+            const educationBullets =
+              edu.bullets
+                ?.split("\n")
+                .map((bullet) => bullet.trim())
+                .filter(Boolean) ?? [];
+
+            return (
+              <div className="entry" key={edu.id}>
+                <div className="entry-header">
+                  <div className="entry-left">
+                    <strong>{edu.study}</strong>
+                    {edu.study && edu.schoolName && ", "}
                     {edu.schoolName}
-                  </strong>
-                  {edu.place && <div>{edu.place}</div>}
+                    {edu.place && (
+                      <>
+                        {edu.study || edu.schoolName ? ", " : ""}
+                        <em>{edu.place}</em>
+                      </>
+                    )}
+                    {!educationBullets.length && edu.grade && (
+                      <span> (GPA: {edu.grade})</span>
+                    )}
+                  </div>
+                  <div className="entry-right">{getDuration(edu)}</div>
                 </div>
-                <div className="entry-right">{getDuration(edu)}</div>
+                {(edu.subTitle || edu.linkText) && (
+                  <div className="education-subrow">
+                    {edu.subTitle && <span>{edu.subTitle}</span>}
+                    {edu.linkText && (
+                      <span>
+                        {edu.linkUrl ? (
+                          <a
+                            href={edu.linkUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                          >
+                            {edu.linkText}
+                          </a>
+                        ) : (
+                          edu.linkText
+                        )}
+                      </span>
+                    )}
+                  </div>
+                )}
+                {educationBullets.length > 0 && (
+                  <ul className="bullet-list education-bullets">
+                    {educationBullets.map((bullet, index) => (
+                      <li key={`${edu.id}-bullet-${index}`}>
+                        {renderBullet(bullet)}
+                        {index === 0 && edu.grade && (
+                          <span> (GPA: {edu.grade})</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-              <div className="entry-details">
-                {edu.courses && <em>Relevant Coursework: {edu.courses}</em>}
-                {edu.courses && edu.grade && " | "}
-                {edu.grade && <em>Score: {edu.grade}</em>}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </section>
       )}
       {/* ================= EXPERIENCE ================= */}

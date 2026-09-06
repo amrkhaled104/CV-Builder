@@ -49,10 +49,11 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         subtitle="Basic details about you"
       />
 
-      <InputRow>
+      <InputRow columns={1}>
         <FormBox label="First Name">
           <input
             type="text"
+            placeholder="e.g., FIRST"
             value={generalInfo.firstName}
             onChange={(e) => handleChange("firstName", e.target.value)}
           />
@@ -61,17 +62,18 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         <FormBox label="Last Name">
           <input
             type="text"
+            placeholder="e.g., LAST"
             value={generalInfo.lastName}
             onChange={(e) => handleChange("lastName", e.target.value)}
           />
         </FormBox>
       </InputRow>
 
-      <InputRow>
+      <InputRow columns={1}>
         <FormBox label="Headline">
           <input
             type="text"
-            placeholder="Software Engineer ⋄ Electrical Engineer"
+            placeholder="e.g., Software Engineer | CSE"
             value={generalInfo.headline}
             onChange={(e) => handleChange("headline", e.target.value)}
           />
@@ -80,7 +82,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         <FormBox label="Location">
           <input
             type="text"
-            placeholder="City, Country"
+            placeholder="e.g., Cairo, Egypt"
             value={generalInfo.location}
             onChange={(e) => handleChange("location", e.target.value)}
           />
@@ -89,10 +91,11 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
 
       <SectionTitle title="Contact Information" />
 
-      <InputRow>
+      <InputRow columns={1}>
         <FormBox label="Email">
           <input
             type="email"
+            placeholder="e.g., X@gmail.com"
             value={generalInfo.email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
@@ -101,6 +104,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         <FormBox label="Phone Number">
           <input
             type="tel"
+            placeholder="e.g., +20 1..."
             value={generalInfo.phone}
             onChange={(e) => handleChange("phone", e.target.value)}
           />
@@ -115,7 +119,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
       <FormBox label="Professional Bio">
         <textarea
           rows={5}
-          placeholder="Passionate software developer with experience in..."
+          placeholder="Short professional summary..."
           value={generalInfo.bio}
           onChange={(e) => handleChange("bio", e.target.value)}
         />
@@ -130,13 +134,13 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         items={generalInfo.links || []}
         renderItem={(link) => (
           <LinkCard key={link.id}>
-            <InputRow>
+            <InputRow columns={1}>
               <FormBox label="Platform">
                 <select
                   value={link.title}
                   onChange={(e) => updateLink(link.id, "title", e.target.value)}
                 >
-                  <option value="">Select Platform</option>
+                  <option value="">e.g., LinkedIn or GitHub</option>
                   <option value="LinkedIn">LinkedIn</option>
                   <option value="GitHub">GitHub</option>
                   <option value="Portfolio">Portfolio</option>
@@ -151,7 +155,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
               <FormBox label="URL">
                 <input
                   type="url"
-                  placeholder="https://..."
+                  placeholder="e.g., linkedin.com/in/username"
                   value={link.url}
                   onChange={(e) => updateLink(link.id, "url", e.target.value)}
                 />
@@ -162,7 +166,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
               <FormBox label="Custom Title">
                 <input
                   type="text"
-                  placeholder="Blog"
+                  placeholder="e.g., Blog or Portfolio"
                   value={link.customTitle || ""}
                   onChange={(e) =>
                     updateLink(link.id, "customTitle", e.target.value)

@@ -19,6 +19,10 @@ export default function EducationalExperience({
         study: "",
         place: "",
         grade: "",
+        subTitle: "",
+        linkText: "",
+        linkUrl: "",
+        bullets: "",
         durationType: "date",
         startDate: "",
         endDate: "",
@@ -69,42 +73,76 @@ export default function EducationalExperience({
 function EducationInfo({ entry, updateEntry, removeEntry }) {
   return (
     <>
-      <InputRow>
+      <InputRow columns={1}>
         <FormBox label="School / University">
           <input
             type="text"
+            placeholder="e.g., Mansoura University"
             value={entry.schoolName}
             onChange={(e) =>
               updateEntry(entry.id, "schoolName", e.target.value)
             }
           />
         </FormBox>
-        <FormBox label="Place">
+        <FormBox label="Place / Location">
           <input
             type="text"
+            placeholder="e.g., Mansoura, Egypt"
             value={entry.place}
             onChange={(e) => updateEntry(entry.id, "place", e.target.value)}
           />
         </FormBox>
-      </InputRow>
-      <InputRow>
-        <FormBox label="Degree / Course">
+        <FormBox label="Degree / Major">
           <input
             type="text"
+            placeholder="e.g., B.S. in Computer Engineering"
             value={entry.study}
             onChange={(e) => updateEntry(entry.id, "study", e.target.value)}
           />
         </FormBox>
-        <FormBox label="Grade">
+        <FormBox label="Grade / GPA">
           <input
             type="text"
-            placeholder="8.92 CGPA / 91% / First Class"
+            placeholder="e.g., 3.8/4.0 or 94%"
             value={entry.grade}
             onChange={(e) => updateEntry(entry.id, "grade", e.target.value)}
           />
         </FormBox>
+        <FormBox label="Subtitle / Department">
+          <input
+            type="text"
+            placeholder="e.g., Computer Systems Engineering Department"
+            value={entry.subTitle}
+            onChange={(e) => updateEntry(entry.id, "subTitle", e.target.value)}
+          />
+        </FormBox>
+        <FormBox label="Link Text">
+          <input
+            type="text"
+            placeholder="e.g., Portfolio Link or Certificate"
+            value={entry.linkText}
+            onChange={(e) => updateEntry(entry.id, "linkText", e.target.value)}
+          />
+        </FormBox>
+        <FormBox label="Link URL">
+          <input
+            type="url"
+            placeholder="e.g., https://..."
+            value={entry.linkUrl}
+            onChange={(e) => updateEntry(entry.id, "linkUrl", e.target.value)}
+          />
+        </FormBox>
+        <DurationInput entry={entry} updateEntry={updateEntry} stacked />
+        <FormBox label="Coursework & Highlights">
+          <textarea
+            rows={4}
+            placeholder="e.g., Programming Coursework: DSA, OOP (one per line)"
+            value={entry.bullets}
+            onChange={(e) => updateEntry(entry.id, "bullets", e.target.value)}
+          />
+        </FormBox>
       </InputRow>
-      <DurationInput entry={entry} updateEntry={updateEntry} />
+
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Education"

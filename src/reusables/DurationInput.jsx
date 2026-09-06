@@ -1,9 +1,9 @@
 import FormBox from "./FormBox";
 import DateRow from "./DateRow";
 import "./DurationInput.css";
-export default function DurationInput({ entry, updateEntry }) {
+export default function DurationInput({ entry, updateEntry, stacked = false }) {
   return (
-    <>
+    <div>
       <div className="duration-toggle">
         <button
           type="button"
@@ -23,7 +23,7 @@ export default function DurationInput({ entry, updateEntry }) {
 
       {entry.durationType === "date" ? (
         <>
-          <DateRow>
+          <DateRow className={stacked ? "stacked" : ""}>
             <FormBox label="Start Date">
               <input
                 type="date"
@@ -69,6 +69,6 @@ export default function DurationInput({ entry, updateEntry }) {
           />
         </FormBox>
       )}
-    </>
+    </div>
   );
 }

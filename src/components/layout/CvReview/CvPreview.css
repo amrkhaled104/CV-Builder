@@ -89,13 +89,13 @@
 ======================================== */
 
 .cv-section-title {
-  margin: 10px 0 10px;
-  padding-bottom: 3px;
-  border-bottom: 1px solid #111;
+  margin: 14px 0 6px 0;
+  padding-bottom: 2px;
+  border-bottom: 1px solid #000;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 22px;
-  font-weight: normal;
+  font-weight: bold;
   text-align: left;
 }
 /* ========================================
@@ -161,24 +161,23 @@
   font-weight: 400;
 }
 
-.entry-details {
+.education-subrow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 15px;
   margin: 2px 0 6px;
   color: #444;
 }
 
-.entry-details em {
-  font-style: italic;
+.education-subrow a {
+  color: #145da0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
-.education-section-title {
-  margin: 10px 0 6px;
-  padding-bottom: 2px;
-  border-bottom: 1px solid #000;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  font-size: 18px;
-  font-weight: 400;
-  text-align: left;
+.education-bullets {
+  margin-top: 2px;
 }
 
 @media (max-width: 768px) {
@@ -189,5 +188,10 @@
 
   .entry-right {
     margin-left: auto;
+  }
+
+  .education-subrow {
+    flex-wrap: wrap;
+    gap: 2px 12px;
   }
 }
