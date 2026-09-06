@@ -11,11 +11,6 @@
   color: var(--text-secondary);
 }
 
-.required {
-  margin-left: 3px;
-  color: var(--danger-color);
-}
-
 .FormBox input,
 .FormBox textarea,
 .FormBox select {

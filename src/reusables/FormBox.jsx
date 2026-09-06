@@ -1,18 +1,8 @@
 import "./FormBox.css";
-export default function FormBox({
-  label,
-  htmlFor,
-  required = false,
-  children,
-}) {
+export default function FormBox({ label, children }) {
   return (
     <div className="FormBox">
-      {label && (
-        <label htmlFor={htmlFor} className="FormLabel">
-          {label}
-          {required && <span className="required">*</span>}
-        </label>
-      )}
+      {label && <label className="FormLabel">{label}</label>}
       {children}
     </div>
   );

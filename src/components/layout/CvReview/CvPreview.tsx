@@ -1,5 +1,4 @@
 import "./CvPreview.css";
-// import { forwardRef } from "react";
 
 type LinkInfo = {
   id: string;
@@ -165,6 +164,7 @@ function CvPreview({
                     {edu.study && edu.schoolName ? ", " : ""}
                     {edu.schoolName}
                   </strong>
+                  {edu.place && <div>{edu.place}</div>}
                 </div>
                 <div className="entry-right">{getDuration(edu)}</div>
               </div>

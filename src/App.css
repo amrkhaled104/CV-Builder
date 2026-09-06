@@ -18,13 +18,10 @@
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
   --text-color: #f8fafc;
-
   --accent-primary: #3b82f6;
   --accent-hover: #60a5fa;
   --primary-color: #3b82f6;
   --primary-hover: #60a5fa;
-  --danger-color: #ef4444;
-  --danger-hover: #dc2626;
 
   --border-color: #334155;
   --shadow: rgba(2, 6, 23, 0.45);
@@ -120,7 +117,7 @@ body {
 .mainContent > :last-child {
   display: flex;
   justify-content: center;
-      flex-direction: column;
+  flex-direction: column;
 }
 
 /* ========================================

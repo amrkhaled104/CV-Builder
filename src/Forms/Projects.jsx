@@ -52,6 +52,7 @@ export default function Project({ projectList, setProjectList }) {
                 {
                   id: crypto.randomUUID(),
                   title: "",
+                  customTitle: "",
                   url: "",
                 },
               ],

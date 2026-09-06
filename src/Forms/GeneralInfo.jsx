@@ -6,8 +6,6 @@ import DynamicList from "../reusables/DynamicList.jsx";
 import LinkCard from "../reusables/LinkCard.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 
-const FormGroup = FormBox;
-
 export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
   function handleChange(field, value) {
     setGeneralInfo({ ...generalInfo, [field]: value });
@@ -113,7 +111,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         renderItem={(link) => (
           <LinkCard key={link.id}>
             <InputRow>
-              <FormGroup label="Platform">
+              <FormBox label="Platform">
                 <select
                   value={link.title}
                   onChange={(e) => updateLink(link.id, "title", e.target.value)}
@@ -128,16 +126,16 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
                   <option value="Website">Website</option>
                   <option value="Other">Other</option>
                 </select>
-              </FormGroup>
+              </FormBox>
 
-              <FormGroup label="URL">
+              <FormBox label="URL">
                 <input
                   type="url"
                   placeholder="https://..."
                   value={link.url}
                   onChange={(e) => updateLink(link.id, "url", e.target.value)}
                 />
-              </FormGroup>
+              </FormBox>
             </InputRow>
 
             {link.title === "Other" && (
