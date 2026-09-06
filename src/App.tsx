@@ -2,6 +2,7 @@ import "./App.css";
 import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
+import * as Sample from "../src/data/sampleData.js";
 import { useRef, useState } from "react";
 
 function App() {
@@ -56,11 +57,15 @@ function App() {
   ]);
   const [projectList, setProjectList] = useState([]);
   // const [skillList, setSkillList] = useState([]);
-
+  function loadSampleCV() {
+    setGeneralInfo(Sample.sampleGeneralInfo);
+    setEducationList(Sample.sampleEducation);
+  }
   return (
     <>
       <HeaderBar
         cvRef={cvRef} //Now HeaderBar can print that element.
+        loadSampleCV={loadSampleCV}
       />
       <div className="mainContent">
         <FormInputs

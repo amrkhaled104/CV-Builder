@@ -3,7 +3,7 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useReactToPrint } from "react-to-print";
 import { useState, useEffect } from "react";
-export default function HeaderBar({ cvRef }) {
+export default function HeaderBar({ cvRef, loadSampleCV }) {
   const [theme, setTheme] = useState(false);
   const toggleTheme = () => {
     setTheme((prev) => !prev);
@@ -29,7 +29,9 @@ export default function HeaderBar({ cvRef }) {
       </div>
       <div className="logo">CV Builder</div>
       <div className="headerButtons">
-        <button className="sampleCV">Sample Cv</button>
+        <button className="sampleCV" onClick={loadSampleCV}>
+          Sample Cv
+        </button>
         <button className="pdfDownload" onClick={handlePrint}>
           PDF
         </button>
