@@ -62,12 +62,23 @@ type ProjectItem = {
   isCurrent: boolean;
   links: ProjectLink[];
 };
+type SkillItem = {
+  id: string;
+  name: string;
+};
+
+type SkillCategory = {
+  id: string;
+  category: string;
+  skills: SkillItem[];
+};
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
   educationList: EducationItem[];
   workList: ExperienceItem[];
   projectList: ProjectItem[];
+  skillList: SkillCategory[];
 };
 
 function CvPreview({
@@ -76,6 +87,7 @@ function CvPreview({
   educationList,
   workList,
   projectList,
+  skillList,
 }: CvPreviewProps) {
   function formatDate(date: string) {
     if (!date) return "";
@@ -339,6 +351,28 @@ function CvPreview({
               )}
             </div>
           ))}
+        </>
+      )}
+
+      {/* =================  SKILLS ================= */}
+
+      {skillList.length > 0 && (
+        <>
+          <h2 className="cv-section-title">Skills</h2>
+
+          <div className="skills-container">
+            {skillList.map((category) => (
+              <div className="skill-category" key={category.id}>
+                <span className="skill-category-title">
+                  {category.category}:
+                </span>
+
+                <span className="skill-category-skills">
+                  {category.skills.map((skill) => skill.name).join(", ")}
+                </span>
+              </div>
+            ))}
+          </div>
         </>
       )}
     </section>

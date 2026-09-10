@@ -5,6 +5,17 @@ import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
 import * as Sample from "../src/data/sampleData.js";
 import { useRef, useState } from "react";
 
+type Skill = {
+  id: string;
+  name: string;
+};
+
+type SkillCategory = {
+  id: string;
+  category: string;
+  skills: Skill[];
+};
+
 function App() {
   const cvRef = useRef(null);
   const [generalInfo, setGeneralInfo] = useState({
@@ -56,11 +67,12 @@ function App() {
     },
   ]);
   const [projectList, setProjectList] = useState([]);
-  const [skillList, setSkillList] = useState([]);
+  const [skillList, setSkillList] = useState<SkillCategory[]>([]);
 
   function loadSampleCV() {
     setGeneralInfo(Sample.sampleGeneralInfo);
     setEducationList(Sample.sampleEducation);
+    setSkillList(Sample.sampleSkills);
   }
   return (
     <>
@@ -87,6 +99,7 @@ function App() {
           educationList={educationList}
           workList={workList}
           projectList={projectList}
+          skillList={skillList}
         />
       </div>
     </>
