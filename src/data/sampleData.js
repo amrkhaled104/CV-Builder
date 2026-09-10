@@ -58,3 +58,35 @@ export const sampleEducation = [
     isCurrent: true,
   },
 ];
+
+export const sampleSkills = [
+
+  {
+    id: crypto.randomUUID(),
+    category: "Technical",
+    skills: [
+      { id: crypto.randomUUID(), name: "React" },
+      { id: crypto.randomUUID(), name: "HTML/CSS" },
+      { id: crypto.randomUUID(), name: "Git & GitHub" },
+      { id: crypto.randomUUID(), name: "REST APIs" },
+    ],
+  },
+    {
+    id: crypto.randomUUID(),
+    category: "Others",
+    skills: [
+      { id: crypto.randomUUID(), name: "C++" },
+      { id: crypto.randomUUID(), name: "Python" },
+      { id: crypto.randomUUID(), name: "JavaScript" },
+      { id: crypto.randomUUID(), name: "TypeScript" },
+    ],
+  },
+  {
+    id: crypto.randomUUID(),
+    category: "Languages",
+    skills: [
+      { id: crypto.randomUUID(), name: "Arabic (Native)" },
+      { id: crypto.randomUUID(), name: "English (Professional)" },
+    ],
+  },
+];
