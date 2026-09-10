@@ -6,7 +6,7 @@ import InputRow from "../reusables/InptRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import DurationInput from "../reusables/DurationInput.jsx";
 
-import "../Common.css"
+import "../Common.css";
 
 export default function EducationalExperience({
   educationList,
@@ -142,13 +142,13 @@ function EducationInfo({ entry, updateEntry, removeEntry }) {
             onChange={(e) => updateEntry(entry.id, "bullets", e.target.value)}
           />
         </FormBox>
-        <DurationInput entry={entry} updateEntry={updateEntry} stacked />
+        <DurationInput entry={entry} updateEntry={updateEntry}  />
       </InputRow>
 
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Education"
-          variant="secondary"
+          variant="link"
           onClick={() => removeEntry(entry.id)}
         />
       </div>

@@ -35,11 +35,10 @@ export default function PracticalExperience({ workList, setWorkList }) {
   }
   return (
     <FormCard title="Work Experience">
-      <SectionTitle
+      {/* <SectionTitle
         title="Professional Experience"
         subtitle="Add internships, jobs or freelance work."
-      />
-
+      /> */}
       <DynamicList
         items={workList}
         renderItem={(work) => (
@@ -94,7 +93,7 @@ function WorkInfo({ entry, updateEntry, removeEntry }) {
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Experience"
-          variant="secondary"
+          variant="link"
           onClick={() => removeEntry(entry.id)}
         />
       </div>

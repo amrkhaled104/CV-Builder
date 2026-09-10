@@ -32,19 +32,50 @@
 
 .btn-primary {
   background: var(--primary-color);
-  color: white;
+  color: var(--text-primary);
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
 }
 
-.btn-secondary {
-  background: rgba(239, 68, 68, 0.12);
-  color: #ffb4b4;
-  border: 1px solid rgba(239, 68, 68, 0.25);
+.btn-link {
+  padding: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  text-align: inherit;
 }
 
-.btn-secondary:hover {
-  background: rgba(239, 68, 68, 0.22);
+.btn-link:hover {
+  background: transparent;
+  color: var(--danger-hover);
+}
+
+.btn-icon {
+  padding: 4px 8px;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.btn-icon:hover {
+  background: transparent;
+  color: var(--danger-color);
+}
+
+.btn-subtle {
+  padding: 6px 12px;
+  background: transparent;
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+
+.btn-subtle:hover {
+  background: transparent;
+  border-color: var(--text-secondary);
+  color: var(--text-primary);
 }

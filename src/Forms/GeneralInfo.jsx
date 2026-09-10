@@ -122,7 +122,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
           items={generalInfo.links || []}
           renderItem={(link) => (
             <LinkCard key={link.id}>
-              <InputRow columns={1}>
+              <InputRow>
                 <FormBox label="Platform">
                   <select
                     value={link.title}
@@ -167,8 +167,8 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
 
               <div className="action-buttons right">
                 <ActionButtons
-                  text="Remove Link"
-                  variant="secondary"
+                  text="×"
+                  variant="icon"
                   onClick={() => removeLink(link.id)}
                 />
               </div>
@@ -177,11 +177,7 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
         />
 
         <div className="action-buttons left">
-          <ActionButtons
-            text="+ Add Link"
-            variant="primary"
-            onClick={addLink}
-          />
+          <ActionButtons text="+ Add Link" variant="subtle" onClick={addLink} />
         </div>
       </FormCard>
     </FormCard>

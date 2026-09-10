@@ -91,7 +91,7 @@ export default function Project({ projectList, setProjectList }) {
   }
   return (
     <FormCard title="Projects">
-      <SectionTitle title="Projects" subtitle="Highlight your best work." />
+      {/* <SectionTitle title="Projects" subtitle="Highlight your best work." /> */}
       <DynamicList
         items={projectList}
         renderItem={(project) => (
@@ -134,7 +134,6 @@ function ProjectInfo({
           onChange={(e) => updateEntry(entry.id, "title", e.target.value)}
         />
       </FormBox>
-      <DurationInput entry={entry} updateEntry={updateEntry} />
       <FormBox label="Description">
         <textarea
           rows={5}
@@ -188,8 +187,8 @@ function ProjectInfo({
             )}
             <div className="action-buttons right">
               <ActionButtons
-                text="Remove Link"
-                variant="secondary"
+                text="×"
+                variant="icon"
                 onClick={() => removeLink(entry.id, link.id)}
               />
             </div>
@@ -199,14 +198,15 @@ function ProjectInfo({
       <div className="action-buttons left">
         <ActionButtons
           text="+ Add Link"
-          variant="primary"
+          variant="subtle"
           onClick={() => addLink(entry.id)}
         />
       </div>
+      <DurationInput entry={entry} updateEntry={updateEntry} />
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Project"
-          variant="secondary"
+          variant="link"
           onClick={() => removeEntry(entry.id)}
         />
       </div>
