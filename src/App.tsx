@@ -64,6 +64,10 @@ function App() {
       endDate: "",
       customDuration: "",
       isCurrent: false,
+      location: "",
+      companyDescription: "",
+      linkText: "",
+      linkUrl: "",
     },
   ]);
   const [projectList, setProjectList] = useState([]);
@@ -73,6 +77,7 @@ function App() {
     setGeneralInfo(Sample.sampleGeneralInfo);
     setEducationList(Sample.sampleEducation);
     setSkillList(Sample.sampleSkills);
+    setWorkList(Sample.sampleWork);
   }
   return (
     <>

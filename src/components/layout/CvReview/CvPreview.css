@@ -188,6 +188,11 @@
   font-weight: 400;
 }
 
+.entry-description {
+  margin: 3px 0 6px;
+  color: #333;
+}
+
 .education-subrow {
   display: flex;
   justify-content: space-between;

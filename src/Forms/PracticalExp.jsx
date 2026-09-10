@@ -19,6 +19,10 @@ export default function PracticalExperience({ workList, setWorkList }) {
         endDate: "",
         customDuration: "",
         isCurrent: false,
+        location: "",
+        companyDescription: "",
+        linkText: "",
+        linkUrl: "",
       },
     ]);
   }
@@ -65,6 +69,7 @@ function WorkInfo({ entry, updateEntry, removeEntry }) {
           <input
             type="text"
             value={entry.companyName}
+            placeholder="Google"
             onChange={(e) =>
               updateEntry(entry.id, "companyName", e.target.value)
             }
@@ -78,8 +83,43 @@ function WorkInfo({ entry, updateEntry, removeEntry }) {
             onChange={(e) => updateEntry(entry.id, "position", e.target.value)}
           />
         </FormBox>
+        <FormBox label="Location">
+          <input
+            type="text"
+            placeholder="e.g., Mansoura, Egypt"
+            value={entry.location || ""}
+            onChange={(e) => updateEntry(entry.id, "location", e.target.value)}
+          />
+        </FormBox>
       </InputRow>
-      <DurationInput entry={entry} updateEntry={updateEntry} />
+      <FormBox label="Company Description">
+        <input
+          type="text"
+          placeholder="Brief description of the company or team"
+          value={entry.companyDescription || ""}
+          onChange={(e) =>
+            updateEntry(entry.id, "companyDescription", e.target.value)
+          }
+        />
+      </FormBox>
+      <InputRow>
+        <FormBox label="Company / Project Link Text">
+          <input
+            type="text"
+            placeholder="Company website"
+            value={entry.linkText || ""}
+            onChange={(e) => updateEntry(entry.id, "linkText", e.target.value)}
+          />
+        </FormBox>
+        <FormBox label="Company / Project Link URL">
+          <input
+            type="url"
+            placeholder="https://..."
+            value={entry.linkUrl || ""}
+            onChange={(e) => updateEntry(entry.id, "linkUrl", e.target.value)}
+          />
+        </FormBox>
+      </InputRow>
       <FormBox label="Responsibilities">
         <textarea
           rows={5}
@@ -90,6 +130,7 @@ function WorkInfo({ entry, updateEntry, removeEntry }) {
           }
         />
       </FormBox>
+      <DurationInput entry={entry} updateEntry={updateEntry} />
       <div className="action-buttons right">
         <ActionButtons
           text="Remove Experience"

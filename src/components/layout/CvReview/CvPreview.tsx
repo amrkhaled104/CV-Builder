@@ -39,6 +39,10 @@ type ExperienceItem = {
   companyName: string;
   position: string;
   responsibilities: string;
+  location?: string;
+  companyDescription?: string;
+  linkText?: string;
+  linkUrl?: string;
   durationType: "date" | string;
   startDate: string;
   endDate: string;
@@ -277,19 +281,33 @@ function CvPreview({
             <div className="entry" key={work.id}>
               <div className="entry-header">
                 <div className="entry-left">
-                  <h3>{work.position}</h3>
+                  <strong>{work.position}</strong>
+                  {work.position && work.companyName && ", "}
+                  {work.companyName}
+                  {work.location && (
+                    <>
+                      {work.position || work.companyName ? ", " : ""}
+                      <em>{work.location}</em>
+                    </>
+                  )}
+                  {work.linkText && work.linkUrl && (
+                    <>
+                      {work.position || work.companyName || work.location
+                        ? " | "
+                        : ""}
+                      <a href={work.linkUrl} target="_blank" rel="noreferrer">
+                        {work.linkText}
+                      </a>
+                    </>
+                  )}
                 </div>
 
-                <div className="entry-right">
-                  <p>{getDuration(work)}</p>
-                </div>
+                <div className="entry-right">{getDuration(work)}</div>
               </div>
 
-              <div className="entry-subheader">
-                <div className="entry-left">
-                  <em>{work.companyName}</em>
-                </div>
-              </div>
+              {work.companyDescription && (
+                <p className="entry-description">{work.companyDescription}</p>
+              )}
 
               {work.responsibilities && (
                 <ul className="bullet-list">
