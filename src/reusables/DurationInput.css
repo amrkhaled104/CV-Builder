@@ -1,6 +1,7 @@
 .duration-toggle {
   display: flex;
   margin-top: 16px;
+  margin-bottom: 8px;
   overflow: hidden;
   border-radius: 8px;
   border: 1px solid var(--border-color);

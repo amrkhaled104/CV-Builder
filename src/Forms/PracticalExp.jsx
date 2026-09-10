@@ -60,7 +60,7 @@ export default function PracticalExperience({ workList, setWorkList }) {
 
 function WorkInfo({ entry, updateEntry, removeEntry }) {
   return (
-    <div className="work-card">
+    <div className="entry-card">
       <InputRow>
         <FormBox label="Company Name">
           <input

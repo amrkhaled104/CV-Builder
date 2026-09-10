@@ -6,6 +6,8 @@ import InputRow from "../reusables/InptRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import DurationInput from "../reusables/DurationInput.jsx";
 
+import "../Common.css"
+
 export default function EducationalExperience({
   educationList,
   setEducationList,
@@ -44,10 +46,10 @@ export default function EducationalExperience({
   }
   return (
     <FormCard title="Education">
-      <SectionTitle
+      {/* <SectionTitle
         title="Educational Qualifications"
         subtitle="Add all your schools, colleges and universities."
-      />
+      /> */}
       <DynamicList
         items={educationList}
         renderItem={(education) => (
@@ -72,7 +74,7 @@ export default function EducationalExperience({
 
 function EducationInfo({ entry, updateEntry, removeEntry }) {
   return (
-    <>
+    <div className="entry-card">
       <InputRow columns={1}>
         <FormBox label="School / University">
           <input
@@ -132,7 +134,6 @@ function EducationInfo({ entry, updateEntry, removeEntry }) {
             onChange={(e) => updateEntry(entry.id, "linkUrl", e.target.value)}
           />
         </FormBox>
-        <DurationInput entry={entry} updateEntry={updateEntry} stacked />
         <FormBox label="Coursework & Highlights">
           <textarea
             rows={4}
@@ -141,6 +142,7 @@ function EducationInfo({ entry, updateEntry, removeEntry }) {
             onChange={(e) => updateEntry(entry.id, "bullets", e.target.value)}
           />
         </FormBox>
+        <DurationInput entry={entry} updateEntry={updateEntry} stacked />
       </InputRow>
 
       <div className="action-buttons right">
@@ -150,6 +152,6 @@ function EducationInfo({ entry, updateEntry, removeEntry }) {
           onClick={() => removeEntry(entry.id)}
         />
       </div>
-    </>
+    </div>
   );
 }
