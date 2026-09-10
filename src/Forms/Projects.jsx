@@ -13,6 +13,7 @@ export default function Project({ projectList, setProjectList }) {
       {
         id: crypto.randomUUID(),
         title: "",
+        tagline: "",
         description: "",
         durationType: "date",
         startDate: "",
@@ -132,6 +133,14 @@ function ProjectInfo({
           type="text"
           value={entry.title}
           onChange={(e) => updateEntry(entry.id, "title", e.target.value)}
+        />
+      </FormBox>
+      <FormBox label="Project Description / Overview">
+        <input
+          type="text"
+          placeholder="A concise overview of the project"
+          value={entry.tagline || ""}
+          onChange={(e) => updateEntry(entry.id, "tagline", e.target.value)}
         />
       </FormBox>
       <FormBox label="Description">

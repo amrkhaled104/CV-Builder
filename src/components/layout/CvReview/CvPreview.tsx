@@ -58,6 +58,7 @@ type ProjectLink = {
 type ProjectItem = {
   id: string;
   title: string;
+  tagline?: string;
   description: string;
   durationType: "date" | "hours" | "custom" | string;
   startDate: string;
@@ -333,35 +334,39 @@ function CvPreview({
             <div className="entry" key={project.id}>
               <div className="entry-header">
                 <div className="entry-left">
-                  <h3>{project.title}</h3>
+                  <strong>{project.title}</strong>
+                  {project.tagline && <>. {project.tagline}</>}
                 </div>
 
                 <div className="entry-right">
-                  <p>{getDuration(project)}</p>
+                  {project.links
+                    .filter(
+                      (link) => link.url && (link.title || link.customTitle),
+                    )
+                    .map((link, index) => (
+                      <span key={link.id}>
+                        {index > 0 && " | "}
+                        <a
+                          className="cv-link"
+                          href={link.url}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {link.title === "Other"
+                            ? link.customTitle || link.url
+                            : link.title}
+                        </a>
+                      </span>
+                    ))}
                 </div>
               </div>
-
-              {project.links.length > 0 && (
-                <div className="project-links">
-                  {project.links.map((link, index) => (
-                    <a
-                      key={link.id}
-                      href={link.url}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      {index !== 0 && " | "}
-                      {link.title === "Other" ? link.customTitle : link.title}
-                    </a>
-                  ))}
-                </div>
-              )}
 
               {project.description && (
                 <ul className="bullet-list">
                   {project.description
                     .split("\n")
-                    .filter((line) => line.trim() !== "")
+                    .map((line) => line.replace(/^\s*[-*•]\s*/, "").trim())
+                    .filter(Boolean)
                     .map((line, index) => (
                       <li key={index}>{line}</li>
                     ))}

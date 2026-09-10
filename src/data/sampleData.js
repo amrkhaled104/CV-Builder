@@ -123,3 +123,33 @@ export const sampleWork = [
     linkUrl: "https://upwork.com",
   },
 ];
+
+export const sampleProjects = [
+  {
+    id: crypto.randomUUID(),
+    title: "Project Name",
+    tagline: "Overview",
+    description: [
+      "Built X / Developed Y using D, E, and F technologies.",
+    ].join("\n"),
+    durationType: "date",
+    startDate: "2025-01-01",
+    endDate: "2025-03-01",
+    customDuration: "",
+    isCurrent: false,
+    links: [
+      {
+        id: crypto.randomUUID(),
+        title: "GitHub Repo",
+        customTitle: "",
+        url: "https://github.com/example/cv-builder",
+      },
+      {
+        id: crypto.randomUUID(),
+        title: "Live Demo",
+        customTitle: "",
+        url: "https://example.com/cv-builder",
+      },
+    ],
+  },
+];

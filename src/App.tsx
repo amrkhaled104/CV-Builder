@@ -16,6 +16,26 @@ type SkillCategory = {
   skills: Skill[];
 };
 
+type ProjectLink = {
+  id: string;
+  title: string;
+  customTitle: string;
+  url: string;
+};
+
+type Project = {
+  id: string;
+  title: string;
+  tagline: string;
+  description: string;
+  durationType: string;
+  startDate: string;
+  endDate: string;
+  customDuration: string;
+  isCurrent: boolean;
+  links: ProjectLink[];
+};
+
 function App() {
   const cvRef = useRef(null);
   const [generalInfo, setGeneralInfo] = useState({
@@ -70,7 +90,7 @@ function App() {
       linkUrl: "",
     },
   ]);
-  const [projectList, setProjectList] = useState([]);
+  const [projectList, setProjectList] = useState<Project[]>([]);
   const [skillList, setSkillList] = useState<SkillCategory[]>([]);
 
   function loadSampleCV() {
@@ -78,6 +98,7 @@ function App() {
     setEducationList(Sample.sampleEducation);
     setSkillList(Sample.sampleSkills);
     setWorkList(Sample.sampleWork);
+    setProjectList(Sample.sampleProjects);
   }
   return (
     <>

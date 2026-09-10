@@ -188,6 +188,12 @@
   font-weight: 400;
 }
 
+.cv-link {
+  color: #145da0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 .entry-description {
   margin: 3px 0 6px;
   color: #333;
