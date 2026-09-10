@@ -3,6 +3,7 @@ import GeneralInfo from "../../../Forms/GeneralInfo.jsx";
 import EducationalExpperience from "../../../Forms/EducationExp.jsx";
 import PracticalExperience from "../../../Forms/PracticalExp.jsx";
 import Project from "../../../Forms/Projects.jsx";
+import Skill from "../../../Forms/Skills.jsx";
 
 export default function FormInputs({
   generalInfo,
@@ -13,6 +14,8 @@ export default function FormInputs({
   setWorkList,
   projectList,
   setProjectList,
+  skillList,
+  setSkillList,
 }) {
   return (
     <section className="leftSidebarForm">
@@ -23,6 +26,7 @@ export default function FormInputs({
       />
       <PracticalExperience workList={workList} setWorkList={setWorkList} />
       <Project projectList={projectList} setProjectList={setProjectList} />
+      <Skill skillList={skillList} setSkillList={setSkillList} />
     </section>
   );
 }

@@ -13,7 +13,8 @@
 
 .FormBox input,
 .FormBox textarea,
-.FormBox select {
+.FormBox select,
+.skill-item input {
   width: 100%;
   padding: 10px 14px;
   border: 1px solid var(--border-color);
@@ -28,13 +29,15 @@
 }
 
 .FormBox input::placeholder,
-.FormBox textarea::placeholder {
+.FormBox textarea::placeholder,
+.skill-item input::placeholder {
   color: var(--placeholder-color);
 }
 
 .FormBox input:focus,
 .FormBox textarea:focus,
-.FormBox select:focus {
+.FormBox select:focus,
+.skill-item input:focus {
   outline: none;
   border-color: var(--primary-color);
   box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);

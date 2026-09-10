@@ -56,6 +56,8 @@ function App() {
     },
   ]);
   const [projectList, setProjectList] = useState([]);
+  const [skillList, setSkillList] = useState([]);
+
   function loadSampleCV() {
     setGeneralInfo(Sample.sampleGeneralInfo);
     setEducationList(Sample.sampleEducation);
@@ -76,6 +78,8 @@ function App() {
           setWorkList={setWorkList}
           projectList={projectList}
           setProjectList={setProjectList}
+          skillList={skillList}
+          setSkillList={setSkillList}
         />
         <CvPreview
           generalInfo={generalInfo}

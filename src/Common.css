@@ -7,3 +7,30 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
 }
+
+/* ========================================
+   SKILL ITEM
+======================================== */
+
+.skill-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.skill-item input {
+  flex: 1;
+}
+
+.FormBox input:disabled,
+.FormBox textarea:disabled,
+.FormBox select:disabled {
+  opacity: 0.55;
+  background: #1a1726;
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.FormBox input[type="date"]:disabled::-webkit-calendar-picker-indicator {
+  opacity: 0.35;
+}
