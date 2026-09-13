@@ -16,17 +16,53 @@ export default function FormInputs({
   setProjectList,
   skillList,
   setSkillList,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
 }) {
   return (
     <section className="leftSidebarForm">
-      <GeneralInfo generalInfo={generalInfo} setGeneralInfo={setGeneralInfo} />
+      <GeneralInfo
+        generalInfo={generalInfo}
+        setGeneralInfo={setGeneralInfo}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+      />
       <EducationalExpperience
         educationList={educationList}
         setEducationList={setEducationList}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
       />
-      <PracticalExperience workList={workList} setWorkList={setWorkList} />
-      <Project projectList={projectList} setProjectList={setProjectList} />
-      <Skill skillList={skillList} setSkillList={setSkillList} />
+      <PracticalExperience
+        workList={workList}
+        setWorkList={setWorkList}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+      />
+      <Project
+        projectList={projectList}
+        setProjectList={setProjectList}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+      />
+      <Skill
+        skillList={skillList}
+        setSkillList={setSkillList}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+      />
     </section>
   );
 }

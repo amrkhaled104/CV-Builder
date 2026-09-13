@@ -55,6 +55,11 @@
   border-color: transparent;
 }
 
+.reorderSections.active {
+  border-color: var(--primary-color);
+  color: var(--text-primary);
+}
+
 .pdfDownload:hover,
 .sampleCV:hover,
 .theme-toggle-handle:hover {

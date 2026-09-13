@@ -11,6 +11,10 @@ import "../Common.css";
 export default function EducationalExperience({
   educationList,
   setEducationList,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
 }) {
   function addEducation() {
     setEducationList([
@@ -45,7 +49,14 @@ export default function EducationalExperience({
     setEducationList(educationList.filter((entry) => entry.id !== id));
   }
   return (
-    <FormCard title="Education">
+    <FormCard
+      title="Education"
+      sectionKey="education"
+      sectionOrder={sectionOrder}
+      isReordering={isReordering}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       {/* <SectionTitle
         title="Educational Qualifications"
         subtitle="Add all your schools, colleges and universities."
@@ -142,7 +153,7 @@ function EducationInfo({ entry, updateEntry, removeEntry }) {
             onChange={(e) => updateEntry(entry.id, "bullets", e.target.value)}
           />
         </FormBox>
-        <DurationInput entry={entry} updateEntry={updateEntry}  />
+        <DurationInput entry={entry} updateEntry={updateEntry} />
       </InputRow>
 
       <div className="action-buttons right">

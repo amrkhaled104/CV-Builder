@@ -2,6 +2,7 @@ import "./App.css";
 import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
+import { useSectionOrder } from "./hooks/useSectionOrder";
 import * as Sample from "../src/data/sampleData.js";
 import { useRef, useState } from "react";
 
@@ -38,6 +39,8 @@ type Project = {
 
 function App() {
   const cvRef = useRef(null);
+  const { sectionOrder, isReordering, toggleReordering, moveUp, moveDown } =
+    useSectionOrder();
   const [generalInfo, setGeneralInfo] = useState({
     firstName: "",
     lastName: "",
@@ -92,7 +95,6 @@ function App() {
   ]);
   const [projectList, setProjectList] = useState<Project[]>([]);
   const [skillList, setSkillList] = useState<SkillCategory[]>([]);
-
   function loadSampleCV() {
     setGeneralInfo(Sample.sampleGeneralInfo);
     setEducationList(Sample.sampleEducation);
@@ -105,6 +107,8 @@ function App() {
       <HeaderBar
         cvRef={cvRef} //Now HeaderBar can print that element.
         loadSampleCV={loadSampleCV}
+        isReordering={isReordering}
+        onToggleReordering={toggleReordering}
       />
       <div className="mainContent">
         <FormInputs
@@ -118,6 +122,10 @@ function App() {
           setProjectList={setProjectList}
           skillList={skillList}
           setSkillList={setSkillList}
+          sectionOrder={sectionOrder}
+          isReordering={isReordering}
+          onMoveUp={moveUp}
+          onMoveDown={moveDown}
         />
         <CvPreview
           generalInfo={generalInfo}
@@ -126,6 +134,7 @@ function App() {
           workList={workList}
           projectList={projectList}
           skillList={skillList}
+          sections={sectionOrder}
         />
       </div>
     </>

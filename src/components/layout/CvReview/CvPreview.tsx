@@ -77,6 +77,12 @@ type SkillCategory = {
   category: string;
   skills: SkillItem[];
 };
+type SectionName =
+  | "summary"
+  | "education"
+  | "experience"
+  | "projects"
+  | "skills";
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
@@ -84,6 +90,7 @@ type CvPreviewProps = {
   workList: ExperienceItem[];
   projectList: ProjectItem[];
   skillList: SkillCategory[];
+  sections: SectionName[];
 };
 
 function CvPreview({
@@ -93,6 +100,7 @@ function CvPreview({
   workList,
   projectList,
   skillList,
+  sections,
 }: CvPreviewProps) {
   function formatDate(date: string) {
     if (!date) return "";
@@ -199,205 +207,219 @@ function CvPreview({
             ))}
           </div>
         )}
-
-        {generalInfo.bio && (
-          <>
-            <h2 className="cv-section-title">Summary</h2>
-            <p className="cv-summary">{generalInfo.bio}</p>
-          </>
-        )}
       </header>
-      {/* ================= EDUCATION ================= */}
-      {educationList.length > 0 && (
-        <section className="education-section">
-          <h2 className="cv-section-title">Education</h2>
-          {educationList.map((edu) => {
-            const educationBullets =
-              edu.bullets
-                ?.split("\n")
-                .map((bullet) => bullet.trim())
-                .filter(Boolean) ?? [];
+      {sections.map((section) => {
+        switch (section) {
+          case "summary":
+            return generalInfo.bio ? (
+              <section key={section}>
+                <h2 className="cv-section-title">Summary</h2>
+                <p className="cv-summary">{generalInfo.bio}</p>
+              </section>
+            ) : null;
 
-            return (
-              <div className="entry" key={edu.id}>
-                <div className="entry-header">
-                  <div className="entry-left">
-                    <strong>{edu.study}</strong>
-                    {edu.study && edu.schoolName && ", "}
-                    {edu.schoolName}
-                    {edu.place && (
-                      <>
-                        {edu.study || edu.schoolName ? ", " : ""}
-                        <em>{edu.place}</em>
-                      </>
+          case "education":
+            return educationList.length > 0 ? (
+              <section className="education-section">
+                <h2 className="cv-section-title">Education</h2>
+                {educationList.map((edu) => {
+                  const educationBullets =
+                    edu.bullets
+                      ?.split("\n")
+                      .map((bullet) => bullet.trim())
+                      .filter(Boolean) ?? [];
+
+                  return (
+                    <div className="entry" key={edu.id}>
+                      <div className="entry-header">
+                        <div className="entry-left">
+                          <strong>{edu.study}</strong>
+                          {edu.study && edu.schoolName && ", "}
+                          {edu.schoolName}
+                          {edu.place && (
+                            <>
+                              {edu.study || edu.schoolName ? ", " : ""}
+                              <em>{edu.place}</em>
+                            </>
+                          )}
+                          {!educationBullets.length && edu.grade && (
+                            <span> (GPA: {edu.grade})</span>
+                          )}
+                        </div>
+                        <div className="entry-right">{getDuration(edu)}</div>
+                      </div>
+                      {(edu.subTitle || edu.linkText) && (
+                        <div className="education-subrow">
+                          {edu.subTitle && <span>{edu.subTitle}</span>}
+                          {edu.linkText && (
+                            <span>
+                              {edu.linkUrl ? (
+                                <a
+                                  href={edu.linkUrl}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {edu.linkText}
+                                </a>
+                              ) : (
+                                edu.linkText
+                              )}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      {educationBullets.length > 0 && (
+                        <ul className="bullet-list education-bullets">
+                          {educationBullets.map((bullet, index) => (
+                            <li key={`${edu.id}-bullet-${index}`}>
+                              {renderBullet(bullet)}
+                              {index === 0 && edu.grade && (
+                                <span> (GPA: {edu.grade})</span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      )}
+                    </div>
+                  );
+                })}
+              </section>
+            ) : null;
+
+          case "experience":
+            return workList.length > 0 ? (
+              <>
+                <h2 className="cv-section-title">Experience</h2>
+                {workList.map((work) => (
+                  <div className="entry" key={work.id}>
+                    <div className="entry-header">
+                      <div className="entry-left">
+                        <strong>{work.position}</strong>
+                        {work.position && work.companyName && ", "}
+                        {work.companyName}
+                        {work.location && (
+                          <>
+                            {work.position || work.companyName ? ", " : ""}
+                            <em>{work.location}</em>
+                          </>
+                        )}
+                        {work.linkText && work.linkUrl && (
+                          <>
+                            {work.position || work.companyName || work.location
+                              ? " | "
+                              : ""}
+                            <a
+                              href={work.linkUrl}
+                              target="_blank"
+                              rel="noreferrer"
+                            >
+                              {work.linkText}
+                            </a>
+                          </>
+                        )}
+                      </div>
+
+                      <div className="entry-right">{getDuration(work)}</div>
+                    </div>
+
+                    {work.companyDescription && (
+                      <p className="entry-description">
+                        {work.companyDescription}
+                      </p>
                     )}
-                    {!educationBullets.length && edu.grade && (
-                      <span> (GPA: {edu.grade})</span>
+
+                    {work.responsibilities && (
+                      <ul className="bullet-list">
+                        {work.responsibilities
+                          .split("\n")
+                          .filter((line) => line.trim() !== "")
+                          .map((item, index) => (
+                            <li key={index}>{item}</li>
+                          ))}
+                      </ul>
                     )}
                   </div>
-                  <div className="entry-right">{getDuration(edu)}</div>
-                </div>
-                {(edu.subTitle || edu.linkText) && (
-                  <div className="education-subrow">
-                    {edu.subTitle && <span>{edu.subTitle}</span>}
-                    {edu.linkText && (
-                      <span>
-                        {edu.linkUrl ? (
-                          <a
-                            href={edu.linkUrl}
-                            target="_blank"
-                            rel="noreferrer"
-                          >
-                            {edu.linkText}
-                          </a>
-                        ) : (
-                          edu.linkText
-                        )}
-                      </span>
+                ))}
+              </>
+            ) : null;
+
+          case "projects":
+            return projectList.length > 0 ? (
+              <>
+                <h2 className="cv-section-title">Projects</h2>
+
+                {projectList.map((project) => (
+                  <div className="entry" key={project.id}>
+                    <div className="entry-header">
+                      <div className="entry-left">
+                        <strong>{project.title}</strong>
+                        {project.tagline && <>. {project.tagline}</>}
+                      </div>
+
+                      <div className="entry-right">
+                        {project.links
+                          .filter(
+                            (link) =>
+                              link.url && (link.title || link.customTitle),
+                          )
+                          .map((link, index) => (
+                            <span key={link.id}>
+                              {index > 0 && " | "}
+                              <a
+                                className="cv-link"
+                                href={link.url}
+                                target="_blank"
+                                rel="noreferrer"
+                              >
+                                {link.title === "Other"
+                                  ? link.customTitle || link.url
+                                  : link.title}
+                              </a>
+                            </span>
+                          ))}
+                      </div>
+                    </div>
+
+                    {project.description && (
+                      <ul className="bullet-list">
+                        {project.description
+                          .split("\n")
+                          .map((line) =>
+                            line.replace(/^\s*[-*•]\s*/, "").trim(),
+                          )
+                          .filter(Boolean)
+                          .map((line, index) => (
+                            <li key={index}>{line}</li>
+                          ))}
+                      </ul>
                     )}
                   </div>
-                )}
-                {educationBullets.length > 0 && (
-                  <ul className="bullet-list education-bullets">
-                    {educationBullets.map((bullet, index) => (
-                      <li key={`${edu.id}-bullet-${index}`}>
-                        {renderBullet(bullet)}
-                        {index === 0 && edu.grade && (
-                          <span> (GPA: {edu.grade})</span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            );
-          })}
-        </section>
-      )}
-      {/* ================= EXPERIENCE ================= */}
-      {workList.length > 0 && (
-        <>
-          <h2 className="cv-section-title">Experience</h2>
-          {workList.map((work) => (
-            <div className="entry" key={work.id}>
-              <div className="entry-header">
-                <div className="entry-left">
-                  <strong>{work.position}</strong>
-                  {work.position && work.companyName && ", "}
-                  {work.companyName}
-                  {work.location && (
-                    <>
-                      {work.position || work.companyName ? ", " : ""}
-                      <em>{work.location}</em>
-                    </>
-                  )}
-                  {work.linkText && work.linkUrl && (
-                    <>
-                      {work.position || work.companyName || work.location
-                        ? " | "
-                        : ""}
-                      <a href={work.linkUrl} target="_blank" rel="noreferrer">
-                        {work.linkText}
-                      </a>
-                    </>
-                  )}
-                </div>
+                ))}
+              </>
+            ) : null;
 
-                <div className="entry-right">{getDuration(work)}</div>
-              </div>
+          case "skills":
+            return skillList.length > 0 ? (
+              <>
+                <h2 className="cv-section-title">Skills</h2>
 
-              {work.companyDescription && (
-                <p className="entry-description">{work.companyDescription}</p>
-              )}
-
-              {work.responsibilities && (
-                <ul className="bullet-list">
-                  {work.responsibilities
-                    .split("\n")
-                    .filter((line) => line.trim() !== "")
-                    .map((item, index) => (
-                      <li key={index}>{item}</li>
-                    ))}
-                </ul>
-              )}
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* ================= PROJECTS ================= */}
-      {projectList.length > 0 && (
-        <>
-          <h2 className="cv-section-title">Projects</h2>
-
-          {projectList.map((project) => (
-            <div className="entry" key={project.id}>
-              <div className="entry-header">
-                <div className="entry-left">
-                  <strong>{project.title}</strong>
-                  {project.tagline && <>. {project.tagline}</>}
-                </div>
-
-                <div className="entry-right">
-                  {project.links
-                    .filter(
-                      (link) => link.url && (link.title || link.customTitle),
-                    )
-                    .map((link, index) => (
-                      <span key={link.id}>
-                        {index > 0 && " | "}
-                        <a
-                          className="cv-link"
-                          href={link.url}
-                          target="_blank"
-                          rel="noreferrer"
-                        >
-                          {link.title === "Other"
-                            ? link.customTitle || link.url
-                            : link.title}
-                        </a>
+                <div className="skills-container">
+                  {skillList.map((category) => (
+                    <div className="skill-category" key={category.id}>
+                      <span className="skill-category-title">
+                        {category.category}:
                       </span>
-                    ))}
+
+                      <span className="skill-category-skills">
+                        {category.skills.map((skill) => skill.name).join(", ")}
+                      </span>
+                    </div>
+                  ))}
                 </div>
-              </div>
-
-              {project.description && (
-                <ul className="bullet-list">
-                  {project.description
-                    .split("\n")
-                    .map((line) => line.replace(/^\s*[-*•]\s*/, "").trim())
-                    .filter(Boolean)
-                    .map((line, index) => (
-                      <li key={index}>{line}</li>
-                    ))}
-                </ul>
-              )}
-            </div>
-          ))}
-        </>
-      )}
-
-      {/* =================  SKILLS ================= */}
-
-      {skillList.length > 0 && (
-        <>
-          <h2 className="cv-section-title">Skills</h2>
-
-          <div className="skills-container">
-            {skillList.map((category) => (
-              <div className="skill-category" key={category.id}>
-                <span className="skill-category-title">
-                  {category.category}:
-                </span>
-
-                <span className="skill-category-skills">
-                  {category.skills.map((skill) => skill.name).join(", ")}
-                </span>
-              </div>
-            ))}
-          </div>
-        </>
-      )}
+              </>
+            ) : null;
+        }
+      })}
     </section>
   );
 }

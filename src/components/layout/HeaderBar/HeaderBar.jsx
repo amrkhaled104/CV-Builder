@@ -3,7 +3,12 @@ import DarkModeIcon from "@mui/icons-material/DarkMode";
 import LightModeIcon from "@mui/icons-material/LightMode";
 import { useReactToPrint } from "react-to-print";
 import { useState, useEffect } from "react";
-export default function HeaderBar({ cvRef, loadSampleCV }) {
+export default function HeaderBar({
+  cvRef,
+  loadSampleCV,
+  isReordering,
+  onToggleReordering,
+}) {
   const [theme, setTheme] = useState(false);
   const toggleTheme = () => {
     setTheme((prev) => !prev);
@@ -34,6 +39,12 @@ export default function HeaderBar({ cvRef, loadSampleCV }) {
         </button>
         <button className="pdfDownload" onClick={handlePrint}>
           PDF
+        </button>
+        <button
+          className={`reorderSections${isReordering ? " active" : ""}`}
+          onClick={onToggleReordering}
+        >
+          {isReordering ? "Done" : "Edit Order"}
         </button>
       </div>
     </div>

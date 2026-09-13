@@ -5,7 +5,14 @@ import DurationInput from "../reusables/DurationInput";
 import ActionButtons from "../reusables/ActionButton";
 import FormBox from "../reusables/FormBox";
 import FormCard from "../reusables/FormCard";
-export default function PracticalExperience({ workList, setWorkList }) {
+export default function PracticalExperience({
+  workList,
+  setWorkList,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
+}) {
   function addWork() {
     setWorkList([
       ...workList,
@@ -38,7 +45,14 @@ export default function PracticalExperience({ workList, setWorkList }) {
     setWorkList(workList.filter((work) => work.id !== id));
   }
   return (
-    <FormCard title="Work Experience">
+    <FormCard
+      title="Work Experience"
+      sectionKey="experience"
+      sectionOrder={sectionOrder}
+      isReordering={isReordering}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       {/* <SectionTitle
         title="Professional Experience"
         subtitle="Add internships, jobs or freelance work."

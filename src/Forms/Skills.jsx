@@ -5,7 +5,14 @@ import ActionButtons from "../reusables/ActionButton.jsx";
 
 import "../Common.css";
 
-export default function Skill({ skillList, setSkillList }) {
+export default function Skill({
+  skillList,
+  setSkillList,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
+}) {
   function addCategory() {
     setSkillList([
       ...skillList,
@@ -77,7 +84,14 @@ export default function Skill({ skillList, setSkillList }) {
   }
 
   return (
-    <FormCard title="Skills">
+    <FormCard
+      title="Skills"
+      sectionKey="skills"
+      sectionOrder={sectionOrder}
+      isReordering={isReordering}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       <DynamicList
         items={skillList}
         emptyMessage="No skill categories added."

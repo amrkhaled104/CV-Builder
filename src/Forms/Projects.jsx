@@ -6,7 +6,14 @@ import DynamicList from "../reusables/DynamicList";
 import ActionButtons from "../reusables/ActionButton";
 import InputRow from "../reusables/InptRow";
 import LinkCard from "../reusables/LinkCard";
-export default function Project({ projectList, setProjectList }) {
+export default function Project({
+  projectList,
+  setProjectList,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
+}) {
   function addProject() {
     setProjectList([
       ...projectList,
@@ -91,7 +98,14 @@ export default function Project({ projectList, setProjectList }) {
     );
   }
   return (
-    <FormCard title="Projects">
+    <FormCard
+      title="Projects"
+      sectionKey="projects"
+      sectionOrder={sectionOrder}
+      isReordering={isReordering}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       {/* <SectionTitle title="Projects" subtitle="Highlight your best work." /> */}
       <DynamicList
         items={projectList}

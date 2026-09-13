@@ -13,6 +13,24 @@
   font-weight: 700;
 }
 
+.form-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.form-card-header .form-card-title {
+  margin-bottom: 18px;
+}
+
+.form-card-content {
+  min-width: 0;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
 .form-card-content {
   flex-direction: column;
   gap: 18px;

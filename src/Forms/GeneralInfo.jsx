@@ -6,7 +6,14 @@ import DynamicList from "../reusables/DynamicList.jsx";
 import LinkCard from "../reusables/LinkCard.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 
-export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
+export default function GeneralInfo({
+  generalInfo,
+  setGeneralInfo,
+  sectionOrder,
+  isReordering,
+  onMoveUp,
+  onMoveDown,
+}) {
   function handleChange(field, value) {
     setGeneralInfo({ ...generalInfo, [field]: value });
   }
@@ -43,7 +50,14 @@ export default function GeneralInfo({ generalInfo, setGeneralInfo }) {
   }
 
   return (
-    <FormCard title="General Information">
+    <FormCard
+      title="General Information"
+      sectionKey="summary"
+      sectionOrder={sectionOrder}
+      isReordering={isReordering}
+      onMoveUp={onMoveUp}
+      onMoveDown={onMoveDown}
+    >
       <FormCard title="Personal Information">
         <InputRow columns={1}>
           <FormBox label="First Name">
