@@ -16,8 +16,7 @@ const initialSectionOrder: SectionKey[] = [
 ];
 
 export function useSectionOrder() {
-  const [sectionOrder, setSectionOrder] =
-    useState<SectionKey[]>(initialSectionOrder);
+  const [sectionOrder, setSectionOrder] = useState<SectionKey[]>(initialSectionOrder);
   const [isReordering, setIsReordering] = useState(false);
 
   function toggleReordering() {

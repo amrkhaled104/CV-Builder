@@ -55,9 +55,50 @@
   border-color: transparent;
 }
 
-.reorderSections.active {
-  border-color: var(--primary-color);
+.reorderSections {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background-color: transparent;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 8px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.reorderSections:hover {
+  border-color: var(--text-secondary);
   color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.04);
+}
+
+.light-theme .reorderSections:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.reorderSections:active {
+  transform: scale(0.97);
+}
+
+.reorderSections.active {
+  background: var(--primary-color);
+  color: #ffffff;
+  border-color: var(--primary-color);
+  font-weight: 600;
+}
+
+.reorderSections.active:hover {
+  background: var(--primary-hover);
+  border-color: var(--primary-hover);
+  color: #ffffff;
+}
+
+.reorder-btn-icon {
+  flex-shrink: 0;
 }
 
 .pdfDownload:hover,

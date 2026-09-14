@@ -39,8 +39,7 @@ type Project = {
 
 function App() {
   const cvRef = useRef(null);
-  const { sectionOrder, isReordering, toggleReordering, moveUp, moveDown } =
-    useSectionOrder();
+  const { sectionOrder, isReordering, toggleReordering, moveUp, moveDown } = useSectionOrder();
   const [generalInfo, setGeneralInfo] = useState({
     firstName: "",
     lastName: "",

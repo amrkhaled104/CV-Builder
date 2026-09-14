@@ -24,13 +24,25 @@
 
 .FormBox input:disabled,
 .FormBox textarea:disabled,
-.FormBox select:disabled {
-  opacity: 0.55;
-  background: #1a1726;
+.FormBox select:disabled,
+.skill-item input:disabled {
+  opacity: 0.65;
+  background: var(--bg-primary);
   color: var(--text-secondary);
+  border-color: var(--border-color);
   cursor: not-allowed;
 }
 
 .FormBox input[type="date"]:disabled::-webkit-calendar-picker-indicator {
-  opacity: 0.35;
+  opacity: 0.25;
+  cursor: not-allowed;
+}
+
+fieldset:disabled .btn,
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed !important;
+  pointer-events: none;
+  transform: none !important;
+  box-shadow: none !important;
 }

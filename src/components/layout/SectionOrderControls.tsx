@@ -1,4 +1,5 @@
 import type { SectionKey } from "../../hooks/useSectionOrder";
+import "./SectionOrderControls.css";
 
 type SectionOrderControlsProps = {
   sectionKey: SectionKey;
@@ -27,27 +28,58 @@ export default function SectionOrderControls({
 }: SectionOrderControlsProps) {
   if (!isVisible) return null;
 
+  const label = sectionLabels[sectionKey];
+
   return (
     <div
-      className="section-order-item"
-      aria-label={`Reorder ${sectionLabels[sectionKey]}`}
+      className="section-order-controls"
+      role="group"
+      aria-label={`Reorder ${label}`}
     >
-      <span>{sectionLabels[sectionKey]}</span>
       <button
         type="button"
-        aria-label={`Move ${sectionLabels[sectionKey]} up`}
+        className="section-order-btn"
+        aria-label={`Move ${label} up`}
+        title={`Move ${label} up`}
         disabled={isFirst}
         onClick={() => onMoveUp(sectionKey)}
       >
-        ↑
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="18 15 12 9 6 15" />
+        </svg>
       </button>
+
       <button
         type="button"
-        aria-label={`Move ${sectionLabels[sectionKey]} down`}
+        className="section-order-btn"
+        aria-label={`Move ${label} down`}
+        title={`Move ${label} down`}
         disabled={isLast}
         onClick={() => onMoveDown(sectionKey)}
       >
-        ↓
+        <svg
+          viewBox="0 0 24 24"
+          width="16"
+          height="16"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <polyline points="6 9 12 15 18 9" />
+        </svg>
       </button>
     </div>
   );

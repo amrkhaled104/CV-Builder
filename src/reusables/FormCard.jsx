@@ -14,7 +14,9 @@ export default function FormCard({
   const sectionIndex = sectionKey ? sectionOrder.indexOf(sectionKey) : -1;
 
   return (
-    <section className={`form-card ${className}`}>
+    <section
+      className={`form-card ${className}${isReordering && sectionKey ? " is-reordering" : ""}`}
+    >
       {title && (
         <div className="form-card-header">
           <h2 className="form-card-title">{title}</h2>

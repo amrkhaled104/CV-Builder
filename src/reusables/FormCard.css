@@ -4,13 +4,18 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   padding: 20px;
+  transition: border-color var(--transition), opacity var(--transition);
+}
+
+.form-card.is-reordering {
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .form-card-title {
   color: var(--text-primary);
-  margin-bottom: 18px;
   font-size: 1.35rem;
   font-weight: 700;
+  margin: 0;
 }
 
 .form-card-header {
@@ -18,9 +23,6 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-}
-
-.form-card-header .form-card-title {
   margin-bottom: 18px;
 }
 
@@ -29,13 +31,20 @@
   border: 0;
   padding: 0;
   margin: 0;
-}
-
-.form-card-content {
   flex-direction: column;
   gap: 18px;
   display: flex;
+  transition: opacity 0.2s ease;
 }
+
+.form-card-content:disabled {
+  opacity: 0.52;
+  cursor: not-allowed;
+  user-select: none;
+  pointer-events: none;
+}
+
 .form-card + .form-card {
   margin-top: 20px;
 }
+
