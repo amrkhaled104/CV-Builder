@@ -28,64 +28,50 @@ export default function HeaderBar({
   }, [theme]);
 
   return (
-    <div className="header-bar">
-      <div className="theme-toggle-handle" onClick={toggleTheme}>
-        {theme ? <LightModeIcon /> : <DarkModeIcon />}
-      </div>
-      <div className="logo">CV</div>
-      <div className="headerButtons">
-        <button className="sampleCV" onClick={loadSampleCV}>
-          Sample Cv
+    <header className="header-bar">
+      <div className="header-left">
+        <button
+          type="button"
+          className="theme-toggle-btn"
+          onClick={toggleTheme}
+          aria-label={theme ? "Switch to dark mode" : "Switch to light mode"}
+          title={theme ? "Switch to dark mode" : "Switch to light mode"}
+        >
+          {theme ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
         </button>
-        <button className="pdfDownload" onClick={handlePrint}>
-          PDF
+      </div>
+
+      <div className="header-center">
+        <span className="logo">CV</span>
+      </div>
+
+      <div className="header-right headerButtons">
+        <button
+          type="button"
+          className="btn-header btn-header--secondary"
+          onClick={loadSampleCV}
+          title="Load sample CV data"
+        >
+          Example
         </button>
         <button
-          className={`reorderSections${isReordering ? " active" : ""}`}
+          type="button"
+          className={`btn-header btn-header--secondary btn-header--sort${isReordering ? " active" : ""}`}
           onClick={onToggleReordering}
           aria-pressed={isReordering}
           title={isReordering ? "Done reordering sections" : "Reorder CV sections"}
         >
-          {isReordering ? (
-            <>
-              <svg
-                className="reorder-btn-icon"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-              <span>Done</span>
-            </>
-          ) : (
-            <>
-              <svg
-                className="reorder-btn-icon"
-                viewBox="0 0 24 24"
-                width="16"
-                height="16"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-hidden="true"
-              >
-                <path d="M7 15l5 5 5-5" />
-                <path d="M7 9l5-5 5 5" />
-              </svg>
-              <span>Edit Order</span>
-            </>
-          )}
+          Sort
+        </button>
+        <button
+          type="button"
+          className="btn-header btn-header--primary"
+          onClick={handlePrint}
+          title="Export CV as PDF"
+        >
+          PDF
         </button>
       </div>
-    </div>
+    </header>
   );
 }

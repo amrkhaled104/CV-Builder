@@ -136,6 +136,7 @@ function App() {
       loadSampleSection(sample);
     }
   }
+
   return (
     <>
       <HeaderBar

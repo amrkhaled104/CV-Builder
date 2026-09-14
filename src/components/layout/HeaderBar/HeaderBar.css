@@ -1,149 +1,193 @@
 /* ========================================
-   HEADER
+   HEADER BAR
 ======================================== */
 .header-bar {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 14px 20px;
+  justify-content: space-between;
+  padding: 10px 24px;
   background-color: var(--bg-secondary);
   color: var(--text-primary);
   border-bottom: 1px solid var(--border-color);
   position: sticky;
   top: 0;
   z-index: 100;
-}
-
-.logo {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  letter-spacing: 1px;
+  min-height: 56px;
 }
 
 /* ========================================
- BUTTON GROUP
+   THREE-COLUMN FLEX LAYOUT
 ======================================== */
-
-.headerButtons {
+.header-left,
+.header-right {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-end;
-  gap: 12px;
+  flex: 1;
 }
 
-.headerButtons button {
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 10px 18px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  transition: var(--transition);
+.header-left {
+  justify-content: flex-start;
 }
 
-/* ========================================
-   PDF BUTTON
-======================================== */
-
-.pdfDownload,
-.sampleCV {
-  background: var(--primary-color);
-  color: #ffffff;
-  border-color: transparent;
-}
-
-.reorderSections {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  background-color: transparent;
-  color: var(--text-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  padding: 8px 14px;
-  font-size: 0.88rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.reorderSections:hover {
-  border-color: var(--text-secondary);
-  color: var(--text-primary);
-  background-color: rgba(255, 255, 255, 0.04);
-}
-
-.light-theme .reorderSections:hover {
-  background-color: rgba(0, 0, 0, 0.04);
-}
-
-.reorderSections:active {
-  transform: scale(0.97);
-}
-
-.reorderSections.active {
-  background: var(--primary-color);
-  color: #ffffff;
-  border-color: var(--primary-color);
-  font-weight: 600;
-}
-
-.reorderSections.active:hover {
-  background: var(--primary-hover);
-  border-color: var(--primary-hover);
-  color: #ffffff;
-}
-
-.reorder-btn-icon {
-  flex-shrink: 0;
-}
-
-.pdfDownload:hover,
-.sampleCV:hover,
-.theme-toggle-handle:hover {
-  background: var(--primary-hover);
-}
-/* ========================================
-theme toggle button
-======================================== */
-
-.theme-toggle-handle {
+.header-center {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  width: 45px;
-  height: 65px;
-  touch-action: none;
+  flex-shrink: 0;
+}
+
+.header-right {
+  justify-content: flex-end;
+  gap: 8px; /* Consistent 0.5rem / 8px spacing */
 }
 
 /* ========================================
-   RESPONSIVE
+   APP TITLE / LOGO
 ======================================== */
+.logo {
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  color: var(--text-primary);
+  user-select: none;
+  line-height: 1;
+}
 
-@media (max-width: 768px) {
+/* ========================================
+   THEME TOGGLE BUTTON
+======================================== */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+  background-color: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--bg-card-subtle);
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+}
+
+.theme-toggle-btn:active {
+  transform: scale(0.96);
+}
+
+/* ========================================
+   ACTION BUTTONS BASE
+======================================== */
+.btn-header {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 14px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  user-select: none;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: all var(--transition);
+}
+
+.btn-header:active {
+  transform: scale(0.97);
+}
+
+/* ========================================
+   SECONDARY OUTLINE BUTTON (Example, Sort)
+======================================== */
+.btn-header--secondary {
+  background-color: transparent;
+  color: var(--text-primary);
+  border-color: var(--border-color);
+}
+
+.btn-header--secondary:hover {
+  color: var(--text-primary);
+  border-color: var(--text-secondary);
+  background-color: var(--bg-card-subtle);
+}
+
+.light-theme .btn-header--secondary:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+/* ========================================
+   SORT BUTTON ACTIVE TOGGLE STATE
+======================================== */
+.btn-header--sort.active {
+  background-color: rgba(59, 130, 246, 0.12);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  font-weight: 600;
+  box-shadow: 0 0 0 1px var(--accent-primary);
+}
+
+.light-theme .btn-header--sort.active {
+  background-color: rgba(37, 99, 235, 0.08);
+}
+
+.btn-header--sort.active:hover {
+  background-color: rgba(59, 130, 246, 0.2);
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
+}
+
+/* ========================================
+   PRIMARY HIGHLIGHTED BUTTON (PDF)
+======================================== */
+.btn-header--primary {
+  background-color: var(--accent-primary);
+  color: var(--text-on-primary);
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
+.btn-header--primary:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px var(--shadow);
+}
+
+.btn-header--primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+@media (max-width: 640px) {
   .header-bar {
-    flex-direction: row;
-    justify-content: space-between;
+    padding: 10px 14px;
   }
 
   .logo {
-    font-size: 1.25rem;
-    justify-content: right;
+    font-size: 1.2rem;
   }
 
-  .headerButtons {
-    justify-content: right;
+  .header-right {
+    gap: 6px;
   }
 
-  .headerButtons button {
-    padding: 8px 14px;
-    font-size: 0.85rem;
+  .btn-header {
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+
+  .theme-toggle-btn {
+    width: 32px;
+    height: 32px;
   }
 }
