@@ -3,6 +3,7 @@ import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
 import { useSectionOrder } from "./hooks/useSectionOrder";
+import { useCustomSections } from "./hooks/useCustomSections";
 import * as Sample from "../src/data/sampleData.js";
 import { useRef, useState } from "react";
 
@@ -39,7 +40,37 @@ type Project = {
 
 function App() {
   const cvRef = useRef(null);
-  const { sectionOrder, isReordering, toggleReordering, moveUp, moveDown } = useSectionOrder();
+  const {
+    sectionOrder,
+    isReordering,
+    toggleReordering,
+    moveUp,
+    moveDown,
+    addSection: addSectionKey,
+    removeSection: removeSectionKey,
+  } = useSectionOrder();
+
+  const {
+    customSections,
+    addSection,
+    removeSection,
+    updateSectionTitle,
+    loadSampleSection,
+    addItem,
+    updateItem,
+    removeItem,
+  } = useCustomSections([], {
+    onSectionAdded: addSectionKey,
+    onSectionRemoved: removeSectionKey,
+  });
+
+  function handleLoadSampleSection() {
+    const sample = Sample.sampleCustomSections[0];
+    if (sample) {
+      loadSampleSection(sample);
+    }
+  }
+
   const [generalInfo, setGeneralInfo] = useState({
     firstName: "",
     lastName: "",
@@ -100,6 +131,10 @@ function App() {
     setSkillList(Sample.sampleSkills);
     setWorkList(Sample.sampleWork);
     setProjectList(Sample.sampleProjects);
+    const sample = Sample.sampleCustomSections[0];
+    if (sample) {
+      loadSampleSection(sample);
+    }
   }
   return (
     <>
@@ -121,6 +156,14 @@ function App() {
           setProjectList={setProjectList}
           skillList={skillList}
           setSkillList={setSkillList}
+          customSections={customSections}
+          addSection={addSection}
+          removeSection={removeSection}
+          updateSectionTitle={updateSectionTitle}
+          onLoadSampleSection={handleLoadSampleSection}
+          addItem={addItem}
+          updateItem={updateItem}
+          removeItem={removeItem}
           sectionOrder={sectionOrder}
           isReordering={isReordering}
           onMoveUp={moveUp}
@@ -133,6 +176,7 @@ function App() {
           workList={workList}
           projectList={projectList}
           skillList={skillList}
+          customSections={customSections}
           sections={sectionOrder}
         />
       </div>

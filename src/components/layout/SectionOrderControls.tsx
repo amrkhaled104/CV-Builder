@@ -10,7 +10,7 @@ type SectionOrderControlsProps = {
   isVisible: boolean;
 };
 
-const sectionLabels: Record<SectionKey, string> = {
+const sectionLabels: Record<string, string> = {
   summary: "Summary",
   education: "Education",
   experience: "Experience",
@@ -28,7 +28,7 @@ export default function SectionOrderControls({
 }: SectionOrderControlsProps) {
   if (!isVisible) return null;
 
-  const label = sectionLabels[sectionKey];
+  const label = sectionLabels[sectionKey] || sectionKey;
 
   return (
     <div

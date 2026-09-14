@@ -1,13 +1,15 @@
 import { useState } from "react";
 
-export type SectionKey =
+export type BuiltinSectionKey =
   | "summary"
   | "education"
   | "experience"
   | "projects"
   | "skills";
 
-const initialSectionOrder: SectionKey[] = [
+export type SectionKey = BuiltinSectionKey | (string & {});
+
+export const initialSectionOrder: SectionKey[] = [
   "summary",
   "education",
   "experience",
@@ -15,8 +17,8 @@ const initialSectionOrder: SectionKey[] = [
   "skills",
 ];
 
-export function useSectionOrder() {
-  const [sectionOrder, setSectionOrder] = useState<SectionKey[]>(initialSectionOrder);
+export function useSectionOrder(initialOrder: SectionKey[] = initialSectionOrder) {
+  const [sectionOrder, setSectionOrder] = useState<SectionKey[]>(initialOrder);
   const [isReordering, setIsReordering] = useState(false);
 
   function toggleReordering() {
@@ -45,11 +47,26 @@ export function useSectionOrder() {
     });
   }
 
+  function addSection(key: SectionKey) {
+    setSectionOrder((current) =>
+      current.includes(key) ? current : [...current, key],
+    );
+  }
+
+  function removeSection(key: SectionKey) {
+    setSectionOrder((current) => current.filter((k) => k !== key));
+  }
+
   return {
     sectionOrder,
+    setSectionOrder,
     isReordering,
     toggleReordering,
     moveUp,
     moveDown,
+    addSection,
+    removeSection,
+    addSectionKey: addSection,
+    removeSectionKey: removeSection,
   };
 }

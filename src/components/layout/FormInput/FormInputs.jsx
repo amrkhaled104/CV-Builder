@@ -4,6 +4,7 @@ import EducationalExpperience from "../../../Forms/EducationExp.jsx";
 import PracticalExperience from "../../../Forms/PracticalExp.jsx";
 import Project from "../../../Forms/Projects.jsx";
 import Skill from "../../../Forms/Skills.jsx";
+import CustomSections from "../../../Forms/CustomSections.jsx";
 
 export default function FormInputs({
   generalInfo,
@@ -16,6 +17,14 @@ export default function FormInputs({
   setProjectList,
   skillList,
   setSkillList,
+  customSections,
+  addSection,
+  removeSection,
+  updateSectionTitle,
+  addItem,
+  updateItem,
+  removeItem,
+  onLoadSampleSection,
   sectionOrder,
   isReordering,
   onMoveUp,
@@ -58,6 +67,20 @@ export default function FormInputs({
       <Skill
         skillList={skillList}
         setSkillList={setSkillList}
+        sectionOrder={sectionOrder}
+        isReordering={isReordering}
+        onMoveUp={onMoveUp}
+        onMoveDown={onMoveDown}
+      />
+      <CustomSections
+        customSections={customSections}
+        addSection={addSection}
+        removeSection={removeSection}
+        updateSectionTitle={updateSectionTitle}
+        onLoadSampleSection={onLoadSampleSection}
+        addItem={addItem}
+        updateItem={updateItem}
+        removeItem={removeItem}
         sectionOrder={sectionOrder}
         isReordering={isReordering}
         onMoveUp={onMoveUp}

@@ -153,3 +153,41 @@ export const sampleProjects = [
     ],
   },
 ];
+
+export const sampleCustomSections = [
+  {
+    id: "custom-open-source-projects",
+    title: "OPEN SOURCE PROJECTS",
+    items: [
+      {
+        id: crypto.randomUUID(),
+        title: "Chromium",
+        tagline: "Open-source browser codebase powering Google Chrome, Edge, and Brave",
+        description: [
+          "Fixed memory regression in V8 garbage collection pipeline by auditing weak callback lifecycle.",
+          "Implemented automated layout regression test suite covering CSS Grid subpixel snapping.",
+        ].join("\n"),
+        durationType: "date",
+        startDate: "2024-03-01",
+        endDate: "2024-09-01",
+        customDuration: "",
+        isCurrent: false,
+        links: [
+          {
+            id: crypto.randomUUID(),
+            title: "PR #14285",
+            customTitle: "",
+            url: "https://chromium-review.googlesource.com/c/chromium/src/+/14285",
+          },
+          {
+            id: crypto.randomUUID(),
+            title: "GitHub Mirror",
+            customTitle: "",
+            url: "https://github.com/chromium/chromium",
+          },
+        ],
+      },
+    ],
+  },
+];
+

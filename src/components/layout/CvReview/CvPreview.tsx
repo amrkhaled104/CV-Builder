@@ -1,4 +1,5 @@
 import "./CvPreview.css";
+import type { CustomSection } from "../../../types/customSection";
 
 type LinkInfo = {
   id: string;
@@ -82,7 +83,8 @@ type SectionName =
   | "education"
   | "experience"
   | "projects"
-  | "skills";
+  | "skills"
+  | (string & {});
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
@@ -90,6 +92,7 @@ type CvPreviewProps = {
   workList: ExperienceItem[];
   projectList: ProjectItem[];
   skillList: SkillCategory[];
+  customSections?: CustomSection[];
   sections: SectionName[];
 };
 
@@ -100,6 +103,7 @@ function CvPreview({
   workList,
   projectList,
   skillList,
+  customSections = [],
   sections,
 }: CvPreviewProps) {
   function formatDate(date: string) {
@@ -418,6 +422,75 @@ function CvPreview({
                 </div>
               </>
             ) : null;
+
+          default: {
+            const customSection = customSections.find(
+              (cs) => cs.id === section,
+            );
+            if (!customSection || customSection.items.length === 0) return null;
+
+            return (
+              <section key={customSection.id}>
+                <h2 className="cv-section-title">{customSection.title}</h2>
+                {customSection.items.map((item) => (
+                  <div className="entry" key={item.id}>
+                    <div className="entry-header">
+                      <div className="entry-left">
+                        <strong>{item.title}</strong>
+                        {item.tagline && <>. {item.tagline}</>}
+                      </div>
+
+                      <div className="entry-right">
+                        {item.links &&
+                        item.links.some(
+                          (link) => link.url && (link.title || link.customTitle),
+                        ) ? (
+                          item.links
+                            .filter(
+                              (link) =>
+                                link.url && (link.title || link.customTitle),
+                            )
+                            .map((link, index) => (
+                              <span key={link.id}>
+                                {index > 0 && " | "}
+                                <a
+                                  className="cv-link"
+                                  href={link.url}
+                                  target="_blank"
+                                  rel="noreferrer"
+                                >
+                                  {link.title === "Other"
+                                    ? link.customTitle || link.url
+                                    : link.title}
+                                </a>
+                              </span>
+                            ))
+                        ) : item.startDate ||
+                          item.isCurrent ||
+                          item.customDuration ? (
+                          getDuration(item)
+                        ) : null}
+                      </div>
+                    </div>
+
+                    {item.description && (
+                      <ul className="bullet-list">
+                        {item.description
+                          .split("\n")
+                          .map((line) =>
+                            line.replace(/^\s*[-*•]\s*/, "").trim(),
+                          )
+                          .filter(Boolean)
+                          .map((line, index) => (
+                            <li key={index}>{line}</li>
+                          ))}
+                      </ul>
+                    )}
+                  </div>
+                ))}
+              </section>
+            );
+          }
         }
       })}
     </section>
