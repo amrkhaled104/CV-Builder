@@ -30,31 +30,3 @@ src/
 ├── App.tsx                        # Main application layout & state
 └── main.tsx                       # App entry point
 ```
-
-## Tools Used
-
-- **React 19** - UI and component state
-- **TypeScript** - Type safety and custom section models
-- **Vite** - Fast local development server and bundler
-- **react-to-print** - Direct browser print & PDF generation
-- **Vanilla CSS** - Modern styling with light/dark theme tokens
-
-## How to Run Locally
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/amrkhaled104/CV-Builder.git
-   cd CV-Builder
-   ```
-
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-
-3. Start the local development server:
-   ```bash
-   npm run dev
-   ```
-
-4. Open [http://localhost:5173](http://localhost:5173) in your browser.
