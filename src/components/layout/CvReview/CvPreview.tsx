@@ -94,6 +94,7 @@ type CvPreviewProps = {
   skillList: SkillCategory[];
   customSections?: CustomSection[];
   sections: SectionName[];
+  onLoadSample?: () => void;
 };
 
 function CvPreview({
@@ -105,6 +106,7 @@ function CvPreview({
   skillList,
   customSections = [],
   sections,
+  onLoadSample,
 }: CvPreviewProps) {
   function formatDate(date: string) {
     if (!date) return "";
@@ -169,49 +171,197 @@ function CvPreview({
     );
   }
 
-  const visibleLinks = generalInfo.links.filter(
-    (link) => link.title && link.url,
+  const hasName = Boolean(
+    generalInfo.firstName?.trim() || generalInfo.lastName?.trim(),
   );
+  const hasHeadline = Boolean(generalInfo.headline?.trim());
+  const hasContact = Boolean(
+    generalInfo.phone?.trim() ||
+      generalInfo.email?.trim() ||
+      generalInfo.location?.trim(),
+  );
+  const visibleLinks = (generalInfo.links || []).filter(
+    (link) =>
+      (link.title?.trim() || link.customTitle?.trim()) && link.url?.trim(),
+  );
+  const hasHeader =
+    hasName || hasHeadline || hasContact || visibleLinks.length > 0;
+  const hasSummary = Boolean(generalInfo.bio?.trim());
+
+  const validEducation = educationList.filter(
+    (edu) =>
+      Boolean(
+        edu.schoolName?.trim() ||
+          edu.study?.trim() ||
+          edu.place?.trim() ||
+          edu.subTitle?.trim() ||
+          edu.bullets?.trim() ||
+          edu.grade?.trim() ||
+          edu.linkText?.trim(),
+      ),
+  );
+
+  const validWork = workList.filter(
+    (work) =>
+      Boolean(
+        work.companyName?.trim() ||
+          work.position?.trim() ||
+          work.responsibilities?.trim() ||
+          work.companyDescription?.trim() ||
+          work.location?.trim() ||
+          work.linkText?.trim(),
+      ),
+  );
+
+  const validProjects = projectList.filter(
+    (project) =>
+      Boolean(
+        project.title?.trim() ||
+          project.tagline?.trim() ||
+          project.description?.trim() ||
+          project.links?.some(
+            (l) =>
+              l.url?.trim() && (l.title?.trim() || l.customTitle?.trim()),
+          ),
+      ),
+  );
+
+  const validSkills = skillList
+    .map((category) => ({
+      ...category,
+      skills: (category.skills || []).filter((s) => s.name?.trim()),
+    }))
+    .filter(
+      (category) => category.category?.trim() && category.skills.length > 0,
+    );
+
+  const validCustomSections = customSections.map((cs) => ({
+    ...cs,
+    items: (cs.items || []).filter(
+      (item) =>
+        Boolean(
+          item.title?.trim() ||
+            item.tagline?.trim() ||
+            item.description?.trim() ||
+            item.links?.some(
+              (l) =>
+                l.url?.trim() && (l.title?.trim() || l.customTitle?.trim()),
+            ),
+        ),
+    ),
+  }));
+
+  const hasAnyData =
+    hasHeader ||
+    hasSummary ||
+    validEducation.length > 0 ||
+    validWork.length > 0 ||
+    validProjects.length > 0 ||
+    validSkills.length > 0 ||
+    validCustomSections.some((cs) => cs.items.length > 0);
+
+  if (!hasAnyData) {
+    return (
+      <section className="cvPreview cvPreview--empty" ref={ref}>
+        <div className="cv-empty-state">
+          <div className="cv-empty-icon-wrap" aria-hidden="true">
+            <svg
+              className="cv-empty-icon"
+              viewBox="0 0 24 24"
+              width="44"
+              height="44"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="1.8"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+              <polyline points="10 9 9 9 8 9" />
+            </svg>
+          </div>
+          <h2 className="cv-empty-title">CV Preview is Empty</h2>
+          <p className="cv-empty-text">
+            Your live CV preview will appear here once you enter data in the form
+            or click <strong>Sample Cv</strong>.
+          </p>
+          {onLoadSample && (
+            <button
+              type="button"
+              className="cv-empty-btn"
+              onClick={onLoadSample}
+            >
+              <svg
+                viewBox="0 0 24 24"
+                width="16"
+                height="16"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                <polyline points="14 2 14 8 20 8" />
+                <line x1="12" y1="18" x2="12" y2="12" />
+                <line x1="9" y1="15" x2="15" y2="15" />
+              </svg>
+              <span>Load Sample CV</span>
+            </button>
+          )}
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="cvPreview" ref={ref}>
       {/* ================= HEADER ================= */}
-      <header className="cv-header">
-        <h1 className="cv-name">
-          {generalInfo.firstName} {generalInfo.lastName}
-        </h1>
-        {generalInfo.headline && (
-          <div className="cv-headline">{generalInfo.headline}</div>
-        )}
-        {(generalInfo.phone || generalInfo.email || generalInfo.location) && (
-          <div className="cv-header-row cv-contact">
-            {generalInfo.phone && <span>{generalInfo.phone}</span>}
-            {generalInfo.email && (
-              <span>
-                <a
-                  href={`mailto:${generalInfo.email}`}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  {generalInfo.email}
-                </a>
-              </span>
-            )}
-            {generalInfo.location && <span>{generalInfo.location}</span>}
-          </div>
-        )}
-        {visibleLinks.length > 0 && (
-          <div className="cv-header-row cv-links">
-            {visibleLinks.map((link) => (
-              <span key={link.id}>
-                <a href={link.url} target="_blank" rel="noreferrer">
-                  {getLinkLabel(link)}
-                </a>
-              </span>
-            ))}
-          </div>
-        )}
-      </header>
+      {hasHeader && (
+        <header className="cv-header">
+          {hasName && (
+            <h1 className="cv-name">
+              {[generalInfo.firstName?.trim(), generalInfo.lastName?.trim()]
+                .filter(Boolean)
+                .join(" ")}
+            </h1>
+          )}
+          {generalInfo.headline && (
+            <div className="cv-headline">{generalInfo.headline}</div>
+          )}
+          {(generalInfo.phone || generalInfo.email || generalInfo.location) && (
+            <div className="cv-header-row cv-contact">
+              {generalInfo.phone && <span>{generalInfo.phone}</span>}
+              {generalInfo.email && (
+                <span>
+                  <a
+                    href={`mailto:${generalInfo.email}`}
+                    target="_blank"
+                    rel="noreferrer"
+                  >
+                    {generalInfo.email}
+                  </a>
+                </span>
+              )}
+              {generalInfo.location && <span>{generalInfo.location}</span>}
+            </div>
+          )}
+          {visibleLinks.length > 0 && (
+            <div className="cv-header-row cv-links">
+              {visibleLinks.map((link) => (
+                <span key={link.id}>
+                  <a href={link.url} target="_blank" rel="noreferrer">
+                    {getLinkLabel(link)}
+                  </a>
+                </span>
+              ))}
+            </div>
+          )}
+        </header>
+      )}
       {sections.map((section) => {
         switch (section) {
           case "summary":
@@ -223,10 +373,10 @@ function CvPreview({
             ) : null;
 
           case "education":
-            return educationList.length > 0 ? (
-              <section className="education-section">
+            return validEducation.length > 0 ? (
+              <section className="education-section" key={section}>
                 <h2 className="cv-section-title">Education</h2>
-                {educationList.map((edu) => {
+                {validEducation.map((edu) => {
                   const educationBullets =
                     edu.bullets
                       ?.split("\n")
@@ -291,10 +441,10 @@ function CvPreview({
             ) : null;
 
           case "experience":
-            return workList.length > 0 ? (
-              <>
+            return validWork.length > 0 ? (
+              <section className="experience-section" key={section}>
                 <h2 className="cv-section-title">Experience</h2>
-                {workList.map((work) => (
+                {validWork.map((work) => (
                   <div className="entry" key={work.id}>
                     <div className="entry-header">
                       <div className="entry-left">
@@ -344,15 +494,15 @@ function CvPreview({
                     )}
                   </div>
                 ))}
-              </>
+              </section>
             ) : null;
 
           case "projects":
-            return projectList.length > 0 ? (
-              <>
+            return validProjects.length > 0 ? (
+              <section className="projects-section" key={section}>
                 <h2 className="cv-section-title">Projects</h2>
 
-                {projectList.map((project) => (
+                {validProjects.map((project) => (
                   <div className="entry" key={project.id}>
                     <div className="entry-header">
                       <div className="entry-left">
@@ -399,16 +549,16 @@ function CvPreview({
                     )}
                   </div>
                 ))}
-              </>
+              </section>
             ) : null;
 
           case "skills":
-            return skillList.length > 0 ? (
-              <>
+            return validSkills.length > 0 ? (
+              <section className="skills-section" key={section}>
                 <h2 className="cv-section-title">Skills</h2>
 
                 <div className="skills-container">
-                  {skillList.map((category) => (
+                  {validSkills.map((category) => (
                     <div className="skill-category" key={category.id}>
                       <span className="skill-category-title">
                         {category.category}:
@@ -420,11 +570,11 @@ function CvPreview({
                     </div>
                   ))}
                 </div>
-              </>
+              </section>
             ) : null;
 
           default: {
-            const customSection = customSections.find(
+            const customSection = validCustomSections.find(
               (cs) => cs.id === section,
             );
             if (!customSection || customSection.items.length === 0) return null;

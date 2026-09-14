@@ -178,6 +178,7 @@ function App() {
           skillList={skillList}
           customSections={customSections}
           sections={sectionOrder}
+          onLoadSample={loadSampleCV}
         />
       </div>
     </>
