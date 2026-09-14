@@ -5,7 +5,11 @@ import { useReactToPrint } from "react-to-print";
 import { useState, useEffect } from "react";
 export default function HeaderBar({
   cvRef,
-  loadSampleCV,
+  onSave,
+  isSavedRecently,
+  hasSavedDraft,
+  onResume,
+  onSample,
   isReordering,
   onToggleReordering,
 }) {
@@ -48,12 +52,33 @@ export default function HeaderBar({
       <div className="header-right headerButtons">
         <button
           type="button"
-          className="btn-header btn-header--secondary"
-          onClick={loadSampleCV}
-          title="Load sample CV data"
+          className={`btn-header btn-header--secondary btn-header--save${isSavedRecently ? " is-saved" : ""}`}
+          onClick={onSave}
+          title="Save current CV draft to local storage"
         >
-          Example
+          {isSavedRecently ? "Saved!" : "Save"}
         </button>
+
+        {hasSavedDraft && (
+          <button
+            type="button"
+            className="btn-header btn-header--secondary btn-header--resume"
+            onClick={onResume}
+            title="Resume saved CV draft"
+          >
+            Resume
+          </button>
+        )}
+
+        <button
+          type="button"
+          className="btn-header btn-header--secondary"
+          onClick={onSample}
+          title="Load sample CV template"
+        >
+          Sample
+        </button>
+
         <button
           type="button"
           className={`btn-header btn-header--secondary btn-header--sort${isReordering ? " active" : ""}`}
@@ -63,6 +88,7 @@ export default function HeaderBar({
         >
           Sort
         </button>
+
         <button
           type="button"
           className="btn-header btn-header--primary"

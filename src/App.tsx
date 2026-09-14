@@ -40,8 +40,15 @@ type Project = {
 
 function App() {
   const cvRef = useRef<HTMLDivElement>(null);
+  const [hasSavedDraft, setHasSavedDraft] = useState(() =>
+    Boolean(localStorage.getItem("cv_draft")),
+  );
+  const [isSavedRecently, setIsSavedRecently] = useState(false);
+  const [, setIsSampleMode] = useState(false);
+
   const {
     sectionOrder,
+    setSectionOrder,
     isReordering,
     toggleReordering,
     moveUp,
@@ -52,6 +59,7 @@ function App() {
 
   const {
     customSections,
+    setCustomSections,
     addSection,
     removeSection,
     updateSectionTitle,
@@ -125,7 +133,46 @@ function App() {
   ]);
   const [projectList, setProjectList] = useState<Project[]>([]);
   const [skillList, setSkillList] = useState<SkillCategory[]>([]);
-  function loadSampleCV() {
+
+  function handleSave() {
+    const cvData = {
+      generalInfo,
+      educationList,
+      workList,
+      projectList,
+      skillList,
+      customSections,
+      sectionOrder,
+    };
+    try {
+      localStorage.setItem("cv_draft", JSON.stringify(cvData));
+      setHasSavedDraft(true);
+      setIsSavedRecently(true);
+      setTimeout(() => setIsSavedRecently(false), 1500);
+    } catch (err) {
+      console.error("Failed to save CV draft:", err);
+    }
+  }
+
+  function handleResume() {
+    try {
+      const raw = localStorage.getItem("cv_draft");
+      if (!raw) return;
+      const cvData = JSON.parse(raw);
+      if (cvData.generalInfo) setGeneralInfo(cvData.generalInfo);
+      if (cvData.educationList) setEducationList(cvData.educationList);
+      if (cvData.workList) setWorkList(cvData.workList);
+      if (cvData.projectList) setProjectList(cvData.projectList);
+      if (cvData.skillList) setSkillList(cvData.skillList);
+      if (cvData.customSections) setCustomSections(cvData.customSections);
+      if (cvData.sectionOrder) setSectionOrder(cvData.sectionOrder);
+      setIsSampleMode(false);
+    } catch (err) {
+      console.error("Failed to load CV draft:", err);
+    }
+  }
+
+  function handleSample() {
     setGeneralInfo(Sample.sampleGeneralInfo);
     setEducationList(Sample.sampleEducation);
     setSkillList(Sample.sampleSkills);
@@ -135,13 +182,18 @@ function App() {
     if (sample) {
       loadSampleSection(sample);
     }
+    setIsSampleMode(true);
   }
 
   return (
     <>
       <HeaderBar
         cvRef={cvRef} //Now HeaderBar can print that element.
-        loadSampleCV={loadSampleCV}
+        onSave={handleSave}
+        isSavedRecently={isSavedRecently}
+        hasSavedDraft={hasSavedDraft}
+        onResume={handleResume}
+        onSample={handleSample}
         isReordering={isReordering}
         onToggleReordering={toggleReordering}
       />
@@ -179,7 +231,7 @@ function App() {
           skillList={skillList}
           customSections={customSections}
           sections={sectionOrder}
-          onLoadSample={loadSampleCV}
+          onLoadSample={handleSample}
         />
       </div>
     </>
