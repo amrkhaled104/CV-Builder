@@ -32,11 +32,12 @@
 
 .btn-primary {
   background: var(--primary-color);
-  color: var(--text-primary);
+  color: var(--text-on-primary, #ffffff);
 }
 
 .btn-primary:hover {
   background: var(--primary-hover);
+  color: var(--text-on-primary, #ffffff);
 }
 
 .btn-link {
@@ -75,7 +76,7 @@
 }
 
 .btn-subtle:hover {
-  background: transparent;
-  border-color: var(--text-secondary);
-  color: var(--text-primary);
+  background: var(--bg-card-subtle, transparent);
+  border-color: var(--primary-color);
+  color: var(--primary-color);
 }

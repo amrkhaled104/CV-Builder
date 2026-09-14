@@ -3,7 +3,7 @@
   flex-direction: column;
   gap: 16px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--bg-card-subtle, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
 }

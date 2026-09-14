@@ -19,8 +19,8 @@
   padding: 10px 14px;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
+  background: var(--bg-input, var(--bg-secondary));
+  color: var(--text-primary);
   transition: var(--transition);
   -webkit-transition: var(--transition);
   -moz-transition: var(--transition);
@@ -40,5 +40,5 @@
 .skill-item input:focus {
   outline: none;
   border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }

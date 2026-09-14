@@ -15,14 +15,21 @@
   flex: 1;
   padding: 10px;
   background: transparent;
-  color: var(--text-primary);
+  color: var(--text-secondary);
   border: none;
-  transition: 0.2s;
+  font-weight: 500;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.duration-toggle button:hover:not(.active) {
+  background: var(--bg-card-subtle, rgba(255, 255, 255, 0.04));
+  color: var(--text-primary);
 }
 
 .duration-toggle button.active {
-  background: var(--accent-primary);
-  color: var(--text-secondary);
+  background: var(--primary-color);
+  color: var(--text-on-primary, #ffffff);
+  font-weight: 600;
 }
 
 .current-checkbox {
