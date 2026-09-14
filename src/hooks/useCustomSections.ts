@@ -70,7 +70,7 @@ export function useCustomSections(
     sectionId: string,
     itemId: string,
     fieldOrPatch: Partial<CustomSectionItem> | keyof CustomSectionItem,
-    value?: any,
+    value?: unknown,
   ): void {
     setCustomSections((prev) =>
       prev.map((sec) => {

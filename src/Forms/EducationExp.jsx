@@ -1,5 +1,4 @@
 import FormCard from "../reusables/FormCard.jsx";
-import SectionTitle from "../reusables/SectionTitle.jsx";
 import DynamicList from "../reusables/DynamicList.jsx";
 import FormBox from "../reusables/FormBox.jsx";
 import InputRow from "../reusables/InptRow.jsx";
@@ -57,10 +56,6 @@ export default function EducationalExperience({
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}
     >
-      {/* <SectionTitle
-        title="Educational Qualifications"
-        subtitle="Add all your schools, colleges and universities."
-      /> */}
       <DynamicList
         items={educationList}
         renderItem={(education) => (

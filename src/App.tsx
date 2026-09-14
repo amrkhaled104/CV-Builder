@@ -1,11 +1,11 @@
+import { useRef, useState } from "react";
 import "./App.css";
 import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
 import { useSectionOrder } from "./hooks/useSectionOrder";
 import { useCustomSections } from "./hooks/useCustomSections";
-import * as Sample from "../src/data/sampleData.js";
-import { useRef, useState } from "react";
+import * as Sample from "./data/sampleData.js";
 
 type Skill = {
   id: string;
@@ -39,7 +39,7 @@ type Project = {
 };
 
 function App() {
-  const cvRef = useRef(null);
+  const cvRef = useRef<HTMLDivElement>(null);
   const {
     sectionOrder,
     isReordering,

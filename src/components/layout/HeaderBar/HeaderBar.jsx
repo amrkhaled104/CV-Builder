@@ -32,7 +32,7 @@ export default function HeaderBar({
       <div className="theme-toggle-handle" onClick={toggleTheme}>
         {theme ? <LightModeIcon /> : <DarkModeIcon />}
       </div>
-      <div className="logo">CV Builder</div>
+      <div className="logo">CV</div>
       <div className="headerButtons">
         <button className="sampleCV" onClick={loadSampleCV}>
           Sample Cv

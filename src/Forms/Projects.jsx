@@ -106,7 +106,6 @@ export default function Project({
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}
     >
-      {/* <SectionTitle title="Projects" subtitle="Highlight your best work." /> */}
       <DynamicList
         items={projectList}
         renderItem={(project) => (

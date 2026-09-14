@@ -1,4 +1,3 @@
-import SectionTitle from "../reusables/SectionTitle";
 import DynamicList from "../reusables/DynamicList";
 import InputRow from "../reusables/InptRow";
 import DurationInput from "../reusables/DurationInput";
@@ -53,10 +52,6 @@ export default function PracticalExperience({
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}
     >
-      {/* <SectionTitle
-        title="Professional Experience"
-        subtitle="Add internships, jobs or freelance work."
-      /> */}
       <DynamicList
         items={workList}
         renderItem={(work) => (
