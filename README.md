@@ -1,19 +1,19 @@
 # CV Builder
 
 ## What this is and why I made it
-
-A straightforward CV builder made to create a clean, single-page resume with live preview. Most CV tools lock you into fixed templates or make it hard to add unique sections like open-source contributions or certifications. I built this so you can easily add custom sections, fill in your info, reorder sections up and down with one click, and export straight to PDF.
+  ""
+> **Design**: Informed by engineering resume best practices (clean hierarchy, scannable layout, zero visual noise). Core reference: [Omar Shawky's Resume Guide](https://omarshawky1.github.io/portfolio/resume.html).
 
 ## Project Folder Structure
 
 ```
 src/
 ├── components/
-│   └── layout/
-│       ├── CvReview/              # Live A4 preview & empty state
-│       ├── FormInput/             # Sidebar form wrapper
-│       ├── HeaderBar/             # Theme switch, Sample CV, PDF export, order toggle
-│       └── SectionOrderControls/  # Up/Down reordering controls
+│   └── layout/                    # Core layout views 
+│       ├── CvReview/              # Live Preview
+│       ├── FormInput/             # Form Sidebar
+│       ├── HeaderBar/             
+│       └── SectionOrderControls/  # Reorder Controls
 ├── Forms/                         # Input forms for each CV section
 │   ├── CustomSections.jsx
 │   ├── EducationExp.jsx
@@ -22,7 +22,7 @@ src/
 │   ├── Projects.jsx
 │   └── Skills.jsx
 ├── hooks/                         # State & logic hooks
-│   ├── useCustomSections.ts       # Dynamic custom sections CRUD
+│   ├── useCustomSections.ts       # Dynamic custom sections
 │   └── useSectionOrder.ts         # Section ordering & freeze mode
 ├── reusables/                     # Shared UI components (cards, inputs, buttons)
 ├── data/                          # Sample CV data for quick testing
