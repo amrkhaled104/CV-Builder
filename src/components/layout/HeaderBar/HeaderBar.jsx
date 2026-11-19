@@ -17,6 +17,8 @@ export default function HeaderBar({
   onImportJson,
   onOpenAtsModal,
   atsScore,
+  hasAiKey = false,
+  onOpenAiModal,
 }) {
   const [theme, setTheme] = useState(false);
   const [isFileMenuOpen, setIsFileMenuOpen] = useState(false);
@@ -286,6 +288,23 @@ export default function HeaderBar({
         >
           <span className="ats-dot" aria-hidden="true" />
           <span>ATS {atsScore !== undefined ? `${atsScore}%` : "Audit"}</span>
+        </button>
+
+        <button
+          type="button"
+          className="btn-header btn-header--ai"
+          onClick={onOpenAiModal}
+          title={
+            hasAiKey
+              ? "Gemini AI Key configured (Click to change)"
+              : "Configure your Gemini API Key for AI enhancements"
+          }
+        >
+          <span
+            className={`ai-dot${hasAiKey ? " active" : ""}`}
+            aria-hidden="true"
+          />
+          <span>AI Key</span>
         </button>
 
         <button

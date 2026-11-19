@@ -280,6 +280,47 @@
 }
 
 /* ========================================
+   AI KEY BUTTON VARIANT
+======================================== */
+.btn-header--ai {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border-color: rgba(59, 130, 246, 0.35);
+  background-color: rgba(59, 130, 246, 0.08);
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.ai-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  transition: all var(--transition);
+}
+
+.ai-dot.active {
+  background-color: #10b981;
+  box-shadow: 0 0 6px rgba(16, 185, 129, 0.6);
+}
+
+.btn-header--ai:hover {
+  background-color: rgba(59, 130, 246, 0.16);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+}
+
+.light-theme .btn-header--ai {
+  background-color: rgba(37, 99, 235, 0.06);
+  border-color: rgba(37, 99, 235, 0.25);
+}
+
+.light-theme .btn-header--ai:hover {
+  background-color: rgba(37, 99, 235, 0.12);
+}
+
+/* ========================================
    PRIMARY PROMINENT CTA BUTTON (Download PDF)
 ======================================== */
 .btn-header--primary {
