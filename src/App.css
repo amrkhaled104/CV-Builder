@@ -9,7 +9,9 @@
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
-  --transition: 0.25s ease;
+  --transition: 0.2s ease;
+
+  --font-ui: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
@@ -19,6 +21,7 @@
 
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --text-on-primary: #ffffff;
   --text-color: #f8fafc;
   --placeholder-color: #64748b;
@@ -34,19 +37,20 @@
   --danger-bg-subtle: rgba(239, 68, 68, 0.12);
 
   --border-color: #334155;
-  --border-subtle: #1e293b;
-  --shadow: rgba(2, 6, 23, 0.45);
+  --border-subtle: #243247;
+  --shadow: 0 4px 20px -2px rgba(2, 6, 23, 0.45);
 }
 
 .light-theme {
-  --bg-primary: #f1f5f9;
+  --bg-primary: #f8fafc;
   --bg-secondary: #ffffff;
-  --bg-card-subtle: #f8fafc;
+  --bg-card-subtle: #f1f5f9;
   --bg-input: #ffffff;
-  --bg-color: #f1f5f9;
+  --bg-color: #f8fafc;
 
   --text-primary: #0f172a;
   --text-secondary: #475569;
+  --text-muted: #94a3b8;
   --text-on-primary: #ffffff;
   --text-color: #0f172a;
   --placeholder-color: #94a3b8;
@@ -63,7 +67,7 @@
 
   --border-color: #cbd5e1;
   --border-subtle: #e2e8f0;
-  --shadow: rgba(15, 23, 42, 0.08);
+  --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.08);
 }
 
 .dark-theme {
@@ -75,6 +79,7 @@
 
   --text-primary: #f8fafc;
   --text-secondary: #94a3b8;
+  --text-muted: #64748b;
   --text-on-primary: #ffffff;
   --text-color: #f8fafc;
   --placeholder-color: #64748b;
@@ -90,29 +95,28 @@
   --danger-bg-subtle: rgba(239, 68, 68, 0.12);
 
   --border-color: #334155;
-  --border-subtle: #1e293b;
-  --shadow: rgba(2, 6, 23, 0.45);
+  --border-subtle: #243247;
+  --shadow: 0 4px 20px -2px rgba(2, 6, 23, 0.45);
 }
 
 /* ========================================
-   GLOBAL STYLES
+   GLOBAL STYLES & STRICT SANS UI FONT STACK
 ======================================== */
+html,
+body,
+button,
+input,
+select,
+textarea {
+  font-family: var(--font-ui);
+}
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition:
-    background-color var(--transition),
-    color var(--transition);
-  -webkit-transition:
-    background-color var(--transition),
-    color var(--transition);
-  -moz-transition:
-    background-color var(--transition),
-    color var(--transition);
-  -ms-transition:
-    background-color var(--transition),
-    color var(--transition);
-  -o-transition:
     background-color var(--transition),
     color var(--transition);
 }
@@ -120,45 +124,56 @@ body {
 /* ========================================
    APP LAYOUT
 ======================================== */
-
 .mainContent {
   display: grid;
-  grid-template-columns: 1fr 2fr;
+  grid-template-columns: minmax(360px, 1fr) minmax(500px, 1.45fr);
   gap: 24px;
-  padding: 24px;
+  padding: 20px 24px;
   align-items: start;
 }
 
 /* ========================================
    SIDEBAR
 ======================================== */
-
 .mainContent > :first-child {
   position: sticky;
-  top: 88px;
-  max-height: calc(100vh - 112px);
+  top: 76px;
+  max-height: calc(100vh - 96px);
   overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom subtle scrollbar */
+.mainContent > :first-child::-webkit-scrollbar {
+  width: 6px;
+}
+
+.mainContent > :first-child::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.mainContent > :first-child::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 999px;
 }
 
 /* ========================================
-   PREVIEW
+   PREVIEW WRAPPER
 ======================================== */
-
 .mainContent > :last-child {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   flex-direction: column;
 }
 
 /* ========================================
    GLOBAL
 ======================================== */
-
 html {
   scroll-behavior: smooth;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 992px) {
   .mainContent {
     grid-template-columns: 1fr;
     padding: 16px;
@@ -168,5 +183,6 @@ html {
     position: static;
     max-height: none;
     overflow: visible;
+    padding-right: 0;
   }
 }
