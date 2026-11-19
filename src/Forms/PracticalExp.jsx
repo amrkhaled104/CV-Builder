@@ -1,5 +1,5 @@
 import DynamicList from "../reusables/DynamicList";
-import InputRow from "../reusables/InptRow";
+import InputRow from "../reusables/InputRow.jsx";
 import DurationInput from "../reusables/DurationInput";
 import ActionButtons from "../reusables/ActionButton";
 import FormBox from "../reusables/FormBox";

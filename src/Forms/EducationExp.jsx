@@ -1,7 +1,7 @@
 import FormCard from "../reusables/FormCard.jsx";
 import DynamicList from "../reusables/DynamicList.jsx";
 import FormBox from "../reusables/FormBox.jsx";
-import InputRow from "../reusables/InptRow.jsx";
+import InputRow from "../reusables/InputRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import DurationInput from "../reusables/DurationInput.jsx";
 

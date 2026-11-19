@@ -4,7 +4,7 @@ import DurationInput from "../reusables/DurationInput";
 import SectionTitle from "../reusables/SectionTitle";
 import DynamicList from "../reusables/DynamicList";
 import ActionButtons from "../reusables/ActionButton";
-import InputRow from "../reusables/InptRow";
+import InputRow from "../reusables/InputRow.jsx";
 import LinkCard from "../reusables/LinkCard";
 export default function Project({
   projectList,

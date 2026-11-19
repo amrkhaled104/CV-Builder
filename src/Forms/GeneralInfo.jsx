@@ -1,5 +1,5 @@
 import FormCard from "../reusables/FormCard.jsx";
-import InputRow from "../reusables/InptRow.jsx";
+import InputRow from "../reusables/InputRow.jsx";
 import FormBox from "../reusables/FormBox.jsx";
 import DynamicList from "../reusables/DynamicList.jsx";
 import LinkCard from "../reusables/LinkCard.jsx";
