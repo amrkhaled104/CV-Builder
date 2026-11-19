@@ -123,6 +123,28 @@ Calculates a real-time score out of 100 based on standard tech hiring filters:
 
 ---
 
+## 10. Client-Side AI Resume Enhancer (BYOK)
+
+**Files**: `src/services/geminiService.ts`, `src/hooks/useAiEnhance.ts`, `src/components/common/AiEnhanceSection/AiEnhanceBox.tsx`, `src/components/layout/AiKeyModal/AiKeyModal.tsx`, `src/utils/aiKeyStorage.ts`
+
+Transforms rough, informal notes (in Arabic or rough English) into ATS-optimized English adhering to Omar Shawky's Software Engineering Resume Guidelines and Google's XYZ formula.
+
+- **Bring Your Own Key (BYOK)**: Users provide their own Google Gemini API key via the `AI Key` button in the header bar. The key is stored locally in `localStorage` (`cv_builder_gemini_key`) and sent directly to Google's API. No backend server or proxy is involved.
+- **Header Status Pill**: The `AI Key` button shows a status dot: green when a key is saved, muted when no key is set.
+- **Model**: Uses `gemini-2.5-flash` with structured JSON output mode (`responseMimeType: "application/json"`).
+- **Prompt Rules**:
+  - Eliminates first-person pronouns (`I`, `me`, `my`, `we`, `our`).
+  - Rewrites experience and project descriptions using Google's XYZ formula (`Accomplished [X] as measured by [Y] by doing [Z]`).
+  - Starts every bullet point with a strong action verb (e.g. `Architected`, `Optimized`, `Automated`).
+  - Prohibits hallucinating numbers, metrics, or technologies not present in the user's input.
+- **Scoped UI & Non-Destructive Preview**:
+  - Integrated into General Info (Bio/Summary), Practical Experience (Responsibilities), and Projects (Description).
+  - Each item maintains its own independent state so enhancing one card does not affect others.
+  - Suggestions appear in an inline preview box showing improved text and coach tips. Users choose to `Accept` (updates the form) or `Discard` (closes the preview).
+  - All AI buttons and previews are hidden automatically when printing or exporting to PDF.
+
+---
+
 ## Next Steps
 
 - Review the resume rules: [Resume Rules](./resume-rules.md)

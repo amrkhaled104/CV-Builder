@@ -21,12 +21,16 @@ This document explains how CV Builder works internally so you can build new feat
 
 ```
 src/
-├── components/layout/
-│   ├── AtsAuditModal/         # Modal dialog showing the ATS score and advice
-│   ├── CvReview/              # Live CV preview paper, toolbar, and print styling
-│   ├── FormInput/             # Left sidebar containing all section form components
-│   ├── HeaderBar/             # Top bar: brand logo, File dropdown menu, actions
-│   └── SectionOrderControls/  # Up/down buttons to reorder sections in sort mode
+├── components/
+│   ├── common/
+│   │   └── AiEnhanceSection/  # Scoped AI enhance button and suggestion box
+│   └── layout/
+│       ├── AiKeyModal/        # Modal for entering and managing Gemini API key
+│       ├── AtsAuditModal/     # Modal dialog showing the ATS score and advice
+│       ├── CvReview/          # Live CV preview paper, toolbar, and print styling
+│       ├── FormInput/         # Left sidebar containing all section form components
+│       ├── HeaderBar/         # Top bar: brand logo, File dropdown menu, actions
+│       └── SectionOrderControls/  # Up/down buttons to reorder sections in sort mode
 ├── data/
 │   └── sampleData.js          # Default sample CV data (engineering focused)
 ├── Forms/                     # Individual form components for each CV section
@@ -37,8 +41,11 @@ src/
 │   ├── Projects.jsx           # Technical project entries
 │   └── Skills.jsx             # Categorized skill lists
 ├── hooks/
+│   ├── useAiEnhance.ts        # Hook for calling AI enhancer per entry
 │   ├── useCustomSections.ts   # State management for custom dynamic sections
 │   └── useSectionOrder.ts     # State management for section reordering
+├── services/
+│   └── geminiService.ts       # Direct REST client for Google Gemini 2.5 Flash
 ├── reusables/                 # Shared UI building blocks
 │   ├── ActionButton.jsx       # Primary, link, subtle, and icon buttons
 │   ├── DynamicList.jsx        # List wrapper for repeated entries
@@ -49,6 +56,7 @@ src/
 ├── types/
 │   └── customSection.ts       # TypeScript types for custom sections
 ├── utils/
+│   ├── aiKeyStorage.ts        # BYOK local storage management
 │   ├── atsLinter.ts           # ATS and formatting audit algorithms
 │   └── storage.ts             # LocalStorage management and JSON export/import
 ├── App.tsx                    # Root state coordinator
@@ -92,6 +100,45 @@ The entire app uses a single source of truth located in `src/App.tsx`.
    - `CvPreview.tsx` maps over `sectionOrder`.
    - For each section key, it renders the matching block (`summary`, `education`, `experience`, `projects`, `skills`, or custom section ID).
    - Empty sections are filtered out so they do not take up space.
+
+---
+
+## AI Enhancer Architecture (BYOK)
+
+The AI Enhancer uses a Bring Your Own Key (BYOK) design:
+
+```
+┌────────────────────────────────┐
+│ User enters Gemini API Key     │
+│ (stored in browser localKey)   │
+└──────────────┬─────────────────┘
+               │
+               ▼
+┌────────────────────────────────┐
+│ User clicks "Enhance with AI"  │
+│ on Summary, Job, or Project    │
+└──────────────┬─────────────────┘
+               │
+               ▼ Direct REST Call (no backend)
+┌────────────────────────────────┐
+│ Google Gemini REST API         │
+│ (gemini-2.5-flash)             │
+│ System Prompt: Omar Shawky's   │
+│ Guidelines & Google XYZ        │
+└──────────────┬─────────────────┘
+               │
+               ▼ Structured JSON Response
+┌────────────────────────────────┐
+│ Non-Destructive Preview Box    │
+│ [Accept] -> Writes to Form     │
+│ [Discard] -> Closes Preview    │
+└────────────────────────────────┘
+```
+
+1. **Storage**: Key is saved in `localStorage` under `cv_builder_gemini_key` (`src/utils/aiKeyStorage.ts`).
+2. **Direct Client Fetch**: Requests go straight to Google's API endpoint (`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent`) without passing through any intermediate proxy or server.
+3. **Scoped State**: `AiEnhanceBox` is mounted inside individual entry items, ensuring each job or project maintains its own isolated loading, error, and suggestion state.
+4. **Non-Destructive**: Suggestions are displayed in a preview box. Form state is only modified when the user clicks `Accept`.
 
 ---
 
