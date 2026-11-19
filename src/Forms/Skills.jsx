@@ -2,6 +2,7 @@ import FormCard from "../reusables/FormCard.jsx";
 import FormBox from "../reusables/FormBox.jsx";
 import DynamicList from "../reusables/DynamicList.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
+import { generateId } from "../utils/id";
 
 import "../Common.css";
 
@@ -17,7 +18,7 @@ export default function Skill({
     setSkillList([
       ...skillList,
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         category: "",
         skills: [],
       },
@@ -45,7 +46,7 @@ export default function Skill({
               skills: [
                 ...category.skills,
                 {
-                  id: crypto.randomUUID(),
+                  id: generateId(),
                   name: "",
                 },
               ],
@@ -94,7 +95,6 @@ export default function Skill({
     >
       <DynamicList
         items={skillList}
-        emptyMessage="No skill categories added."
         renderItem={(category) => (
           <SkillCategory
             key={category.id}
@@ -140,7 +140,6 @@ function SkillCategory({
 
       <DynamicList
         items={entry.skills}
-        emptyMessage="No skills added."
         renderItem={(skill) => (
           <div className="skill-item" key={skill.id}>
             <input

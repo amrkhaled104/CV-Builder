@@ -7,6 +7,7 @@ import ActionButtons from "../reusables/ActionButton";
 import InputRow from "../reusables/InputRow.jsx";
 import LinkCard from "../reusables/LinkCard";
 import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
+import { generateId } from "../utils/id";
 
 export default function Project({
   projectList,
@@ -21,7 +22,7 @@ export default function Project({
     setProjectList([
       ...projectList,
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: "",
         tagline: "",
         description: "",
@@ -32,7 +33,7 @@ export default function Project({
         isCurrent: false,
         links: [
           {
-            id: crypto.randomUUID(),
+            id: generateId(),
             title: "",
             customTitle: "",
             url: "",
@@ -61,7 +62,7 @@ export default function Project({
               links: [
                 ...project.links,
                 {
-                  id: crypto.randomUUID(),
+                  id: generateId(),
                   title: "",
                   customTitle: "",
                   url: "",

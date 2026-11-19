@@ -6,6 +6,7 @@ import DynamicList from "../reusables/DynamicList";
 import ActionButtons from "../reusables/ActionButton";
 import InputRow from "../reusables/InputRow.jsx";
 import LinkCard from "../reusables/LinkCard";
+import { generateId } from "../utils/id";
 
 export default function CustomSections({
   customSections = [],
@@ -33,7 +34,7 @@ export default function CustomSections({
     updateItem(sectionId, itemId, "links", [
       ...currentLinks,
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: "",
         customTitle: "",
         url: "",

@@ -4,6 +4,7 @@ import FormBox from "../reusables/FormBox.jsx";
 import InputRow from "../reusables/InputRow.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import DurationInput from "../reusables/DurationInput.jsx";
+import { generateId } from "../utils/id";
 
 import "../Common.css";
 
@@ -19,7 +20,7 @@ export default function EducationalExperience({
     setEducationList([
       ...educationList,
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         schoolName: "",
         study: "",
         place: "",

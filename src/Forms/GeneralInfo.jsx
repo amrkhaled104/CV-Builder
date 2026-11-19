@@ -5,6 +5,7 @@ import DynamicList from "../reusables/DynamicList.jsx";
 import LinkCard from "../reusables/LinkCard.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
 import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
+import { generateId } from "../utils/id";
 
 export default function GeneralInfo({
   generalInfo,
@@ -41,7 +42,7 @@ export default function GeneralInfo({
       links: [
         ...prev.links,
         {
-          id: crypto.randomUUID(),
+          id: generateId(),
           title: "",
           customTitle: "",
           url: "",
