@@ -388,17 +388,22 @@ function CvPreview({
             <span>Show 1-Page Guide</span>
           </label>
         </div>
-      </div>
 
-      {isOverflowing && showPageGuide && (
-        <div className="cv-overflow-warning">
-          <span>⚠️</span>
-          <span>
-            <strong>Page limit exceeded:</strong> Your content extends beyond 1 page.
-            Try selecting <strong>&quot;Compact&quot;</strong> spacing or trimming bullet points to keep within the FAANG 1-page standard.
-          </span>
-        </div>
-      )}
+        {isOverflowing && showPageGuide && (
+          <div
+            className="page-limit-pill"
+            role="status"
+            title={
+              density === "compact"
+                ? "Content exceeds 1 page. Try trimming bullet points or tightening descriptions to fit on 1 page."
+                : "Content exceeds 1 page. Try switching Spacing to Compact or trimming bullet points to fit on 1 page."
+            }
+          >
+            <span className="page-limit-pill-icon" aria-hidden="true">⚠️</span>
+            <span>Over 1 page</span>
+          </div>
+        )}
+      </div>
 
       <section
         className={`cvPreview font-${font} density-${density}`}

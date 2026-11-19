@@ -1,10 +1,14 @@
 /* ========================================
    CV PREVIEW - ROOT CONTAINER
 ======================================== */
+.cv-preview-wrapper {
+  font-family: var(--font-ui);
+}
+
 .cvPreview {
   width: min(100%, 210mm);
   min-width: 0;
-  margin: 30px auto;
+  margin: 14px auto 30px auto;
   padding: 28px 36px;
   background: #fff;
   color: #111;
@@ -82,7 +86,8 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 297mm; /* Standard A4 height */
+  top: 297mm;
+  /* Standard A4 height */
   border-top: 2px dashed #ef4444;
   pointer-events: none;
   z-index: 50;
@@ -100,19 +105,6 @@
   border-radius: 0 0 4px 4px;
   letter-spacing: 0.5px;
   text-transform: uppercase;
-}
-
-.cv-overflow-warning {
-  margin-top: 12px;
-  padding: 8px 14px;
-  background-color: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  color: #ef4444;
-  border-radius: var(--radius-sm);
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 /* ========================================
@@ -157,7 +149,7 @@
   font-size: 0.85rem;
 }
 
-.cv-header-row span + span::before {
+.cv-header-row span+span::before {
   content: "⋄";
   margin: 0 8px;
   color: #777;
@@ -351,6 +343,39 @@
   user-select: none;
 }
 
+/* Compact status pill directly inside Preview Toolbar */
+.page-limit-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.2;
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  color: #fca5a5;
+  cursor: help;
+  user-select: none;
+  transition: all var(--transition);
+  margin-left: auto;
+}
+
+.light-theme .page-limit-pill {
+  background-color: #fee2e2;
+  border-color: #fca5a5;
+  color: #b91c1c;
+}
+
+.page-limit-pill:hover {
+  transform: translateY(-1px);
+}
+
+.page-limit-pill-icon {
+  font-size: 0.85rem;
+}
+
 /* ========================================
    EMPTY STATE PREVIEW
 ======================================== */
@@ -492,7 +517,7 @@
 
   .preview-controls-bar,
   .cv-page-guide,
-  .cv-overflow-warning,
+  .page-limit-pill,
   .cvPreview--empty,
   .header-bar,
   .leftSidebarForm {
@@ -525,5 +550,20 @@
   .cv-header-row a {
     color: #000 !important;
     text-decoration: underline !important;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  .cvPreview {
+    padding: 12mm 14mm !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    box-sizing: border-box;
   }
 }
