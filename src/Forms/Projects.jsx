@@ -6,6 +6,8 @@ import DynamicList from "../reusables/DynamicList";
 import ActionButtons from "../reusables/ActionButton";
 import InputRow from "../reusables/InputRow.jsx";
 import LinkCard from "../reusables/LinkCard";
+import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
+
 export default function Project({
   projectList,
   setProjectList,
@@ -13,6 +15,7 @@ export default function Project({
   isReordering,
   onMoveUp,
   onMoveDown,
+  onMissingKey,
 }) {
   function addProject() {
     setProjectList([
@@ -117,6 +120,7 @@ export default function Project({
             updateLink={updateLink}
             removeLink={removeLink}
             removeEntry={removeEntry}
+            onMissingKey={onMissingKey}
           />
         )}
       />
@@ -138,6 +142,7 @@ function ProjectInfo({
   updateLink,
   removeLink,
   removeEntry,
+  onMissingKey,
 }) {
   return (
     <div className="entry-card">
@@ -164,6 +169,13 @@ function ProjectInfo({
           onChange={(e) => updateEntry(entry.id, "description", e.target.value)}
         />
       </FormBox>
+      <AiEnhanceBox
+        sectionType="project"
+        rawContent={entry.description}
+        context={`${entry.title || ""}: ${entry.tagline || ""}`}
+        onAccept={(improved) => updateEntry(entry.id, "description", improved)}
+        onMissingKey={onMissingKey}
+      />
       <SectionTitle title="Project Links" />
       <DynamicList
         items={entry.links}

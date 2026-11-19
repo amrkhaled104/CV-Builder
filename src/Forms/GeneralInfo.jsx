@@ -4,6 +4,7 @@ import FormBox from "../reusables/FormBox.jsx";
 import DynamicList from "../reusables/DynamicList.jsx";
 import LinkCard from "../reusables/LinkCard.jsx";
 import ActionButtons from "../reusables/ActionButton.jsx";
+import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
 
 export default function GeneralInfo({
   generalInfo,
@@ -12,6 +13,7 @@ export default function GeneralInfo({
   isReordering,
   onMoveUp,
   onMoveDown,
+  onMissingKey,
 }) {
   function handleChange(field, value) {
     setGeneralInfo({ ...generalInfo, [field]: value });
@@ -136,6 +138,13 @@ export default function GeneralInfo({
             onChange={(e) => handleChange("bio", e.target.value)}
           />
         </FormBox>
+        <AiEnhanceBox
+          sectionType="summary"
+          rawContent={generalInfo.bio}
+          context={generalInfo.headline}
+          onAccept={(improved) => handleChange("bio", improved)}
+          onMissingKey={onMissingKey}
+        />
       </div>
 
       {/* 4. Links & Profiles */}

@@ -4,6 +4,8 @@ import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
 import AtsAuditModal from "./components/layout/AtsAuditModal/AtsAuditModal.tsx";
+import AiKeyModal from "./components/layout/AiKeyModal/AiKeyModal.tsx";
+import { hasAiKey } from "./utils/aiKeyStorage";
 import { useSectionOrder } from "./hooks/useSectionOrder";
 import { useCustomSections } from "./hooks/useCustomSections";
 import * as Sample from "./data/sampleData.js";
@@ -30,6 +32,8 @@ function App() {
   const [isSavedRecently, setIsSavedRecently] = useState(false);
   const [, setIsSampleMode] = useState(false);
   const [isAtsModalOpen, setIsAtsModalOpen] = useState(false);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [hasKey, setHasKey] = useState(() => hasAiKey());
 
   const {
     sectionOrder,
@@ -227,6 +231,8 @@ function App() {
         onImportJson={handleImportJson}
         onOpenAtsModal={() => setIsAtsModalOpen(true)}
         atsScore={auditResult.score}
+        hasAiKey={hasKey}
+        onOpenAiModal={() => setIsAiModalOpen(true)}
       />
       <div className="mainContent">
         <FormInputs
@@ -252,6 +258,7 @@ function App() {
           isReordering={isReordering}
           onMoveUp={moveUp}
           onMoveDown={moveDown}
+          onMissingKey={() => setIsAiModalOpen(true)}
         />
         <CvPreview
           generalInfo={generalInfo}
@@ -270,6 +277,12 @@ function App() {
         isOpen={isAtsModalOpen}
         onClose={() => setIsAtsModalOpen(false)}
         auditResult={auditResult}
+      />
+
+      <AiKeyModal
+        isOpen={isAiModalOpen}
+        onClose={() => setIsAiModalOpen(false)}
+        onKeyUpdated={(status) => setHasKey(status)}
       />
     </>
   );

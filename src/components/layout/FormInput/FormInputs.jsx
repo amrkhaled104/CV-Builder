@@ -29,6 +29,7 @@ export default function FormInputs({
   isReordering,
   onMoveUp,
   onMoveDown,
+  onMissingKey,
 }) {
   return (
     <section className="leftSidebarForm">
@@ -39,6 +40,7 @@ export default function FormInputs({
         isReordering={isReordering}
         onMoveUp={onMoveUp}
         onMoveDown={onMoveDown}
+        onMissingKey={onMissingKey}
       />
       <EducationalExperience
         educationList={educationList}
@@ -55,6 +57,7 @@ export default function FormInputs({
         isReordering={isReordering}
         onMoveUp={onMoveUp}
         onMoveDown={onMoveDown}
+        onMissingKey={onMissingKey}
       />
       <Project
         projectList={projectList}
@@ -63,6 +66,7 @@ export default function FormInputs({
         isReordering={isReordering}
         onMoveUp={onMoveUp}
         onMoveDown={onMoveDown}
+        onMissingKey={onMissingKey}
       />
       <Skill
         skillList={skillList}

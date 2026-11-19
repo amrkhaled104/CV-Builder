@@ -4,6 +4,8 @@ import DurationInput from "../reusables/DurationInput";
 import ActionButtons from "../reusables/ActionButton";
 import FormBox from "../reusables/FormBox";
 import FormCard from "../reusables/FormCard";
+import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
+
 export default function PracticalExperience({
   workList,
   setWorkList,
@@ -11,6 +13,7 @@ export default function PracticalExperience({
   isReordering,
   onMoveUp,
   onMoveDown,
+  onMissingKey,
 }) {
   function addWork() {
     setWorkList([
@@ -60,6 +63,7 @@ export default function PracticalExperience({
             entry={work}
             updateEntry={updateEntry}
             removeEntry={removeEntry}
+            onMissingKey={onMissingKey}
           />
         )}
       />
@@ -70,7 +74,7 @@ export default function PracticalExperience({
   );
 }
 
-function WorkInfo({ entry, updateEntry, removeEntry }) {
+function WorkInfo({ entry, updateEntry, removeEntry, onMissingKey }) {
   return (
     <div className="entry-card">
       <InputRow>
@@ -139,6 +143,15 @@ function WorkInfo({ entry, updateEntry, removeEntry }) {
           }
         />
       </FormBox>
+      <AiEnhanceBox
+        sectionType="experience"
+        rawContent={entry.responsibilities}
+        context={`${entry.position || ""} at ${entry.companyName || ""}`}
+        onAccept={(improved) =>
+          updateEntry(entry.id, "responsibilities", improved)
+        }
+        onMissingKey={onMissingKey}
+      />
       <DurationInput entry={entry} updateEntry={updateEntry} />
       <div className="action-buttons right">
         <ActionButtons
