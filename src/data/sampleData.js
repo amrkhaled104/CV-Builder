@@ -1,9 +1,9 @@
 export const sampleGeneralInfo = {
-  firstName: "Omar",
-  lastName: "Shawky",
+  firstName: "Amr",
+  lastName: "Khaled",
   headline: "Software Engineer | Distributed Systems & Web Platforms",
   location: "Cairo, Egypt",
-  email: "omar.shawky@example.com",
+  email: "amr.khaled@example.com",
   phone: "+20 123 456 7890",
   bio: "Software Engineer with hands-on experience in building scalable web architectures, distributed systems, and backend performance optimization using React, TypeScript, Node.js, and Redis.",
   links: [
@@ -11,13 +11,13 @@ export const sampleGeneralInfo = {
       id: crypto.randomUUID(),
       title: "LinkedIn",
       customTitle: "",
-      url: "https://linkedin.com/in/omarshawky1",
+      url: "https://linkedin.com/in/amrkhaled",
     },
     {
       id: crypto.randomUUID(),
       title: "GitHub",
       customTitle: "",
-      url: "https://github.com/OmarShawky1",
+      url: "https://github.com/amrkhaled",
     },
   ],
 };
@@ -160,7 +160,7 @@ export const sampleProjects = [
         id: crypto.randomUUID(),
         title: "GitHub Repo",
         customTitle: "",
-        url: "https://github.com/OmarShawky1/task-queue",
+        url: "https://github.com/amrkhaled/task-queue",
       },
       {
         id: crypto.randomUUID(),
