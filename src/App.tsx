@@ -1,50 +1,35 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useMemo } from "react";
 import "./App.css";
 import HeaderBar from "./components/layout/HeaderBar/HeaderBar.jsx";
 import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
+import AtsAuditModal from "./components/layout/AtsAuditModal/AtsAuditModal.tsx";
 import { useSectionOrder } from "./hooks/useSectionOrder";
 import { useCustomSections } from "./hooks/useCustomSections";
 import * as Sample from "./data/sampleData.js";
-
-type Skill = {
-  id: string;
-  name: string;
-};
-
-type SkillCategory = {
-  id: string;
-  category: string;
-  skills: Skill[];
-};
-
-type ProjectLink = {
-  id: string;
-  title: string;
-  customTitle: string;
-  url: string;
-};
-
-type Project = {
-  id: string;
-  title: string;
-  tagline: string;
-  description: string;
-  durationType: string;
-  startDate: string;
-  endDate: string;
-  customDuration: string;
-  isCurrent: boolean;
-  links: ProjectLink[];
-};
+import {
+  saveSessionToStorage,
+  loadSessionFromStorage,
+  hasSavedSessionInStorage,
+  exportCvToJson,
+  importCvFromJson,
+  type CvSessionData,
+  type GeneralInfo,
+  type EducationItem,
+  type ExperienceItem,
+  type ProjectItem,
+  type SkillCategory,
+} from "./utils/storage";
+import { runAtsAudit } from "./utils/atsLinter";
 
 function App() {
   const cvRef = useRef<HTMLDivElement>(null);
   const [hasSavedDraft, setHasSavedDraft] = useState(() =>
-    Boolean(localStorage.getItem("cv_draft")),
+    hasSavedSessionInStorage(),
   );
   const [isSavedRecently, setIsSavedRecently] = useState(false);
   const [, setIsSampleMode] = useState(false);
+  const [isAtsModalOpen, setIsAtsModalOpen] = useState(false);
 
   const {
     sectionOrder,
@@ -79,7 +64,7 @@ function App() {
     }
   }
 
-  const [generalInfo, setGeneralInfo] = useState({
+  const [generalInfo, setGeneralInfo] = useState<GeneralInfo>({
     firstName: "",
     lastName: "",
     headline: "",
@@ -96,7 +81,8 @@ function App() {
       },
     ],
   });
-  const [educationList, setEducationList] = useState([
+
+  const [educationList, setEducationList] = useState<EducationItem[]>([
     {
       id: crypto.randomUUID(),
       schoolName: "",
@@ -114,7 +100,8 @@ function App() {
       isCurrent: false,
     },
   ]);
-  const [workList, setWorkList] = useState([
+
+  const [workList, setWorkList] = useState<ExperienceItem[]>([
     {
       id: crypto.randomUUID(),
       companyName: "",
@@ -131,11 +118,26 @@ function App() {
       linkUrl: "",
     },
   ]);
-  const [projectList, setProjectList] = useState<Project[]>([]);
+
+  const [projectList, setProjectList] = useState<ProjectItem[]>([]);
   const [skillList, setSkillList] = useState<SkillCategory[]>([]);
 
+  // Memoized ATS & Omar Shawky's Guide Audit
+  const auditResult = useMemo(
+    () =>
+      runAtsAudit({
+        generalInfo,
+        educationList,
+        workList,
+        projectList,
+        skillList,
+        customSections,
+      }),
+    [generalInfo, educationList, workList, projectList, skillList, customSections],
+  );
+
   function handleSave() {
-    const cvData = {
+    const sessionData: Omit<CvSessionData, "version" | "savedAt"> = {
       generalInfo,
       educationList,
       workList,
@@ -144,31 +146,56 @@ function App() {
       customSections,
       sectionOrder,
     };
-    try {
-      localStorage.setItem("cv_draft", JSON.stringify(cvData));
+
+    const success = saveSessionToStorage(sessionData);
+    if (success) {
       setHasSavedDraft(true);
       setIsSavedRecently(true);
       setTimeout(() => setIsSavedRecently(false), 1500);
-    } catch (err) {
-      console.error("Failed to save CV draft:", err);
     }
   }
 
   function handleResume() {
+    const sessionData = loadSessionFromStorage();
+    if (!sessionData) return;
+
+    if (sessionData.generalInfo) setGeneralInfo(sessionData.generalInfo);
+    if (sessionData.educationList) setEducationList(sessionData.educationList);
+    if (sessionData.workList) setWorkList(sessionData.workList);
+    if (sessionData.projectList) setProjectList(sessionData.projectList);
+    if (sessionData.skillList) setSkillList(sessionData.skillList);
+    if (sessionData.customSections) setCustomSections(sessionData.customSections);
+    if (sessionData.sectionOrder) setSectionOrder(sessionData.sectionOrder);
+    setIsSampleMode(false);
+  }
+
+  function handleExportJson() {
+    exportCvToJson({
+      generalInfo,
+      educationList,
+      workList,
+      projectList,
+      skillList,
+      customSections,
+      sectionOrder,
+    });
+  }
+
+  async function handleImportJson(file: File) {
     try {
-      const raw = localStorage.getItem("cv_draft");
-      if (!raw) return;
-      const cvData = JSON.parse(raw);
-      if (cvData.generalInfo) setGeneralInfo(cvData.generalInfo);
-      if (cvData.educationList) setEducationList(cvData.educationList);
-      if (cvData.workList) setWorkList(cvData.workList);
-      if (cvData.projectList) setProjectList(cvData.projectList);
-      if (cvData.skillList) setSkillList(cvData.skillList);
-      if (cvData.customSections) setCustomSections(cvData.customSections);
-      if (cvData.sectionOrder) setSectionOrder(cvData.sectionOrder);
+      const data = await importCvFromJson(file);
+      if (data.generalInfo) setGeneralInfo(data.generalInfo);
+      if (data.educationList) setEducationList(data.educationList);
+      if (data.workList) setWorkList(data.workList);
+      if (data.projectList) setProjectList(data.projectList);
+      if (data.skillList) setSkillList(data.skillList);
+      if (data.customSections) setCustomSections(data.customSections);
+      if (data.sectionOrder) setSectionOrder(data.sectionOrder);
+      setHasSavedDraft(true);
       setIsSampleMode(false);
-    } catch (err) {
-      console.error("Failed to load CV draft:", err);
+      alert("CV data imported successfully!");
+    } catch (err: unknown) {
+      alert((err as Error).message || "Failed to import CV JSON.");
     }
   }
 
@@ -188,7 +215,7 @@ function App() {
   return (
     <>
       <HeaderBar
-        cvRef={cvRef} //Now HeaderBar can print that element.
+        cvRef={cvRef}
         onSave={handleSave}
         isSavedRecently={isSavedRecently}
         hasSavedDraft={hasSavedDraft}
@@ -196,6 +223,10 @@ function App() {
         onSample={handleSample}
         isReordering={isReordering}
         onToggleReordering={toggleReordering}
+        onExportJson={handleExportJson}
+        onImportJson={handleImportJson}
+        onOpenAtsModal={() => setIsAtsModalOpen(true)}
+        atsScore={auditResult.score}
       />
       <div className="mainContent">
         <FormInputs
@@ -234,6 +265,12 @@ function App() {
           onLoadSample={handleSample}
         />
       </div>
+
+      <AtsAuditModal
+        isOpen={isAtsModalOpen}
+        onClose={() => setIsAtsModalOpen(false)}
+        auditResult={auditResult}
+      />
     </>
   );
 }

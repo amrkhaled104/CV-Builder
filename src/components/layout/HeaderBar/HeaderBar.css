@@ -166,6 +166,24 @@
 }
 
 /* ========================================
+   ATS AUDIT BUTTON VARIANT
+======================================== */
+.btn-header--ats {
+  border-color: #8b5cf6;
+  color: #a78bfa;
+}
+
+.light-theme .btn-header--ats {
+  color: #7c3aed;
+  border-color: #7c3aed;
+}
+
+.btn-header--ats:hover {
+  background-color: rgba(139, 92, 246, 0.12);
+  border-color: #a78bfa;
+}
+
+/* ========================================
    PRIMARY HIGHLIGHTED BUTTON (PDF)
 ======================================== */
 .btn-header--primary {
