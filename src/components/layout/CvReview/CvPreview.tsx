@@ -178,6 +178,34 @@ function CvPreview({
     return `${formatDate(entry.startDate)}${entry.startDate && entry.endDate ? " – " : ""}${formatDate(entry.endDate)}`;
   }
 
+  function sanitizeUrl(url?: string): string {
+    if (!url) return "#";
+    const trimmed = url.trim();
+    if (/^(javascript|data|vbscript|file):/i.test(trimmed)) {
+      return "#";
+    }
+    try {
+      if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+        const parsed = new URL(trimmed);
+        if (
+          parsed.protocol === "http:" ||
+          parsed.protocol === "https:" ||
+          parsed.protocol === "mailto:"
+        ) {
+          return trimmed;
+        }
+        return "#";
+      }
+      const parsed = new URL(`https://${trimmed}`);
+      if (parsed.protocol === "https:") {
+        return `https://${trimmed}`;
+      }
+      return "#";
+    } catch {
+      return "#";
+    }
+  }
+
   function getLinkLabel(link: LinkInfo) {
     if (link.title === "Other") return link.customTitle || link.url;
 
@@ -443,8 +471,7 @@ function CvPreview({
                 {generalInfo.email && (
                   <span>
                     <a
-                      href={`mailto:${generalInfo.email}`}
-                      target="_blank"
+                      href={sanitizeUrl(`mailto:${generalInfo.email}`)}
                       rel="noreferrer"
                     >
                       {generalInfo.email}
@@ -458,7 +485,11 @@ function CvPreview({
               <div className="cv-header-row cv-links">
                 {visibleLinks.map((link) => (
                   <span key={link.id}>
-                    <a href={link.url} target="_blank" rel="noreferrer">
+                    <a
+                      href={sanitizeUrl(link.url)}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       {getLinkLabel(link)}
                     </a>
                   </span>
@@ -486,22 +517,36 @@ function CvPreview({
                     const educationBullets =
                       edu.bullets
                         ?.split("\n")
-                        .map((bullet) => bullet.trim())
+                        .map((bullet) =>
+                          bullet.replace(/^\s*[-*•]\s*/, "").trim(),
+                        )
                         .filter(Boolean) ?? [];
 
                     return (
                       <div className="entry" key={edu.id}>
                         <div className="entry-header">
                           <div className="entry-left">
-                            <strong>{edu.study}</strong>
-                            {edu.study && edu.schoolName && ", "}
-                            {edu.schoolName}
-                            {edu.place && (
-                              <>
-                                {edu.study || edu.schoolName ? ", " : ""}
-                                <em>{edu.place}</em>
-                              </>
-                            )}
+                            {[
+                              edu.study?.trim() ? (
+                                <strong key="study">
+                                  {edu.study.trim().replace(/,\s*$/, "")}
+                                </strong>
+                              ) : null,
+                              edu.schoolName?.trim() ? (
+                                <span key="school">
+                                  {edu.schoolName.trim().replace(/,\s*$/, "")}
+                                </span>
+                              ) : null,
+                              edu.place?.trim() ? (
+                                <em key="place">{edu.place.trim()}</em>
+                              ) : null,
+                            ]
+                              .filter(Boolean)
+                              .reduce<React.ReactNode[]>(
+                                (prev, curr, i) =>
+                                  i === 0 ? [curr] : [...prev, ", ", curr],
+                                [],
+                              )}
                             {!educationBullets.length && edu.grade && (
                               <span> (GPA: {edu.grade})</span>
                             )}
@@ -515,7 +560,7 @@ function CvPreview({
                               <span>
                                 {edu.linkUrl ? (
                                   <a
-                                    href={edu.linkUrl}
+                                    href={sanitizeUrl(edu.linkUrl)}
                                     target="_blank"
                                     rel="noreferrer"
                                   >
@@ -554,22 +599,32 @@ function CvPreview({
                     <div className="entry" key={work.id}>
                       <div className="entry-header">
                         <div className="entry-left">
-                          <strong>{work.position}</strong>
-                          {work.position && work.companyName && ", "}
-                          {work.companyName}
-                          {work.location && (
-                            <>
-                              {work.position || work.companyName ? ", " : ""}
-                              <em>{work.location}</em>
-                            </>
-                          )}
+                          {[
+                            work.position?.trim() ? (
+                              <strong key="position">
+                                {work.position.trim().replace(/,\s*$/, "")}
+                              </strong>
+                            ) : null,
+                            work.companyName?.trim() ? (
+                              <span key="company">
+                                {work.companyName.trim().replace(/,\s*$/, "")}
+                              </span>
+                            ) : null,
+                            work.location?.trim() ? (
+                              <em key="location">{work.location.trim()}</em>
+                            ) : null,
+                          ]
+                            .filter(Boolean)
+                            .reduce<React.ReactNode[]>(
+                              (prev, curr, i) =>
+                                i === 0 ? [curr] : [...prev, ", ", curr],
+                              [],
+                            )}
                           {work.linkText && work.linkUrl && (
                             <>
-                              {work.position || work.companyName || work.location
-                                ? " | "
-                                : ""}
+                              {" | "}
                               <a
-                                href={work.linkUrl}
+                                href={sanitizeUrl(work.linkUrl)}
                                 target="_blank"
                                 rel="noreferrer"
                               >
@@ -592,7 +647,10 @@ function CvPreview({
                         <ul className="bullet-list">
                           {work.responsibilities
                             .split("\n")
-                            .filter((line) => line.trim() !== "")
+                            .map((line) =>
+                              line.replace(/^\s*[-*•]\s*/, "").trim(),
+                            )
+                            .filter(Boolean)
                             .map((item, index) => (
                               <li key={index}>{item}</li>
                             ))}
@@ -627,7 +685,7 @@ function CvPreview({
                                 {index > 0 && " | "}
                                 <a
                                   className="cv-link"
-                                  href={link.url}
+                                  href={sanitizeUrl(link.url)}
                                   target="_blank"
                                   rel="noreferrer"
                                 >
@@ -711,7 +769,7 @@ function CvPreview({
                                   {index > 0 && " | "}
                                   <a
                                     className="cv-link"
-                                    href={link.url}
+                                    href={sanitizeUrl(link.url)}
                                     target="_blank"
                                     rel="noreferrer"
                                   >

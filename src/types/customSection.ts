@@ -1,3 +1,5 @@
+import { generateId } from "../utils/id";
+
 export type ProjectLink = {
   id: string;
   title: string;
@@ -41,7 +43,7 @@ export type CustomSection = {
  */
 export function createEmptyCustomItem(): CustomSectionItem {
   return {
-    id: crypto.randomUUID(),
+    id: generateId(),
     title: "",
     tagline: "",
     description: "",
@@ -52,7 +54,7 @@ export function createEmptyCustomItem(): CustomSectionItem {
     isCurrent: false,
     links: [
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: "",
         customTitle: "",
         url: "",

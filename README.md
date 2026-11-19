@@ -40,7 +40,7 @@ Full documentation is located in the `docs/` folder:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/cv-builder.git
+   git clone https://github.com/amrkhaled104/CV-Builder.git
    cd cv-builder
    ```
 

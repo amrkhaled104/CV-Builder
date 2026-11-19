@@ -1,5 +1,6 @@
 import type { SectionKey } from "../hooks/useSectionOrder";
 import type { CustomSection } from "../types/customSection";
+import { generateId } from "./id";
 
 export type LinkInfo = {
   id: string;
@@ -98,6 +99,268 @@ export type CvSessionData = {
 export const STORAGE_KEY = "cv_builder_session_v1";
 export const LEGACY_STORAGE_KEY = "cv_draft";
 
+export const BUILTIN_SECTION_KEYS: readonly SectionKey[] = [
+  "summary",
+  "education",
+  "experience",
+  "projects",
+  "skills",
+];
+
+/**
+ * Normalizes and sanitizes arbitrary session data, filling default field types
+ * and reconciling sectionOrder so malformed JSON never crashes the runtime.
+ */
+export function normalizeSessionData(data: unknown): CvSessionData {
+  const raw =
+    data && typeof data === "object"
+      ? (data as Record<string, unknown>)
+      : {};
+
+  const rawG =
+    raw.generalInfo && typeof raw.generalInfo === "object"
+      ? (raw.generalInfo as Record<string, unknown>)
+      : {};
+
+  const links: LinkInfo[] = Array.isArray(rawG.links)
+    ? rawG.links
+        .filter(
+          (l): l is Record<string, unknown> =>
+            Boolean(l && typeof l === "object"),
+        )
+        .map((l) => ({
+          id: String(l.id || generateId()),
+          title: String(l.title || ""),
+          customTitle: String(l.customTitle || ""),
+          url: String(l.url || ""),
+        }))
+    : [];
+
+  const generalInfo: GeneralInfo = {
+    firstName: String(rawG.firstName || ""),
+    lastName: String(rawG.lastName || ""),
+    headline: String(rawG.headline || ""),
+    phone: String(rawG.phone || ""),
+    email: String(rawG.email || ""),
+    location: String(rawG.location || ""),
+    bio: String(rawG.bio || ""),
+    links,
+  };
+
+  const educationList: EducationItem[] = Array.isArray(raw.educationList)
+    ? raw.educationList
+        .filter(
+          (e): e is Record<string, unknown> =>
+            Boolean(e && typeof e === "object"),
+        )
+        .map((e) => ({
+          id: String(e.id || generateId()),
+          schoolName: String(e.schoolName || ""),
+          study: String(e.study || ""),
+          place: String(e.place || ""),
+          grade: String(e.grade || ""),
+          subTitle: e.subTitle ? String(e.subTitle) : undefined,
+          linkText: e.linkText ? String(e.linkText) : undefined,
+          linkUrl: e.linkUrl ? String(e.linkUrl) : undefined,
+          bullets: e.bullets ? String(e.bullets) : "",
+          durationType: String(e.durationType || "date"),
+          startDate: String(e.startDate || ""),
+          endDate: String(e.endDate || ""),
+          customDuration: String(e.customDuration || ""),
+          isCurrent: Boolean(e.isCurrent),
+        }))
+    : [];
+
+  const workList: ExperienceItem[] = Array.isArray(raw.workList)
+    ? raw.workList
+        .filter(
+          (w): w is Record<string, unknown> =>
+            Boolean(w && typeof w === "object"),
+        )
+        .map((w) => ({
+          id: String(w.id || generateId()),
+          companyName: String(w.companyName || ""),
+          position: String(w.position || ""),
+          responsibilities: String(w.responsibilities || ""),
+          location: w.location ? String(w.location) : undefined,
+          companyDescription: w.companyDescription
+            ? String(w.companyDescription)
+            : undefined,
+          linkText: w.linkText ? String(w.linkText) : undefined,
+          linkUrl: w.linkUrl ? String(w.linkUrl) : undefined,
+          durationType: String(w.durationType || "date"),
+          startDate: String(w.startDate || ""),
+          endDate: String(w.endDate || ""),
+          customDuration: String(w.customDuration || ""),
+          isCurrent: Boolean(w.isCurrent),
+        }))
+    : [];
+
+  const projectList: ProjectItem[] = Array.isArray(raw.projectList)
+    ? raw.projectList
+        .filter(
+          (p): p is Record<string, unknown> =>
+            Boolean(p && typeof p === "object"),
+        )
+        .map((p) => {
+          const pLinks: ProjectLink[] = Array.isArray(p.links)
+            ? p.links
+                .filter(
+                  (l): l is Record<string, unknown> =>
+                    Boolean(l && typeof l === "object"),
+                )
+                .map((l) => ({
+                  id: String(l.id || generateId()),
+                  title: String(l.title || ""),
+                  customTitle: String(l.customTitle || ""),
+                  url: String(l.url || ""),
+                }))
+            : [];
+
+          return {
+            id: String(p.id || generateId()),
+            title: String(p.title || ""),
+            tagline: String(p.tagline || ""),
+            description: String(p.description || ""),
+            durationType: String(p.durationType || "date"),
+            startDate: String(p.startDate || ""),
+            endDate: String(p.endDate || ""),
+            customDuration: String(p.customDuration || ""),
+            isCurrent: Boolean(p.isCurrent),
+            links: pLinks,
+          };
+        })
+    : [];
+
+  const skillList: SkillCategory[] = Array.isArray(raw.skillList)
+    ? raw.skillList
+        .filter(
+          (s): s is Record<string, unknown> =>
+            Boolean(s && typeof s === "object"),
+        )
+        .map((s) => {
+          const skills: SkillItem[] = Array.isArray(s.skills)
+            ? s.skills
+                .filter(
+                  (sk): sk is Record<string, unknown> =>
+                    Boolean(sk && typeof sk === "object"),
+                )
+                .map((sk) => ({
+                  id: String(sk.id || generateId()),
+                  name: String(sk.name || ""),
+                }))
+            : [];
+
+          return {
+            id: String(s.id || generateId()),
+            category: String(s.category || ""),
+            skills,
+          };
+        })
+    : [];
+
+  const customSections: CustomSection[] = Array.isArray(raw.customSections)
+    ? raw.customSections
+        .filter(
+          (cs): cs is Record<string, unknown> =>
+            Boolean(cs && typeof cs === "object"),
+        )
+        .map((cs) => {
+          const items = Array.isArray(cs.items)
+            ? cs.items
+                .filter(
+                  (it): it is Record<string, unknown> =>
+                    Boolean(it && typeof it === "object"),
+                )
+                .map((it) => {
+                  const itLinks = Array.isArray(it.links)
+                    ? it.links
+                        .filter(
+                          (l): l is Record<string, unknown> =>
+                            Boolean(l && typeof l === "object"),
+                        )
+                        .map((l) => ({
+                          id: String(l.id || generateId()),
+                          title: String(l.title || ""),
+                          customTitle: String(l.customTitle || ""),
+                          url: String(l.url || ""),
+                        }))
+                    : [];
+
+                  return {
+                    id: String(it.id || generateId()),
+                    title: String(it.title || ""),
+                    tagline: String(it.tagline || ""),
+                    description: String(it.description || ""),
+                    durationType: String(it.durationType || "date"),
+                    startDate: String(it.startDate || ""),
+                    endDate: String(it.endDate || ""),
+                    customDuration: String(it.customDuration || ""),
+                    isCurrent: Boolean(it.isCurrent),
+                    links: itLinks,
+                  };
+                })
+            : [];
+
+          return {
+            id: String(cs.id || `custom-${generateId()}`),
+            title: String(cs.title || "Custom Section"),
+            items,
+          };
+        })
+    : [];
+
+  // Reconcile sectionOrder
+  const customSectionIds = customSections.map((cs) => cs.id);
+  const allowedKeys = new Set<string>([
+    ...BUILTIN_SECTION_KEYS,
+    ...customSectionIds,
+  ]);
+
+  let incomingOrder: string[] = [];
+  if (Array.isArray(raw.sectionOrder)) {
+    incomingOrder = raw.sectionOrder
+      .map(String)
+      .filter((k) => allowedKeys.has(k));
+  }
+
+  // Never accept empty sectionOrder
+  if (incomingOrder.length === 0) {
+    incomingOrder = [...BUILTIN_SECTION_KEYS];
+  }
+
+  // Append missing built-in sections
+  for (const builtin of BUILTIN_SECTION_KEYS) {
+    if (!incomingOrder.includes(builtin)) {
+      incomingOrder.push(builtin);
+    }
+  }
+
+  // Append missing custom sections so they are never silently hidden
+  for (const customId of customSectionIds) {
+    if (!incomingOrder.includes(customId)) {
+      incomingOrder.push(customId);
+    }
+  }
+
+  const sectionOrder = Array.from(new Set(incomingOrder));
+
+  return {
+    version: typeof raw.version === "number" ? raw.version : 1,
+    savedAt:
+      typeof raw.savedAt === "string"
+        ? raw.savedAt
+        : new Date().toISOString(),
+    generalInfo,
+    educationList,
+    workList,
+    projectList,
+    skillList,
+    customSections,
+    sectionOrder,
+  };
+}
+
 /**
  * Checks whether a candidate object contains actual user-entered CV content
  * (as opposed to an unpopulated, empty initial state).
@@ -105,31 +368,42 @@ export const LEGACY_STORAGE_KEY = "cv_draft";
 export function isValidSessionData(data: unknown): data is CvSessionData {
   if (!data || typeof data !== "object") return false;
 
-  const session = data as Partial<CvSessionData>;
-  const g = session.generalInfo;
+  const session = data as Record<string, unknown>;
+  const g = session.generalInfo as Record<string, unknown> | undefined;
 
-  const hasName = Boolean(g?.firstName?.trim() || g?.lastName?.trim());
-  const hasHeadline = Boolean(g?.headline?.trim());
-  const hasBio = Boolean(g?.bio?.trim());
+  const hasName = Boolean(
+    (typeof g?.firstName === "string" && g.firstName.trim()) ||
+      (typeof g?.lastName === "string" && g.lastName.trim()),
+  );
+  const hasHeadline =
+    typeof g?.headline === "string" && Boolean(g.headline.trim());
+  const hasBio = typeof g?.bio === "string" && Boolean(g.bio.trim());
   const hasContact = Boolean(
-    g?.email?.trim() || g?.phone?.trim() || g?.location?.trim(),
+    (typeof g?.email === "string" && g.email.trim()) ||
+      (typeof g?.phone === "string" && g.phone.trim()) ||
+      (typeof g?.location === "string" && g.location.trim()),
   );
   const hasLinks =
     Array.isArray(g?.links) &&
     g.links.some(
       (l) =>
-        Boolean(l?.url?.trim() && (l?.title?.trim() || l?.customTitle?.trim())),
+        Boolean(
+          typeof l?.url === "string" &&
+            l.url.trim() &&
+            ((typeof l?.title === "string" && l.title.trim()) ||
+              (typeof l?.customTitle === "string" && l.customTitle.trim())),
+        ),
     );
 
   const hasEdu =
     Array.isArray(session.educationList) &&
     session.educationList.some((e) =>
       Boolean(
-        e?.schoolName?.trim() ||
-          e?.study?.trim() ||
-          e?.bullets?.trim() ||
-          e?.subTitle?.trim() ||
-          e?.place?.trim(),
+        (typeof e?.schoolName === "string" && e.schoolName.trim()) ||
+          (typeof e?.study === "string" && e.study.trim()) ||
+          (typeof e?.bullets === "string" && e.bullets.trim()) ||
+          (typeof e?.subTitle === "string" && e.subTitle.trim()) ||
+          (typeof e?.place === "string" && e.place.trim()),
       ),
     );
 
@@ -137,10 +411,12 @@ export function isValidSessionData(data: unknown): data is CvSessionData {
     Array.isArray(session.workList) &&
     session.workList.some((w) =>
       Boolean(
-        w?.companyName?.trim() ||
-          w?.position?.trim() ||
-          w?.responsibilities?.trim() ||
-          w?.companyDescription?.trim(),
+        (typeof w?.companyName === "string" && w.companyName.trim()) ||
+          (typeof w?.position === "string" && w.position.trim()) ||
+          (typeof w?.responsibilities === "string" &&
+            w.responsibilities.trim()) ||
+          (typeof w?.companyDescription === "string" &&
+            w.companyDescription.trim()),
       ),
     );
 
@@ -148,26 +424,41 @@ export function isValidSessionData(data: unknown): data is CvSessionData {
     Array.isArray(session.projectList) &&
     session.projectList.some((p) =>
       Boolean(
-        p?.title?.trim() ||
-          p?.tagline?.trim() ||
-          p?.description?.trim() ||
-          (p?.links && p.links.some((l) => l?.url?.trim())),
+        (typeof p?.title === "string" && p.title.trim()) ||
+          (typeof p?.tagline === "string" && p.tagline.trim()) ||
+          (typeof p?.description === "string" && p.description.trim()) ||
+          (Array.isArray(p?.links) &&
+            p.links.some(
+              (l: Record<string, unknown>) =>
+                typeof l?.url === "string" && l.url.trim(),
+            )),
       ),
     );
 
   const hasSkills =
     Array.isArray(session.skillList) &&
     session.skillList.some(
-      (s) => s?.category?.trim() && s?.skills?.some((sk) => sk?.name?.trim()),
+      (s) =>
+        typeof s?.category === "string" &&
+        s.category.trim() &&
+        Array.isArray(s?.skills) &&
+        s.skills.some(
+          (sk: Record<string, unknown>) =>
+            typeof sk?.name === "string" && sk.name.trim(),
+        ),
     );
 
   const hasCustom =
     Array.isArray(session.customSections) &&
     session.customSections.some((cs) =>
       Boolean(
-        cs?.items?.some(
-          (item) => item?.title?.trim() || item?.description?.trim(),
-        ),
+        Array.isArray(cs?.items) &&
+          cs.items.some(
+            (item: Record<string, unknown>) =>
+              (typeof item?.title === "string" && item.title.trim()) ||
+              (typeof item?.description === "string" &&
+                item.description.trim()),
+          ),
       ),
     );
 
@@ -216,7 +507,7 @@ export function loadSessionFromStorage(): CvSessionData | null {
     if (raw) {
       const parsed = JSON.parse(raw);
       if (isValidSessionData(parsed)) {
-        return parsed;
+        return normalizeSessionData(parsed);
       }
     }
 
@@ -225,13 +516,9 @@ export function loadSessionFromStorage(): CvSessionData | null {
     if (legacyRaw) {
       const parsedLegacy = JSON.parse(legacyRaw);
       if (isValidSessionData(parsedLegacy)) {
-        // Upgrade to new storage key seamlessly
-        saveSessionToStorage(parsedLegacy);
-        return {
-          ...parsedLegacy,
-          version: 1,
-          savedAt: new Date().toISOString(),
-        };
+        const normalized = normalizeSessionData(parsedLegacy);
+        saveSessionToStorage(normalized);
+        return normalized;
       }
     }
 
@@ -298,7 +585,14 @@ export function exportCvToJson(
  */
 export function importCvFromJson(file: File): Promise<CvSessionData> {
   return new Promise((resolve, reject) => {
-    if (!file.name.endsWith(".json")) {
+    // 1MB file size cap
+    if (file.size > 1024 * 1024) {
+      reject(new Error("File exceeds maximum allowed size of 1MB."));
+      return;
+    }
+
+    // Case-insensitive check
+    if (!file.name.toLowerCase().endsWith(".json")) {
       reject(new Error("Please upload a valid .json file."));
       return;
     }
@@ -309,7 +603,7 @@ export function importCvFromJson(file: File): Promise<CvSessionData> {
         const text = event.target?.result as string;
         const parsed = JSON.parse(text);
         if (isValidSessionData(parsed)) {
-          resolve(parsed as CvSessionData);
+          resolve(normalizeSessionData(parsed));
         } else {
           reject(
             new Error(

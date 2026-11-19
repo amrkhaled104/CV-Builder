@@ -42,6 +42,81 @@ const STRONG_ACTION_VERBS = new Set([
   "transformed", "troubleshot", "unified", "upgraded", "utilized", "validated", "verified", "wrote"
 ]);
 
+const PRESENT_ACTION_VERBS = new Set([
+  "administers", "advises", "allocates", "analyzes", "architects", "assembles", "assesses",
+  "audits", "automates", "boosts", "builds", "centralizes", "champions", "coaches",
+  "collaborates", "compiles", "composes", "configures", "constructs", "consults",
+  "coordinates", "crafts", "creates", "customizes", "debugs", "delivers", "deploys",
+  "designs", "determines", "develops", "devises", "diagnoses", "directs", "discovers",
+  "documents", "drafts", "drives", "enables", "enforces", "engineers", "enhances",
+  "establishes", "evaluates", "executes", "expands", "facilitates", "formulates",
+  "generates", "guides", "heads", "identifies", "implements", "improves", "increases",
+  "initiates", "inspects", "installs", "instructs", "integrates", "introduces",
+  "investigates", "launches", "lead", "leads", "leverages", "maintains", "manages",
+  "maps", "maximizes", "measures", "mentors", "migrates", "minimizes", "models",
+  "modernizes", "monitors", "negotiates", "optimizes", "orchestrates", "organizes",
+  "outperforms", "overhauls", "oversees", "partners", "performs", "pioneers", "plans",
+  "prepares", "prevents", "produces", "programs", "promotes", "proposes", "publishes",
+  "re-architects", "rebuilds", "redesigns", "reduces", "refactors", "refines",
+  "remodels", "reorganizes", "replaces", "resolves", "restructures", "revamps",
+  "reviews", "saves", "scales", "schedules", "secures", "simplifies", "simulates",
+  "solves", "spearheads", "standardizes", "streamlines", "strengthens", "structures",
+  "supervises", "tests", "tracks", "trains", "transforms", "troubleshoots", "unifies",
+  "upgrades", "utilizes", "validates", "verifies", "writes"
+]);
+
+const WEAK_OPENERS = [
+  "worked on",
+  "responsible for",
+  "helped with",
+  "assisted in",
+  "tasked with",
+  "involved in",
+  "participated in",
+];
+
+function hasQuantifiedMetric(line: string): boolean {
+  // 1. Percentages, multipliers, or currency
+  if (/\b\d+(\.\d+)?%|[xX]%|\$[\d,]+(\.\d+)?([kKmMbB])?|\b\d+(\.\d+)?x\b/i.test(line)) {
+    return true;
+  }
+  // 2. Metric suffixes: 10k, 2M, 500k, 100+
+  if (/\b\d+([kKmMbB])\+?\b|\b\d+\+\b/i.test(line)) {
+    return true;
+  }
+  // 3. Time / latency measurements: 35ms, 2 seconds, 3 hours
+  if (/\b\d+(\.\d+)?\s*(ms|milliseconds?|seconds?|secs?|minutes?|mins?|hours?|days?|weeks?|months?)\b/i.test(line)) {
+    return true;
+  }
+  // 4. Quantified nouns: 12 applications, 500 users, 14 services
+  if (/\b\d+\s*(?:\+)?\s*(users?|clients?|customers?|requests?|queries|endpoints?|services?|microservices?|servers?|nodes?|tests?|features?|members?|engineers?|developers?|stars?|downloads?|tickets?|prs?|pull\s+requests?|issues?|events?|qps|rps|applications?|projects?|milestones?)\b/i.test(line)) {
+    return true;
+  }
+  // 5. Check if there are other numbers, but strip out years (19xx, 20xx) and tech versions (e.g. React 18, Java 17, ES6, S3)
+  const stripped = line
+    .replace(/\b(19\d\d|20\d\d)\b/g, "")
+    .replace(/\b(?:react|vue|angular|node|python|java|c\+\+|c#|es|ecmascript|html|css|php|ruby|go|s|v|version)\s*\d+\b/gi, "")
+    .replace(/\b(?:ipv4|ipv6|utf-8|utf-16|sha-\d+|sha\d+|md5|aes-\d+|oauth\s*\d+|http\s*\d+(\.\d+)?)\b/gi, "");
+
+  if (/\b\d+\b/.test(stripped) && /\b(reduced|increased|improved|cut|saved|scaled|boosted|grew|expanded|from|to)\b/i.test(line)) {
+    return true;
+  }
+  return false;
+}
+
+function isValidProfileUrl(urlStr: string | undefined, domain: string): boolean {
+  if (!urlStr?.trim()) return false;
+  try {
+    const trimmed = urlStr.trim();
+    const parsed = new URL(trimmed.startsWith("http") ? trimmed : `https://${trimmed}`);
+    const host = parsed.hostname.toLowerCase().replace(/^www\./, "");
+    const cleanPath = parsed.pathname.replace(/\/$/, "");
+    return host === domain && cleanPath.length > 0;
+  } catch {
+    return false;
+  }
+}
+
 export function runAtsAudit({
   generalInfo,
   educationList,
@@ -59,15 +134,7 @@ export function runAtsAudit({
 }): LintResult {
   const issues: LintIssue[] = [];
 
-  // 1. Structure: One-Column Layout
-  issues.push({
-    id: "layout-single-column",
-    type: "success",
-    category: "Structure",
-    message: "Strict Single-Column Layout: Ensures 100% predictable ATS parsing order without text-box glitches.",
-  });
-
-  // 2. Contact Information
+  // 1. Contact Information
   const fullName = [generalInfo.firstName, generalInfo.lastName].filter(Boolean).join(" ").trim();
   if (!fullName) {
     issues.push({
@@ -86,6 +153,7 @@ export function runAtsAudit({
     });
   }
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!generalInfo.email?.trim()) {
     issues.push({
       id: "contact-email",
@@ -93,6 +161,14 @@ export function runAtsAudit({
       category: "Contact",
       message: "Missing email address.",
       recommendation: "Provide a clean, professional email (e.g., firstname.lastname@gmail.com).",
+    });
+  } else if (!emailRegex.test(generalInfo.email.trim())) {
+    issues.push({
+      id: "contact-email",
+      type: "error",
+      category: "Contact",
+      message: `Invalid email address format: "${generalInfo.email}".`,
+      recommendation: "Ensure email has a valid username, @ symbol, and domain.",
     });
   } else {
     issues.push({
@@ -120,27 +196,23 @@ export function runAtsAudit({
     });
   }
 
-  const hasGithub = generalInfo.links?.some((l) =>
-    l.url.toLowerCase().includes("github.com") || l.title?.toLowerCase().includes("github")
-  );
-  const hasLinkedin = generalInfo.links?.some((l) =>
-    l.url.toLowerCase().includes("linkedin.com") || l.title?.toLowerCase().includes("linkedin")
-  );
+  const hasLinkedin = generalInfo.links?.some((l) => isValidProfileUrl(l.url, "linkedin.com"));
+  const hasGithub = generalInfo.links?.some((l) => isValidProfileUrl(l.url, "github.com"));
 
   if (!hasLinkedin) {
     issues.push({
       id: "contact-linkedin",
       type: "warning",
       category: "Contact",
-      message: "LinkedIn profile link missing.",
-      recommendation: "FAANG & Fortune 500 recruiters routinely look for a LinkedIn profile link in the header.",
+      message: "Valid LinkedIn profile URL missing.",
+      recommendation: "Provide a valid profile link to linkedin.com/in/yourname in the header.",
     });
   } else {
     issues.push({
       id: "contact-linkedin",
       type: "success",
       category: "Contact",
-      message: "LinkedIn profile link included.",
+      message: "Valid LinkedIn profile URL included.",
     });
   }
 
@@ -149,32 +221,102 @@ export function runAtsAudit({
       id: "contact-github",
       type: "warning",
       category: "Contact",
-      message: "GitHub link missing.",
-      recommendation: "For CS and Software Engineering roles, a GitHub profile demonstrates real code artifacts.",
+      message: "Valid GitHub profile URL missing.",
+      recommendation: "For CS and Software Engineering roles, a valid github.com/yourname link demonstrates real code.",
     });
   } else {
     issues.push({
       id: "contact-github",
       type: "success",
       category: "Contact",
-      message: "GitHub profile link included.",
+      message: "Valid GitHub profile URL included.",
+    });
+  }
+
+  // 2. Core Section Content Checks (Prevent Empty-CV 100% Score)
+  const validWorkCount = workList.filter(
+    (w) => Boolean(w.companyName?.trim() || w.position?.trim() || w.responsibilities?.trim())
+  ).length;
+
+  const validProjectsCount = projectList.filter(
+    (p) => Boolean(p.title?.trim() || p.description?.trim())
+  ).length;
+
+  if (validWorkCount === 0 && validProjectsCount === 0) {
+    issues.push({
+      id: "core-experience-projects",
+      type: "error",
+      category: "Structure",
+      message: "No Experience or Projects provided.",
+      recommendation: "Add at least one work experience or technical project detailing your software engineering work.",
+    });
+  } else {
+    issues.push({
+      id: "core-experience-projects",
+      type: "success",
+      category: "Structure",
+      message: `Documented technical experience/projects: ${validWorkCount} job(s), ${validProjectsCount} project(s).`,
+    });
+  }
+
+  const validEducationCount = educationList.filter(
+    (e) => Boolean(e.schoolName?.trim() || e.study?.trim())
+  ).length;
+
+  if (validEducationCount === 0) {
+    issues.push({
+      id: "core-education",
+      type: "warning",
+      category: "Structure",
+      message: "No Education entries provided.",
+      recommendation: "Include your degree, university, or verified computer science curriculum.",
+    });
+  } else {
+    issues.push({
+      id: "core-education",
+      type: "success",
+      category: "Structure",
+      message: "Education details provided.",
+    });
+  }
+
+  const validSkillsCount = skillList.filter(
+    (s) => Boolean(s.category?.trim() && s.skills?.some((sk) => sk.name?.trim()))
+  ).length;
+
+  if (validSkillsCount === 0) {
+    issues.push({
+      id: "core-skills",
+      type: "warning",
+      category: "Structure",
+      message: "No technical Skills categorized.",
+      recommendation: "Add core Languages, Frameworks, and Developer Tools so ATS keyword parsers can index you.",
+    });
+  } else {
+    issues.push({
+      id: "core-skills",
+      type: "success",
+      category: "Structure",
+      message: `Categorized skills provided across ${validSkillsCount} group(s).`,
     });
   }
 
   // 3. Proofreading & Punctuation (Joel Spolsky Rule: space after comma)
   const allTexts: string[] = [
-    generalInfo.bio,
-    ...educationList.map((e) => `${e.bullets || ""} ${e.study} ${e.schoolName}`),
+    generalInfo.bio || "",
+    ...educationList.map((e) => `${e.bullets || ""} ${e.study || ""} ${e.schoolName || ""}`),
     ...workList.map((w) => `${w.responsibilities || ""} ${w.companyDescription || ""}`),
     ...projectList.map((p) => `${p.description || ""} ${p.tagline || ""}`),
+    ...skillList.map((s) => `${s.category || ""}: ${(s.skills || []).map((sk) => sk.name).join(", ")}`),
     ...customSections.flatMap((cs) => cs.items.map((i) => i.description || "")),
   ];
 
   let missingCommaSpaceCount = 0;
   for (const text of allTexts) {
     if (!text) continue;
-    // Look for comma followed immediately by a letter without space (e.g. "React,Node" or "Algorithms,Data")
-    const match = text.match(/[a-zA-Z0-9],[a-zA-Z]/g);
+    // Strip code generics like Map<string,number> before checking comma spacing
+    const normalized = text.replace(/<[^>]*>/g, "");
+    const match = normalized.match(/[a-zA-Z0-9],[a-zA-Z]/g);
     if (match) {
       missingCommaSpaceCount += match.length;
     }
@@ -198,43 +340,111 @@ export function runAtsAudit({
     });
   }
 
-  // 4. Action Verbs & Google's XYZ Formula Check
-  const allBulletLines: string[] = [];
+  // 4. Action Verbs, Weak Openers & Google's XYZ Formula Check
+  type BulletEntry = {
+    line: string;
+    isCurrent: boolean;
+  };
+  const allBulletLines: BulletEntry[] = [];
+
   workList.forEach((w) => {
     if (w.responsibilities) {
-      w.responsibilities.split("\n").map((l) => l.trim()).filter(Boolean).forEach((l) => allBulletLines.push(l));
+      w.responsibilities
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean)
+        .forEach((l) => allBulletLines.push({ line: l, isCurrent: Boolean(w.isCurrent) }));
     }
   });
+
   projectList.forEach((p) => {
     if (p.description) {
-      p.description.split("\n").map((l) => l.trim()).filter(Boolean).forEach((l) => allBulletLines.push(l));
+      p.description
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean)
+        .forEach((l) => allBulletLines.push({ line: l, isCurrent: Boolean(p.isCurrent) }));
     }
   });
+
+  educationList.forEach((e) => {
+    if (e.bullets) {
+      e.bullets
+        .split("\n")
+        .map((l) => l.trim())
+        .filter(Boolean)
+        .forEach((l) => allBulletLines.push({ line: l, isCurrent: Boolean(e.isCurrent) }));
+    }
+  });
+
   customSections.forEach((cs) => {
     cs.items?.forEach((item) => {
       if (item.description) {
-        item.description.split("\n").map((l) => l.trim()).filter(Boolean).forEach((l) => allBulletLines.push(l));
+        item.description
+          .split("\n")
+          .map((l) => l.trim())
+          .filter(Boolean)
+          .forEach((l) => allBulletLines.push({ line: l, isCurrent: Boolean(item.isCurrent) }));
       }
     });
   });
 
-  if (allBulletLines.length > 0) {
+  if (allBulletLines.length === 0) {
+    issues.push({
+      id: "impact-no-bullets",
+      type: "warning",
+      category: "Impact & Action Verbs",
+      message: "No bullet points found in your work, project, or education sections.",
+      recommendation: "Add bullet points using Google's XYZ formula to show measurable technical impact.",
+    });
+  } else {
     let strongActionVerbCount = 0;
     let metricCount = 0;
+    let weakOpenerCount = 0;
+    const weakOpenerExamples: string[] = [];
 
-    allBulletLines.forEach((line) => {
-      // Clean leading bullet symbols (- * •)
+    allBulletLines.forEach(({ line, isCurrent }) => {
       const cleaned = line.replace(/^[-*•]\s*/, "").trim();
-      const firstWord = cleaned.split(/\s+/)[0]?.toLowerCase().replace(/[^a-z-]/g, "");
-      if (firstWord && STRONG_ACTION_VERBS.has(firstWord)) {
-        strongActionVerbCount++;
+      const lowerCleaned = cleaned.toLowerCase();
+
+      // Check weak openers
+      for (const weak of WEAK_OPENERS) {
+        if (lowerCleaned.startsWith(weak)) {
+          weakOpenerCount++;
+          weakOpenerExamples.push(weak);
+          break;
+        }
       }
 
-      // Check for metrics (% or numbers or metrics like 10k, 2x, etc., or X% formula templates)
-      if (/(\d+[%kKxXmM]?|[xX]%|\$[\d,]+|\b[0-9]+(\.[0-9]+)?%)/.test(line)) {
+      // Check action verbs
+      const firstWord = cleaned.split(/\s+/)[0]?.toLowerCase().replace(/[^a-z-]/g, "");
+      if (firstWord) {
+        if (STRONG_ACTION_VERBS.has(firstWord)) {
+          strongActionVerbCount++;
+        } else if (isCurrent && PRESENT_ACTION_VERBS.has(firstWord)) {
+          strongActionVerbCount++;
+        }
+      }
+
+      // Check genuine metrics
+      if (hasQuantifiedMetric(cleaned)) {
         metricCount++;
       }
     });
+
+    if (weakOpenerCount > 0) {
+      const uniqueWeak = Array.from(new Set(weakOpenerExamples))
+        .map((w) => `"${w}"`)
+        .join(", ");
+      issues.push({
+        id: "impact-weak-openers",
+        type: "warning",
+        category: "Impact & Action Verbs",
+        message: `Detected ${weakOpenerCount} bullet point(s) starting with weak openers (${uniqueWeak}).`,
+        recommendation:
+          "Avoid passive phrases like 'worked on' or 'responsible for'. Replace with strong action verbs (e.g., Developed, Engineered, Optimized).",
+      });
+    }
 
     const actionVerbRatio = strongActionVerbCount / allBulletLines.length;
     if (actionVerbRatio >= 0.6) {
@@ -251,7 +461,7 @@ export function runAtsAudit({
         category: "Impact & Action Verbs",
         message: `Only ${strongActionVerbCount} of ${allBulletLines.length} bullet points start with strong action verbs.`,
         recommendation:
-          "Start bullets with punchy past-tense verbs (e.g., Developed, Built, Engineered, Spearheaded, Optimized, Automated).",
+          "Start bullets with punchy action verbs (e.g., Developed, Built, Engineered, Spearheaded, Optimized, Automated).",
       });
     }
 
@@ -272,16 +482,6 @@ export function runAtsAudit({
           "Use Google's formula: 'Accomplished [X] as measured by [Y], by doing [Z]'. Example: 'Reduced latency by 35% by implementing Redis caching'.",
       });
     }
-  }
-
-  // 5. Skills Check: No rating stars or percentages
-  if (skillList.length > 0) {
-    issues.push({
-      id: "skills-clean-format",
-      type: "success",
-      category: "Structure",
-      message: "Skills are categorized cleanly as keywords without arbitrary percentage or star ratings.",
-    });
   }
 
   // Calculate score

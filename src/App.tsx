@@ -8,6 +8,7 @@ import AiKeyModal from "./components/layout/AiKeyModal/AiKeyModal.tsx";
 import { hasAiKey } from "./utils/aiKeyStorage";
 import { useSectionOrder } from "./hooks/useSectionOrder";
 import { useCustomSections } from "./hooks/useCustomSections";
+import { generateId } from "./utils/id";
 import * as Sample from "./data/sampleData.js";
 import {
   saveSessionToStorage,
@@ -30,7 +31,6 @@ function App() {
     hasSavedSessionInStorage(),
   );
   const [isSavedRecently, setIsSavedRecently] = useState(false);
-  const [, setIsSampleMode] = useState(false);
   const [isAtsModalOpen, setIsAtsModalOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
   const [hasKey, setHasKey] = useState(() => hasAiKey());
@@ -42,8 +42,8 @@ function App() {
     toggleReordering,
     moveUp,
     moveDown,
-    addSection: addSectionKey,
-    removeSection: removeSectionKey,
+    addSection: orderAddSection,
+    removeSection: orderRemoveSection,
   } = useSectionOrder();
 
   const {
@@ -57,8 +57,8 @@ function App() {
     updateItem,
     removeItem,
   } = useCustomSections([], {
-    onSectionAdded: addSectionKey,
-    onSectionRemoved: removeSectionKey,
+    onSectionAdded: orderAddSection,
+    onSectionRemoved: orderRemoveSection,
   });
 
   function handleLoadSampleSection() {
@@ -78,7 +78,7 @@ function App() {
     bio: "",
     links: [
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         title: "",
         customTitle: "",
         url: "",
@@ -88,7 +88,7 @@ function App() {
 
   const [educationList, setEducationList] = useState<EducationItem[]>([
     {
-      id: crypto.randomUUID(),
+      id: generateId(),
       schoolName: "",
       study: "",
       place: "",
@@ -107,7 +107,7 @@ function App() {
 
   const [workList, setWorkList] = useState<ExperienceItem[]>([
     {
-      id: crypto.randomUUID(),
+      id: generateId(),
       companyName: "",
       position: "",
       responsibilities: "",
@@ -170,7 +170,6 @@ function App() {
     if (sessionData.skillList) setSkillList(sessionData.skillList);
     if (sessionData.customSections) setCustomSections(sessionData.customSections);
     if (sessionData.sectionOrder) setSectionOrder(sessionData.sectionOrder);
-    setIsSampleMode(false);
   }
 
   function handleExportJson() {
@@ -196,7 +195,6 @@ function App() {
       if (data.customSections) setCustomSections(data.customSections);
       if (data.sectionOrder) setSectionOrder(data.sectionOrder);
       setHasSavedDraft(true);
-      setIsSampleMode(false);
       alert("CV data imported successfully!");
     } catch (err: unknown) {
       alert((err as Error).message || "Failed to import CV JSON.");
@@ -204,17 +202,75 @@ function App() {
   }
 
   function handleSample() {
-    setGeneralInfo(Sample.sampleGeneralInfo);
-    setEducationList(Sample.sampleEducation);
-    setSkillList(Sample.sampleSkills);
-    setWorkList(Sample.sampleWork);
-    setProjectList(Sample.sampleProjects);
-    const sample = Sample.sampleCustomSections[0];
+    const sampleData = Sample.createSampleData();
+    setGeneralInfo(sampleData.generalInfo);
+    setEducationList(sampleData.educationList);
+    setSkillList(sampleData.skillList);
+    setWorkList(sampleData.workList);
+    setProjectList(sampleData.projectList);
+    const sample = sampleData.customSections[0];
     if (sample) {
       loadSampleSection(sample);
     }
-    setIsSampleMode(true);
   }
+
+  const hasPrintableContent = useMemo(() => {
+    const hasName = Boolean(
+      generalInfo.firstName?.trim() || generalInfo.lastName?.trim(),
+    );
+    const hasHeader = Boolean(
+      hasName ||
+        generalInfo.email?.trim() ||
+        generalInfo.phone?.trim() ||
+        generalInfo.headline?.trim() ||
+        generalInfo.bio?.trim() ||
+        generalInfo.links?.some((l) => l.url?.trim()),
+    );
+    const hasEducation = educationList.some(
+      (e) => e.schoolName?.trim() || e.study?.trim(),
+    );
+    const hasWork = workList.some(
+      (w) =>
+        w.companyName?.trim() ||
+        w.position?.trim() ||
+        w.responsibilities?.trim(),
+    );
+    const hasProjects = projectList.some(
+      (p) => p.title?.trim() || p.description?.trim(),
+    );
+    const hasSkills = skillList.some(
+      (s) => s.category?.trim() && s.skills?.some((sk) => sk.name?.trim()),
+    );
+    const hasCustom = customSections.some((c) =>
+      c.items?.some((i) => i.title?.trim() || i.description?.trim()),
+    );
+    return (
+      hasHeader ||
+      hasEducation ||
+      hasWork ||
+      hasProjects ||
+      hasSkills ||
+      hasCustom
+    );
+  }, [
+    generalInfo,
+    educationList,
+    workList,
+    projectList,
+    skillList,
+    customSections,
+  ]);
+
+  const documentTitle = useMemo(() => {
+    const nameSlug = [
+      generalInfo.firstName?.trim(),
+      generalInfo.lastName?.trim(),
+    ]
+      .filter(Boolean)
+      .join("_")
+      .replace(/[^a-zA-Z0-9_-]/g, "");
+    return nameSlug ? `${nameSlug}_Resume` : "Resume";
+  }, [generalInfo.firstName, generalInfo.lastName]);
 
   return (
     <>
@@ -233,6 +289,8 @@ function App() {
         atsScore={auditResult.score}
         hasAiKey={hasKey}
         onOpenAiModal={() => setIsAiModalOpen(true)}
+        documentTitle={documentTitle}
+        isPrintDisabled={!hasPrintableContent}
       />
       <div className="mainContent">
         <FormInputs

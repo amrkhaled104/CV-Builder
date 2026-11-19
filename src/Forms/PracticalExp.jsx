@@ -5,6 +5,7 @@ import ActionButtons from "../reusables/ActionButton";
 import FormBox from "../reusables/FormBox";
 import FormCard from "../reusables/FormCard";
 import AiEnhanceBox from "../components/common/AiEnhanceSection/AiEnhanceBox.tsx";
+import { generateId } from "../utils/id";
 
 export default function PracticalExperience({
   workList,
@@ -19,7 +20,7 @@ export default function PracticalExperience({
     setWorkList([
       ...workList,
       {
-        id: crypto.randomUUID(),
+        id: generateId(),
         companyName: "",
         position: "",
         responsibilities: "",

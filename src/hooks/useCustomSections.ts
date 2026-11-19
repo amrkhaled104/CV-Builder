@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { CustomSection, CustomSectionItem } from "../types/customSection";
 import { createEmptyCustomItem } from "../types/customSection";
+import { generateId } from "../utils/id";
 
 export type UseCustomSectionsOptions = {
   onSectionAdded?: (sectionId: string) => void;
@@ -23,7 +24,7 @@ export function useCustomSections(
     id?: string,
   ): CustomSection {
     const newSection: CustomSection = {
-      id: id ?? `custom-${crypto.randomUUID()}`,
+      id: id ?? `custom-${generateId()}`,
       title,
       items,
     };
@@ -51,7 +52,7 @@ export function useCustomSections(
     const newItem: CustomSectionItem = {
       ...createEmptyCustomItem(),
       ...item,
-      id: item?.id ?? crypto.randomUUID(),
+      id: item?.id ?? generateId(),
     };
 
     setCustomSections((prev) =>

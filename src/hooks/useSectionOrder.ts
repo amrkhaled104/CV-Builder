@@ -66,7 +66,5 @@ export function useSectionOrder(initialOrder: SectionKey[] = initialSectionOrder
     moveDown,
     addSection,
     removeSection,
-    addSectionKey: addSection,
-    removeSectionKey: removeSection,
   };
 }

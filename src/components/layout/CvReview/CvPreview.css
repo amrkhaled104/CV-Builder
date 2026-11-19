@@ -24,6 +24,10 @@
   transition: all var(--transition);
 }
 
+.cvPreview * {
+  line-height: inherit;
+}
+
 /* ========================================
    FONT PRESETS (LaTeX Serif vs Modern Sans)
 ======================================== */
@@ -150,7 +154,7 @@
 }
 
 .cv-header-row span+span::before {
-  content: "⋄";
+  content: "|";
   margin: 0 8px;
   color: #777;
 }
@@ -205,6 +209,8 @@
 .bullet-list li {
   margin-bottom: 4px;
   text-align: justify;
+  orphans: 2;
+  widows: 2;
 }
 
 /* ========================================
@@ -536,6 +542,8 @@
 
   .cv-section-title {
     border-bottom: 1px solid #000 !important;
+    break-after: avoid !important;
+    page-break-after: avoid !important;
   }
 
   .entry,
@@ -550,20 +558,5 @@
   .cv-header-row a {
     color: #000 !important;
     text-decoration: underline !important;
-  }
-}
-
-@media print {
-  @page {
-    size: A4 portrait;
-    margin: 0;
-  }
-
-  .cvPreview {
-    padding: 12mm 14mm !important;
-    margin: 0 !important;
-    box-shadow: none !important;
-    width: 100% !important;
-    box-sizing: border-box;
   }
 }
