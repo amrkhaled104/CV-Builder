@@ -1,3 +1,4 @@
+import { useState, useEffect, useRef } from "react";
 import "./CvPreview.css";
 import type { CustomSection } from "../../../types/customSection";
 
@@ -35,6 +36,7 @@ type EducationItem = {
   customDuration: string;
   isCurrent: boolean;
 };
+
 type ExperienceItem = {
   id: string;
   companyName: string;
@@ -50,12 +52,14 @@ type ExperienceItem = {
   customDuration: string;
   isCurrent: boolean;
 };
+
 type ProjectLink = {
   id: string;
   title: string;
   customTitle: string;
   url: string;
 };
+
 type ProjectItem = {
   id: string;
   title: string;
@@ -68,6 +72,7 @@ type ProjectItem = {
   isCurrent: boolean;
   links: ProjectLink[];
 };
+
 type SkillItem = {
   id: string;
   name: string;
@@ -78,6 +83,7 @@ type SkillCategory = {
   category: string;
   skills: SkillItem[];
 };
+
 type SectionName =
   | "summary"
   | "education"
@@ -85,6 +91,7 @@ type SectionName =
   | "projects"
   | "skills"
   | (string & {});
+
 type CvPreviewProps = {
   generalInfo: GeneralInfo;
   ref?: React.Ref<HTMLDivElement>;
@@ -108,6 +115,29 @@ function CvPreview({
   sections,
   onLoadSample,
 }: CvPreviewProps) {
+  const [font, setFont] = useState<"serif" | "sans">("serif");
+  const [density, setDensity] = useState<"compact" | "normal" | "spacious">("normal");
+  const [showPageGuide, setShowPageGuide] = useState<boolean>(true);
+  const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+  const internalRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const el = internalRef.current;
+    if (!el) return;
+
+    // Check if height exceeds ~297mm (approx 1120px at 96dpi)
+    const checkOverflow = () => {
+      // 297mm in pixels at 96 DPI is ~1122px
+      const a4HeightPx = 1122;
+      setIsOverflowing(el.scrollHeight > a4HeightPx);
+    };
+
+    checkOverflow();
+    const observer = new ResizeObserver(checkOverflow);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [generalInfo, educationList, workList, projectList, skillList, customSections, sections, density, font]);
+
   function formatDate(date: string) {
     if (!date) return "";
 
@@ -318,284 +348,271 @@ function CvPreview({
   }
 
   return (
-    <section className="cvPreview" ref={ref}>
-      {/* ================= HEADER ================= */}
-      {hasHeader && (
-        <header className="cv-header">
-          {hasName && (
-            <h1 className="cv-name">
-              {[generalInfo.firstName?.trim(), generalInfo.lastName?.trim()]
-                .filter(Boolean)
-                .join(" ")}
-            </h1>
-          )}
-          {generalInfo.headline && (
-            <div className="cv-headline">{generalInfo.headline}</div>
-          )}
-          {(generalInfo.phone || generalInfo.email || generalInfo.location) && (
-            <div className="cv-header-row cv-contact">
-              {generalInfo.phone && <span>{generalInfo.phone}</span>}
-              {generalInfo.email && (
-                <span>
-                  <a
-                    href={`mailto:${generalInfo.email}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    {generalInfo.email}
-                  </a>
-                </span>
-              )}
-              {generalInfo.location && <span>{generalInfo.location}</span>}
-            </div>
-          )}
-          {visibleLinks.length > 0 && (
-            <div className="cv-header-row cv-links">
-              {visibleLinks.map((link) => (
-                <span key={link.id}>
-                  <a href={link.url} target="_blank" rel="noreferrer">
-                    {getLinkLabel(link)}
-                  </a>
-                </span>
-              ))}
-            </div>
-          )}
-        </header>
+    <div className="cv-preview-wrapper">
+      {/* Visual Controls for Font, Density & Page Limit */}
+      <div className="preview-controls-bar">
+        <div className="preview-control-group">
+          <span className="preview-control-label">Typography:</span>
+          <select
+            className="preview-select"
+            value={font}
+            onChange={(e) => setFont(e.target.value as "serif" | "sans")}
+          >
+            <option value="serif">LaTeX Serif (Latin Modern)</option>
+            <option value="sans">Modern Sans (Source Sans)</option>
+          </select>
+        </div>
+
+        <div className="preview-control-group">
+          <span className="preview-control-label">Spacing:</span>
+          <select
+            className="preview-select"
+            value={density}
+            onChange={(e) =>
+              setDensity(e.target.value as "compact" | "normal" | "spacious")
+            }
+          >
+            <option value="compact">Compact (Fit 1 Page)</option>
+            <option value="normal">Standard Normal</option>
+            <option value="spacious">Spacious</option>
+          </select>
+        </div>
+
+        <div className="preview-control-group">
+          <label className="preview-toggle-label">
+            <input
+              type="checkbox"
+              checked={showPageGuide}
+              onChange={(e) => setShowPageGuide(e.target.checked)}
+            />
+            <span>Show 1-Page Guide</span>
+          </label>
+        </div>
+      </div>
+
+      {isOverflowing && showPageGuide && (
+        <div className="cv-overflow-warning">
+          <span>⚠️</span>
+          <span>
+            <strong>Page limit exceeded:</strong> Your content extends beyond 1 page.
+            Try selecting <strong>&quot;Compact&quot;</strong> spacing or trimming bullet points to keep within the FAANG 1-page standard.
+          </span>
+        </div>
       )}
-      {sections.map((section) => {
-        switch (section) {
-          case "summary":
-            return generalInfo.bio ? (
-              <section key={section}>
-                <h2 className="cv-section-title">Summary</h2>
-                <p className="cv-summary">{generalInfo.bio}</p>
-              </section>
-            ) : null;
 
-          case "education":
-            return validEducation.length > 0 ? (
-              <section className="education-section" key={section}>
-                <h2 className="cv-section-title">Education</h2>
-                {validEducation.map((edu) => {
-                  const educationBullets =
-                    edu.bullets
-                      ?.split("\n")
-                      .map((bullet) => bullet.trim())
-                      .filter(Boolean) ?? [];
+      <section
+        className={`cvPreview font-${font} density-${density}`}
+        ref={(node) => {
+          const divNode = node as HTMLDivElement | null;
+          internalRef.current = divNode;
+          if (typeof ref === "function") {
+            ref(divNode);
+          } else if (ref && "current" in ref) {
+            (ref as React.MutableRefObject<HTMLDivElement | null>).current = divNode;
+          }
+        }}
+      >
+        {/* Page 1 Guide line */}
+        {showPageGuide && (
+          <div className="cv-page-guide" aria-hidden="true">
+            <span className="cv-page-guide-badge">Page 1 Limit (A4)</span>
+          </div>
+        )}
 
-                  return (
-                    <div className="entry" key={edu.id}>
+        {/* ================= HEADER ================= */}
+        {hasHeader && (
+          <header className="cv-header">
+            {hasName && (
+              <h1 className="cv-name">
+                {[generalInfo.firstName?.trim(), generalInfo.lastName?.trim()]
+                  .filter(Boolean)
+                  .join(" ")}
+              </h1>
+            )}
+            {generalInfo.headline && (
+              <div className="cv-headline">{generalInfo.headline}</div>
+            )}
+            {(generalInfo.phone || generalInfo.email || generalInfo.location) && (
+              <div className="cv-header-row cv-contact">
+                {generalInfo.phone && <span>{generalInfo.phone}</span>}
+                {generalInfo.email && (
+                  <span>
+                    <a
+                      href={`mailto:${generalInfo.email}`}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      {generalInfo.email}
+                    </a>
+                  </span>
+                )}
+                {generalInfo.location && <span>{generalInfo.location}</span>}
+              </div>
+            )}
+            {visibleLinks.length > 0 && (
+              <div className="cv-header-row cv-links">
+                {visibleLinks.map((link) => (
+                  <span key={link.id}>
+                    <a href={link.url} target="_blank" rel="noreferrer">
+                      {getLinkLabel(link)}
+                    </a>
+                  </span>
+                ))}
+              </div>
+            )}
+          </header>
+        )}
+
+        {sections.map((section) => {
+          switch (section) {
+            case "summary":
+              return generalInfo.bio ? (
+                <section key={section}>
+                  <h2 className="cv-section-title">Summary</h2>
+                  <p className="cv-summary">{generalInfo.bio}</p>
+                </section>
+              ) : null;
+
+            case "education":
+              return validEducation.length > 0 ? (
+                <section className="education-section" key={section}>
+                  <h2 className="cv-section-title">Education</h2>
+                  {validEducation.map((edu) => {
+                    const educationBullets =
+                      edu.bullets
+                        ?.split("\n")
+                        .map((bullet) => bullet.trim())
+                        .filter(Boolean) ?? [];
+
+                    return (
+                      <div className="entry" key={edu.id}>
+                        <div className="entry-header">
+                          <div className="entry-left">
+                            <strong>{edu.study}</strong>
+                            {edu.study && edu.schoolName && ", "}
+                            {edu.schoolName}
+                            {edu.place && (
+                              <>
+                                {edu.study || edu.schoolName ? ", " : ""}
+                                <em>{edu.place}</em>
+                              </>
+                            )}
+                            {!educationBullets.length && edu.grade && (
+                              <span> (GPA: {edu.grade})</span>
+                            )}
+                          </div>
+                          <div className="entry-right">{getDuration(edu)}</div>
+                        </div>
+                        {(edu.subTitle || edu.linkText) && (
+                          <div className="education-subrow">
+                            {edu.subTitle && <span>{edu.subTitle}</span>}
+                            {edu.linkText && (
+                              <span>
+                                {edu.linkUrl ? (
+                                  <a
+                                    href={edu.linkUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {edu.linkText}
+                                  </a>
+                                ) : (
+                                  edu.linkText
+                                )}
+                              </span>
+                            )}
+                          </div>
+                        )}
+                        {educationBullets.length > 0 && (
+                          <ul className="bullet-list education-bullets">
+                            {educationBullets.map((bullet, index) => (
+                              <li key={`${edu.id}-bullet-${index}`}>
+                                {renderBullet(bullet)}
+                                {index === 0 && edu.grade && (
+                                  <span> (GPA: {edu.grade})</span>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    );
+                  })}
+                </section>
+              ) : null;
+
+            case "experience":
+              return validWork.length > 0 ? (
+                <section className="experience-section" key={section}>
+                  <h2 className="cv-section-title">Experience</h2>
+                  {validWork.map((work) => (
+                    <div className="entry" key={work.id}>
                       <div className="entry-header">
                         <div className="entry-left">
-                          <strong>{edu.study}</strong>
-                          {edu.study && edu.schoolName && ", "}
-                          {edu.schoolName}
-                          {edu.place && (
+                          <strong>{work.position}</strong>
+                          {work.position && work.companyName && ", "}
+                          {work.companyName}
+                          {work.location && (
                             <>
-                              {edu.study || edu.schoolName ? ", " : ""}
-                              <em>{edu.place}</em>
+                              {work.position || work.companyName ? ", " : ""}
+                              <em>{work.location}</em>
                             </>
                           )}
-                          {!educationBullets.length && edu.grade && (
-                            <span> (GPA: {edu.grade})</span>
-                          )}
-                        </div>
-                        <div className="entry-right">{getDuration(edu)}</div>
-                      </div>
-                      {(edu.subTitle || edu.linkText) && (
-                        <div className="education-subrow">
-                          {edu.subTitle && <span>{edu.subTitle}</span>}
-                          {edu.linkText && (
-                            <span>
-                              {edu.linkUrl ? (
-                                <a
-                                  href={edu.linkUrl}
-                                  target="_blank"
-                                  rel="noreferrer"
-                                >
-                                  {edu.linkText}
-                                </a>
-                              ) : (
-                                edu.linkText
-                              )}
-                            </span>
-                          )}
-                        </div>
-                      )}
-                      {educationBullets.length > 0 && (
-                        <ul className="bullet-list education-bullets">
-                          {educationBullets.map((bullet, index) => (
-                            <li key={`${edu.id}-bullet-${index}`}>
-                              {renderBullet(bullet)}
-                              {index === 0 && edu.grade && (
-                                <span> (GPA: {edu.grade})</span>
-                              )}
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  );
-                })}
-              </section>
-            ) : null;
-
-          case "experience":
-            return validWork.length > 0 ? (
-              <section className="experience-section" key={section}>
-                <h2 className="cv-section-title">Experience</h2>
-                {validWork.map((work) => (
-                  <div className="entry" key={work.id}>
-                    <div className="entry-header">
-                      <div className="entry-left">
-                        <strong>{work.position}</strong>
-                        {work.position && work.companyName && ", "}
-                        {work.companyName}
-                        {work.location && (
-                          <>
-                            {work.position || work.companyName ? ", " : ""}
-                            <em>{work.location}</em>
-                          </>
-                        )}
-                        {work.linkText && work.linkUrl && (
-                          <>
-                            {work.position || work.companyName || work.location
-                              ? " | "
-                              : ""}
-                            <a
-                              href={work.linkUrl}
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              {work.linkText}
-                            </a>
-                          </>
-                        )}
-                      </div>
-
-                      <div className="entry-right">{getDuration(work)}</div>
-                    </div>
-
-                    {work.companyDescription && (
-                      <p className="entry-description">
-                        {work.companyDescription}
-                      </p>
-                    )}
-
-                    {work.responsibilities && (
-                      <ul className="bullet-list">
-                        {work.responsibilities
-                          .split("\n")
-                          .filter((line) => line.trim() !== "")
-                          .map((item, index) => (
-                            <li key={index}>{item}</li>
-                          ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </section>
-            ) : null;
-
-          case "projects":
-            return validProjects.length > 0 ? (
-              <section className="projects-section" key={section}>
-                <h2 className="cv-section-title">Projects</h2>
-
-                {validProjects.map((project) => (
-                  <div className="entry" key={project.id}>
-                    <div className="entry-header">
-                      <div className="entry-left">
-                        <strong>{project.title}</strong>
-                        {project.tagline && <>. {project.tagline}</>}
-                      </div>
-
-                      <div className="entry-right">
-                        {project.links
-                          .filter(
-                            (link) =>
-                              link.url && (link.title || link.customTitle),
-                          )
-                          .map((link, index) => (
-                            <span key={link.id}>
-                              {index > 0 && " | "}
+                          {work.linkText && work.linkUrl && (
+                            <>
+                              {work.position || work.companyName || work.location
+                                ? " | "
+                                : ""}
                               <a
-                                className="cv-link"
-                                href={link.url}
+                                href={work.linkUrl}
                                 target="_blank"
                                 rel="noreferrer"
                               >
-                                {link.title === "Other"
-                                  ? link.customTitle || link.url
-                                  : link.title}
+                                {work.linkText}
                               </a>
-                            </span>
-                          ))}
+                            </>
+                          )}
+                        </div>
+
+                        <div className="entry-right">{getDuration(work)}</div>
                       </div>
-                    </div>
 
-                    {project.description && (
-                      <ul className="bullet-list">
-                        {project.description
-                          .split("\n")
-                          .map((line) =>
-                            line.replace(/^\s*[-*•]\s*/, "").trim(),
-                          )
-                          .filter(Boolean)
-                          .map((line, index) => (
-                            <li key={index}>{line}</li>
-                          ))}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </section>
-            ) : null;
+                      {work.companyDescription && (
+                        <p className="entry-description">
+                          {work.companyDescription}
+                        </p>
+                      )}
 
-          case "skills":
-            return validSkills.length > 0 ? (
-              <section className="skills-section" key={section}>
-                <h2 className="cv-section-title">Skills</h2>
-
-                <div className="skills-container">
-                  {validSkills.map((category) => (
-                    <div className="skill-category" key={category.id}>
-                      <span className="skill-category-title">
-                        {category.category}:
-                      </span>
-
-                      <span className="skill-category-skills">
-                        {category.skills.map((skill) => skill.name).join(", ")}
-                      </span>
+                      {work.responsibilities && (
+                        <ul className="bullet-list">
+                          {work.responsibilities
+                            .split("\n")
+                            .filter((line) => line.trim() !== "")
+                            .map((item, index) => (
+                              <li key={index}>{item}</li>
+                            ))}
+                        </ul>
+                      )}
                     </div>
                   ))}
-                </div>
-              </section>
-            ) : null;
+                </section>
+              ) : null;
 
-          default: {
-            const customSection = validCustomSections.find(
-              (cs) => cs.id === section,
-            );
-            if (!customSection || customSection.items.length === 0) return null;
+            case "projects":
+              return validProjects.length > 0 ? (
+                <section className="projects-section" key={section}>
+                  <h2 className="cv-section-title">Projects</h2>
 
-            return (
-              <section key={customSection.id}>
-                <h2 className="cv-section-title">{customSection.title}</h2>
-                {customSection.items.map((item) => (
-                  <div className="entry" key={item.id}>
-                    <div className="entry-header">
-                      <div className="entry-left">
-                        <strong>{item.title}</strong>
-                        {item.tagline && <>. {item.tagline}</>}
-                      </div>
+                  {validProjects.map((project) => (
+                    <div className="entry" key={project.id}>
+                      <div className="entry-header">
+                        <div className="entry-left">
+                          <strong>{project.title}</strong>
+                          {project.tagline && <>. {project.tagline}</>}
+                        </div>
 
-                      <div className="entry-right">
-                        {item.links &&
-                        item.links.some(
-                          (link) => link.url && (link.title || link.customTitle),
-                        ) ? (
-                          item.links
+                        <div className="entry-right">
+                          {project.links
                             .filter(
                               (link) =>
                                 link.url && (link.title || link.customTitle),
@@ -614,36 +631,121 @@ function CvPreview({
                                     : link.title}
                                 </a>
                               </span>
-                            ))
-                        ) : item.startDate ||
-                          item.isCurrent ||
-                          item.customDuration ? (
-                          getDuration(item)
-                        ) : null}
+                            ))}
+                        </div>
                       </div>
-                    </div>
 
-                    {item.description && (
-                      <ul className="bullet-list">
-                        {item.description
-                          .split("\n")
-                          .map((line) =>
-                            line.replace(/^\s*[-*•]\s*/, "").trim(),
-                          )
-                          .filter(Boolean)
-                          .map((line, index) => (
-                            <li key={index}>{line}</li>
-                          ))}
-                      </ul>
-                    )}
+                      {project.description && (
+                        <ul className="bullet-list">
+                          {project.description
+                            .split("\n")
+                            .map((line) =>
+                              line.replace(/^\s*[-*•]\s*/, "").trim(),
+                            )
+                            .filter(Boolean)
+                            .map((line, index) => (
+                              <li key={index}>{line}</li>
+                            ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </section>
+              ) : null;
+
+            case "skills":
+              return validSkills.length > 0 ? (
+                <section className="skills-section" key={section}>
+                  <h2 className="cv-section-title">Skills</h2>
+
+                  <div className="skills-container">
+                    {validSkills.map((category) => (
+                      <div className="skill-category" key={category.id}>
+                        <span className="skill-category-title">
+                          {category.category}:
+                        </span>
+
+                        <span className="skill-category-skills">
+                          {category.skills.map((skill) => skill.name).join(", ")}
+                        </span>
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </section>
-            );
+                </section>
+              ) : null;
+
+            default: {
+              const customSection = validCustomSections.find(
+                (cs) => cs.id === section,
+              );
+              if (!customSection || customSection.items.length === 0) return null;
+
+              return (
+                <section key={customSection.id}>
+                  <h2 className="cv-section-title">{customSection.title}</h2>
+                  {customSection.items.map((item) => (
+                    <div className="entry" key={item.id}>
+                      <div className="entry-header">
+                        <div className="entry-left">
+                          <strong>{item.title}</strong>
+                          {item.tagline && <>. {item.tagline}</>}
+                        </div>
+
+                        <div className="entry-right">
+                          {item.links &&
+                          item.links.some(
+                            (link) => link.url && (link.title || link.customTitle),
+                          ) ? (
+                            item.links
+                              .filter(
+                                (link) =>
+                                  link.url && (link.title || link.customTitle),
+                              )
+                              .map((link, index) => (
+                                <span key={link.id}>
+                                  {index > 0 && " | "}
+                                  <a
+                                    className="cv-link"
+                                    href={link.url}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                  >
+                                    {link.title === "Other"
+                                      ? link.customTitle || link.url
+                                      : link.title}
+                                  </a>
+                                </span>
+                              ))
+                          ) : item.startDate ||
+                            item.isCurrent ||
+                            item.customDuration ? (
+                            getDuration(item)
+                          ) : null}
+                        </div>
+                      </div>
+
+                      {item.description && (
+                        <ul className="bullet-list">
+                          {item.description
+                            .split("\n")
+                            .map((line) =>
+                              line.replace(/^\s*[-*•]\s*/, "").trim(),
+                            )
+                            .filter(Boolean)
+                            .map((line, index) => (
+                              <li key={index}>{line}</li>
+                            ))}
+                        </ul>
+                      )}
+                    </div>
+                  ))}
+                </section>
+              );
+            }
           }
-        }
-      })}
-    </section>
+        })}
+      </section>
+    </div>
   );
 }
 

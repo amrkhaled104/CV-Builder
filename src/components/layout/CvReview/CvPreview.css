@@ -1,5 +1,5 @@
 /* ========================================
-   CV PREVIEW
+   CV PREVIEW - ROOT CONTAINER
 ======================================== */
 .cvPreview {
   width: min(100%, 210mm);
@@ -11,11 +11,113 @@
   font-size: 14px;
   line-height: 1.4;
   box-shadow: 0 8px 30px var(--shadow);
+  position: relative;
+  /* Prevent awkward browser soft-hyphenation from breaking search terms like Java */
+  hyphens: none;
+  -webkit-hyphens: none;
+  word-break: normal;
+  overflow-wrap: break-word;
+  transition: all var(--transition);
 }
+
+/* ========================================
+   FONT PRESETS (LaTeX Serif vs Modern Sans)
+======================================== */
+.cvPreview.font-serif {
+  font-family: "Latin Modern Roman", "Computer Modern", "Times New Roman", Times, Georgia, serif;
+}
+
+.cvPreview.font-sans {
+  font-family: "Source Sans Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ========================================
+   DENSITY PRESETS (To help achieve 1 page)
+======================================== */
+.cvPreview.density-compact {
+  padding: 22px 30px;
+  font-size: 13px;
+  line-height: 1.32;
+}
+
+.cvPreview.density-compact .cv-header {
+  margin-bottom: 10px;
+}
+
+.cvPreview.density-compact .cv-name {
+  font-size: 1.6rem;
+}
+
+.cvPreview.density-compact .cv-section-title {
+  margin: 10px 0 4px 0;
+  font-size: 18px;
+}
+
+.cvPreview.density-compact .entry {
+  margin-bottom: 7px;
+}
+
+.cvPreview.density-compact .bullet-list {
+  margin-top: 3px;
+}
+
+.cvPreview.density-compact .bullet-list li {
+  margin-bottom: 3px;
+}
+
+.cvPreview.density-spacious {
+  padding: 34px 40px;
+  font-size: 14.5px;
+  line-height: 1.5;
+}
+
+.cvPreview.density-spacious .entry {
+  margin-bottom: 14px;
+}
+
+/* ========================================
+   PAGE 1 VISUAL BOUNDARY INDICATOR
+======================================== */
+.cv-page-guide {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 297mm; /* Standard A4 height */
+  border-top: 2px dashed #ef4444;
+  pointer-events: none;
+  z-index: 50;
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 12px;
+}
+
+.cv-page-guide-badge {
+  background-color: #ef4444;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 0 0 4px 4px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.cv-overflow-warning {
+  margin-top: 12px;
+  padding: 8px 14px;
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 /* ========================================
    HEADER
 ======================================== */
-
 .cv-header {
   text-align: center;
   margin-bottom: 16px;
@@ -23,10 +125,11 @@
 
 .cv-name {
   margin: 0;
-  font-size: 1.8rem;
+  font-size: 1.85rem;
   font-weight: bold;
   line-height: 1.2;
   text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .cv-headline {
@@ -74,52 +177,51 @@
   white-space: nowrap;
   flex-shrink: 0;
 }
-/* ========================================
-   PROFILE
-======================================== */
 
+/* ========================================
+   PROFILE / SUMMARY
+======================================== */
 .cv-summary {
-  margin-top: 10px;
+  margin-top: 8px;
   text-align: justify;
-  line-height: 1.55;
-  color: #333;
+  line-height: 1.5;
+  color: #222;
 }
-/* ========================================
-   SECTION TITLE
-======================================== */
 
+/* ========================================
+   SECTION TITLE (LaTeX STYLE)
+======================================== */
 .cv-section-title {
   margin: 14px 0 6px 0;
   padding-bottom: 2px;
   border-bottom: 1px solid #000;
   text-transform: uppercase;
   letter-spacing: 1px;
-  font-size: 22px;
+  font-size: 20px;
   font-weight: bold;
   text-align: left;
 }
+
 /* ========================================
    BULLET LIST
 ======================================== */
-
 .bullet-list {
   margin-top: 6px;
-  margin-left: 22px;
+  margin-left: 20px;
 }
 
 .bullet-list li {
-  margin-bottom: 5px;
+  margin-bottom: 4px;
   text-align: justify;
 }
 
 /* ========================================
-   SKILLS
+   SKILLS (CLEAN CATEGORIZATION)
 ======================================== */
-
 .skills-container {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 
 .skill-category {
@@ -130,35 +232,18 @@
 
 .skill-category-title {
   font-weight: 700;
-  width: 140px;
+  width: 150px;
   flex-shrink: 0;
 }
 
 .skill-category-skills {
   flex: 1;
-  color: #333;
+  color: #222;
 }
 
-@media (max-width: 768px) {
-  .cvPreview {
-    width: 100%;
-    padding: 20px 18px;
-    margin: 12px auto;
-  }
-
-  .cv-name {
-    font-size: 1.8rem;
-  }
-
-  .cv-contact {
-    font-size: 13px;
-  }
-
-  .cv-section-title {
-    font-size: 18px;
-  }
-}
-
+/* ========================================
+   ENTRY (WORK, EDUCATION, PROJECTS)
+======================================== */
 .entry {
   margin-bottom: 10px;
 }
@@ -195,7 +280,7 @@
 }
 
 .entry-description {
-  margin: 3px 0 6px;
+  margin: 3px 0 5px;
   color: #333;
 }
 
@@ -204,7 +289,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: 15px;
-  margin: 2px 0 6px;
+  margin: 2px 0 5px;
   color: #444;
 }
 
@@ -218,20 +303,52 @@
   margin-top: 2px;
 }
 
-@media (max-width: 768px) {
-  .entry-header {
-    flex-wrap: wrap;
-    gap: 2px 12px;
-  }
+/* ========================================
+   PREVIEW TOOLBAR
+======================================== */
+.preview-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  width: min(100%, 210mm);
+  margin: 0 auto 12px auto;
+  padding: 8px 14px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+}
 
-  .entry-right {
-    margin-left: auto;
-  }
+.preview-control-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 
-  .education-subrow {
-    flex-wrap: wrap;
-    gap: 2px 12px;
-  }
+.preview-control-label {
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.preview-select {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.preview-toggle-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  color: var(--text-primary);
+  user-select: none;
 }
 
 /* ========================================
@@ -317,13 +434,96 @@
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
 }
 
-.cv-empty-btn:active {
-  transform: translateY(0);
-}
+/* ========================================
+   RESPONSIVE ADJUSTMENTS
+======================================== */
+@media (max-width: 768px) {
+  .cvPreview {
+    width: 100%;
+    padding: 20px 18px;
+    margin: 12px auto;
+  }
 
-@media print {
-  .cvPreview--empty {
-    display: none !important;
+  .cv-name {
+    font-size: 1.6rem;
+  }
+
+  .cv-contact {
+    font-size: 13px;
+  }
+
+  .cv-section-title {
+    font-size: 18px;
+  }
+
+  .entry-header {
+    flex-wrap: wrap;
+    gap: 2px 12px;
+  }
+
+  .entry-right {
+    margin-left: auto;
+  }
+
+  .education-subrow {
+    flex-wrap: wrap;
+    gap: 2px 12px;
+  }
+
+  .preview-controls-bar {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 
+/* ========================================
+   PRINT MEDIA RULES (ATS & PDF EXPORT)
+======================================== */
+@page {
+  size: A4 portrait;
+  margin: 12mm 14mm;
+}
+
+@media print {
+  body {
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .preview-controls-bar,
+  .cv-page-guide,
+  .cv-overflow-warning,
+  .cvPreview--empty,
+  .header-bar,
+  .leftSidebarForm {
+    display: none !important;
+  }
+
+  .cvPreview {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+    color: #000 !important;
+  }
+
+  .cv-section-title {
+    border-bottom: 1px solid #000 !important;
+  }
+
+  .entry,
+  .skill-category,
+  .cv-header {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  .cv-link,
+  .education-subrow a,
+  .cv-header-row a {
+    color: #000 !important;
+    text-decoration: underline !important;
+  }
+}
