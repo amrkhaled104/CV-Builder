@@ -19,6 +19,8 @@ export default function HeaderBar({
   atsScore,
   hasAiKey = false,
   onOpenAiModal,
+  documentTitle = "Resume",
+  isPrintDisabled = false,
 }) {
   const [theme, setTheme] = useState(false);
   const [isFileMenuOpen, setIsFileMenuOpen] = useState(false);
@@ -31,6 +33,7 @@ export default function HeaderBar({
 
   const handlePrint = useReactToPrint({
     contentRef: cvRef,
+    documentTitle,
   });
 
   // Theme effect
@@ -325,7 +328,12 @@ export default function HeaderBar({
           type="button"
           className="btn-header btn-header--primary"
           onClick={handlePrint}
-          title="Export ATS-friendly PDF"
+          disabled={isPrintDisabled}
+          title={
+            isPrintDisabled
+              ? "Add content to your CV before downloading PDF"
+              : "Export ATS-friendly PDF"
+          }
         >
           <svg
             viewBox="0 0 24 24"

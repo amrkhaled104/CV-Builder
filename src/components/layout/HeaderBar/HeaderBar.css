@@ -208,6 +208,14 @@
   transform: scale(0.97);
 }
 
+.btn-header:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: auto;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
 /* ========================================
    SECONDARY OUTLINE BUTTON (Sort, File)
 ======================================== */
