@@ -19,8 +19,9 @@ The layout and design rules are based on [Omar Shawky's Resume Guide](https://om
 
 ## Documentation
 
-Full developer documentation is located in the `docs/` folder:
+Full documentation is located in the `docs/` folder:
 
+- [User Guide](./docs/user-guide.md): Practical guide on how to build and export an ATS-compliant resume.
 - [Documentation Index](./docs/README.md): Hub connecting all guides.
 - [Architecture](./docs/architecture.md): Project structure, state management, storage, and print engine.
 - [Features Guide](./docs/features.md): Overview of all user-facing features and components.

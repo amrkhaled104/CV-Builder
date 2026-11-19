@@ -6,6 +6,7 @@ The goal of this project is to provide a fast, clean tool to build software engi
 
 ## Documentation Index
 
+- [User Guide](./user-guide.md): Practical step-by-step guide on how to build, refine, and export an industry-standard resume.
 - [Architecture](./architecture.md): How the codebase is structured, how state flows from forms to the preview, and how storage works.
 - [Features](./features.md): Overview of all user-facing features and the components that power them.
 - [Resume Rules](./resume-rules.md): The formatting and ATS rules based on Omar Shawky's resume guide that must not be broken when adding features.
