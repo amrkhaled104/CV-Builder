@@ -210,6 +210,13 @@ export function runAtsAudit({
       p.description.split("\n").map((l) => l.trim()).filter(Boolean).forEach((l) => allBulletLines.push(l));
     }
   });
+  customSections.forEach((cs) => {
+    cs.items?.forEach((item) => {
+      if (item.description) {
+        item.description.split("\n").map((l) => l.trim()).filter(Boolean).forEach((l) => allBulletLines.push(l));
+      }
+    });
+  });
 
   if (allBulletLines.length > 0) {
     let strongActionVerbCount = 0;
@@ -223,8 +230,8 @@ export function runAtsAudit({
         strongActionVerbCount++;
       }
 
-      // Check for metrics (% or numbers or metrics like 10k, 2x, etc.)
-      if (/(\d+[%kKxXmM]?|\$[\d,]+|\b[0-9]+(\.[0-9]+)?%)/.test(line)) {
+      // Check for metrics (% or numbers or metrics like 10k, 2x, etc., or X% formula templates)
+      if (/(\d+[%kKxXmM]?|[xX]%|\$[\d,]+|\b[0-9]+(\.[0-9]+)?%)/.test(line)) {
         metricCount++;
       }
     });
