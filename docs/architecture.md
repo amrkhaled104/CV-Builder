@@ -30,7 +30,7 @@ src/
 │       ├── CvReview/          # Live CV preview paper, toolbar, and print styling
 │       ├── FormInput/         # Left sidebar containing all section form components
 │       ├── HeaderBar/         # Top bar: brand logo, File dropdown menu, actions
-│       └── SectionOrderControls/  # Up/down buttons to reorder sections in sort mode
+│       └── SectionOrderControls.tsx # Up/down buttons to reorder sections in sort mode
 ├── data/
 │   └── sampleData.js          # Default sample CV data (engineering focused)
 ├── Forms/                     # Individual form components for each CV section
@@ -160,8 +160,10 @@ PDF export uses `react-to-print` in `src/components/layout/HeaderBar/HeaderBar.j
 - It captures the DOM node referenced by `cvRef` (the `.cvPreview` section).
 - In `src/components/layout/CvReview/CvPreview.css`, the `@media print` query:
   - Hides all application UI (sidebar, header, toolbars, buttons, warnings).
-  - Sets paper size to A4 (`@page { size: A4 portrait; margin: 12mm 14mm; }`).
+  - Sets paper size to A4 with a single clean margin (`@page { size: A4 portrait; margin: 12mm 14mm; }`) and zero redundant `.cvPreview` padding so multi-page resumes maintain proper top/bottom margins on subsequent pages.
   - Sets text color to pure black (`#000000`).
+  - Sets `break-after: avoid; page-break-after: avoid;` on `.cv-section-title` to prevent orphaned headings.
+  - Sets `orphans: 2; widows: 2;` on `.bullet-list li` for clean typographic pagination.
   - Sets `break-inside: avoid` on `.entry` and `.skill-category` so entries are not awkwardly split across pages.
   - Keeps text vector-based and selectable so ATS parsers can read it cleanly.
 
