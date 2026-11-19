@@ -1,11 +1,16 @@
 .entry-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   padding: 16px;
   background: var(--bg-card-subtle, rgba(255, 255, 255, 0.02));
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
+  transition: border-color var(--transition);
+}
+
+.entry-card:hover {
+  border-color: rgba(59, 130, 246, 0.35);
 }
 
 /* ========================================

@@ -57,8 +57,10 @@ export default function GeneralInfo({
       onMoveUp={onMoveUp}
       onMoveDown={onMoveDown}
     >
-      <FormCard title="Personal Information">
-        <InputRow columns={1}>
+      {/* 1. Personal Details */}
+      <div className="form-sub-group">
+        <h3 className="form-sub-heading">Personal Details</h3>
+        <InputRow columns={2}>
           <FormBox label="First Name">
             <input
               type="text"
@@ -76,7 +78,9 @@ export default function GeneralInfo({
               onChange={(e) => handleChange("lastName", e.target.value)}
             />
           </FormBox>
+        </InputRow>
 
+        <InputRow columns={2}>
           <FormBox label="Headline">
             <input
               type="text"
@@ -95,14 +99,16 @@ export default function GeneralInfo({
             />
           </FormBox>
         </InputRow>
-      </FormCard>
+      </div>
 
-      <FormCard title="Contact Information">
-        <InputRow columns={1}>
+      {/* 2. Contact Details */}
+      <div className="form-sub-group">
+        <h3 className="form-sub-heading">Contact Details</h3>
+        <InputRow columns={2}>
           <FormBox label="Email">
             <input
               type="email"
-              placeholder="e.g., X@gmail.com"
+              placeholder="e.g., firstname@gmail.com"
               value={generalInfo.email}
               onChange={(e) => handleChange("email", e.target.value)}
             />
@@ -111,31 +117,38 @@ export default function GeneralInfo({
           <FormBox label="Phone Number">
             <input
               type="tel"
-              placeholder="e.g., +20 1..."
+              placeholder="e.g., +20 123 456 7890"
               value={generalInfo.phone}
               onChange={(e) => handleChange("phone", e.target.value)}
             />
           </FormBox>
         </InputRow>
-      </FormCard>
+      </div>
 
-      <FormCard title="Professional Bio">
-        <FormBox label="Professional Bio">
+      {/* 3. Professional Bio / Summary */}
+      <div className="form-sub-group">
+        <h3 className="form-sub-heading">Professional Bio</h3>
+        <FormBox label="Short Summary">
           <textarea
-            rows={5}
-            placeholder="Short professional summary..."
+            rows={4}
+            placeholder="Write a concise professional summary highlighting your core tech background..."
             value={generalInfo.bio}
             onChange={(e) => handleChange("bio", e.target.value)}
           />
         </FormBox>
-      </FormCard>
+      </div>
 
-      <FormCard title="Links">
+      {/* 4. Links & Profiles */}
+      <div className="form-sub-group">
+        <div className="form-sub-heading-row">
+          <h3 className="form-sub-heading">Links & Profiles</h3>
+        </div>
+
         <DynamicList
           items={generalInfo.links || []}
           renderItem={(link) => (
             <LinkCard key={link.id}>
-              <InputRow>
+              <InputRow columns={2}>
                 <FormBox label="Platform">
                   <select
                     value={link.title}
@@ -143,7 +156,7 @@ export default function GeneralInfo({
                       updateLink(link.id, "title", e.target.value)
                     }
                   >
-                    <option value="">e.g., LinkedIn or GitHub</option>
+                    <option value="">Select Platform</option>
                     <option value="LinkedIn">LinkedIn</option>
                     <option value="GitHub">GitHub</option>
                     <option value="Portfolio">Portfolio</option>
@@ -158,7 +171,7 @@ export default function GeneralInfo({
                 <FormBox label="URL">
                   <input
                     type="url"
-                    placeholder="e.g., linkedin.com/in/username"
+                    placeholder="https://..."
                     value={link.url}
                     onChange={(e) => updateLink(link.id, "url", e.target.value)}
                   />
@@ -180,8 +193,8 @@ export default function GeneralInfo({
 
               <div className="action-buttons right">
                 <ActionButtons
-                  text="×"
-                  variant="icon"
+                  text="× Remove"
+                  variant="link"
                   onClick={() => removeLink(link.id)}
                 />
               </div>
@@ -192,7 +205,7 @@ export default function GeneralInfo({
         <div className="action-buttons left">
           <ActionButtons text="+ Add Link" variant="subtle" onClick={addLink} />
         </div>
-      </FormCard>
+      </div>
     </FormCard>
   );
 }

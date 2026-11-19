@@ -1,14 +1,16 @@
 .FormBox {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
   width: 100%;
 }
 
 .FormLabel {
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-secondary);
+  letter-spacing: 0.01em;
+  user-select: none;
 }
 
 .FormBox input,
@@ -16,22 +18,29 @@
 .FormBox select,
 .skill-item input {
   width: 100%;
-  padding: 10px 14px;
+  padding: 8px 12px;
+  font-family: inherit;
+  font-size: 0.88rem;
+  line-height: 1.45;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  background: var(--bg-input, var(--bg-secondary));
+  background-color: var(--bg-input, var(--bg-secondary));
   color: var(--text-primary);
-  transition: var(--transition);
-  -webkit-transition: var(--transition);
-  -moz-transition: var(--transition);
-  -ms-transition: var(--transition);
-  -o-transition: var(--transition);
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.FormBox input:hover,
+.FormBox textarea:hover,
+.FormBox select:hover,
+.skill-item input:hover {
+  border-color: var(--text-muted);
 }
 
 .FormBox input::placeholder,
 .FormBox textarea::placeholder,
 .skill-item input::placeholder {
   color: var(--placeholder-color);
+  font-size: 0.85rem;
 }
 
 .FormBox input:focus,
@@ -39,6 +48,6 @@
 .FormBox select:focus,
 .skill-item input:focus {
   outline: none;
-  border-color: var(--primary-color);
+  border-color: var(--accent-primary);
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
