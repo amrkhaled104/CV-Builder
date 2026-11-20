@@ -579,3 +579,48 @@ export function exportCvToJson(
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
 }
+
+/**
+ * Imports and validates CV data from a user-uploaded JSON file against the template schema.
+ */
+export function importCvFromJson(file: File): Promise<CvSessionData> {
+  return new Promise((resolve, reject) => {
+    // 1MB file size cap
+    if (file.size > 1024 * 1024) {
+      reject(new Error("File exceeds maximum allowed size of 1MB."));
+      return;
+    }
+
+    // Case-insensitive .json extension check
+    if (!file.name.toLowerCase().endsWith(".json")) {
+      reject(new Error("Please upload a valid .json file."));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const text = (event.target?.result as string) || "";
+        const parsed = JSON.parse(text);
+
+        if (isValidSessionData(parsed)) {
+          resolve(normalizeSessionData(parsed));
+        } else {
+          reject(
+            new Error(
+              "The uploaded JSON file does not match the required CV template. Please make sure your file follows the structure of the downloadable template (File > Download JSON Template).",
+            ),
+          );
+        }
+      } catch {
+        reject(
+          new Error(
+            "Failed to parse JSON file. Please ensure the file is valid JSON and matches the template structure (File > Download JSON Template).",
+          ),
+        );
+      }
+    };
+    reader.onerror = () => reject(new Error("Failed to read the file."));
+    reader.readAsText(file);
+  });
+}
