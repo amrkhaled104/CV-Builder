@@ -550,14 +550,9 @@ function CvPreview({
                             {!educationBullets.length && edu.grade && (
                               <span> (GPA: {edu.grade})</span>
                             )}
-                          </div>
-                          <div className="entry-right">{getDuration(edu)}</div>
-                        </div>
-                        {(edu.subTitle || edu.linkText) && (
-                          <div className="education-subrow">
-                            {edu.subTitle && <span>{edu.subTitle}</span>}
                             {edu.linkText && (
-                              <span>
+                              <>
+                                {" | "}
                                 {edu.linkUrl ? (
                                   <a
                                     href={sanitizeUrl(edu.linkUrl)}
@@ -567,10 +562,16 @@ function CvPreview({
                                     {edu.linkText}
                                   </a>
                                 ) : (
-                                  edu.linkText
+                                  <span>{edu.linkText}</span>
                                 )}
-                              </span>
+                              </>
                             )}
+                          </div>
+                          <div className="entry-right">{getDuration(edu)}</div>
+                        </div>
+                        {edu.subTitle && (
+                          <div className="education-subrow">
+                            <span>{edu.subTitle}</span>
                           </div>
                         )}
                         {educationBullets.length > 0 && (

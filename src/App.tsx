@@ -5,7 +5,6 @@ import FormInputs from "./components/layout/FormInput/FormInputs.jsx";
 import CvPreview from "./components/layout/CvReview/CvPreview.tsx";
 import AtsAuditModal from "./components/layout/AtsAuditModal/AtsAuditModal.tsx";
 import AiKeyModal from "./components/layout/AiKeyModal/AiKeyModal.tsx";
-import ImportGuideModal from "./components/layout/ImportGuideModal/ImportGuideModal.tsx";
 import { hasAiKey } from "./utils/aiKeyStorage";
 import { useSectionOrder } from "./hooks/useSectionOrder";
 import { useCustomSections } from "./hooks/useCustomSections";
@@ -16,6 +15,7 @@ import {
   loadSessionFromStorage,
   hasSavedSessionInStorage,
   exportCvToJson,
+  importCvFromJson,
   type CvSessionData,
   type GeneralInfo,
   type EducationItem,
@@ -23,7 +23,6 @@ import {
   type ProjectItem,
   type SkillCategory,
 } from "./utils/storage";
-import { importCvFromJson, type ImportCvError } from "./utils/schemaAdapter";
 import { downloadCvTemplateJson } from "./utils/schemaTemplate";
 import { runAtsAudit } from "./utils/atsLinter";
 
@@ -35,9 +34,6 @@ function App() {
   const [isSavedRecently, setIsSavedRecently] = useState(false);
   const [isAtsModalOpen, setIsAtsModalOpen] = useState(false);
   const [isAiModalOpen, setIsAiModalOpen] = useState(false);
-  const [isImportGuideOpen, setIsImportGuideOpen] = useState(false);
-  const [importErrorMsg, setImportErrorMsg] = useState("");
-  const [failedRawJson, setFailedRawJson] = useState("");
   const [hasKey, setHasKey] = useState(() => hasAiKey());
 
   const {
@@ -189,31 +185,23 @@ function App() {
     });
   }
 
-  function applyImportedData(data: CvSessionData) {
-    if (data.generalInfo) setGeneralInfo(data.generalInfo);
-    if (data.educationList) setEducationList(data.educationList);
-    if (data.workList) setWorkList(data.workList);
-    if (data.projectList) setProjectList(data.projectList);
-    if (data.skillList) setSkillList(data.skillList);
-    if (data.customSections) setCustomSections(data.customSections);
-    if (data.sectionOrder) setSectionOrder(data.sectionOrder);
-    setHasSavedDraft(true);
-  }
-
   async function handleImportJson(file: File) {
     try {
-      const result = await importCvFromJson(file);
-      applyImportedData(result.data);
-      alert(
-        result.detectedSchema
-          ? `CV data imported successfully! (${result.detectedSchema})`
-          : "CV data imported successfully!",
-      );
+      const data = await importCvFromJson(file);
+      if (data.generalInfo) setGeneralInfo(data.generalInfo);
+      if (data.educationList) setEducationList(data.educationList);
+      if (data.workList) setWorkList(data.workList);
+      if (data.projectList) setProjectList(data.projectList);
+      if (data.skillList) setSkillList(data.skillList);
+      if (data.customSections) setCustomSections(data.customSections);
+      if (data.sectionOrder) setSectionOrder(data.sectionOrder);
+      setHasSavedDraft(true);
+      alert("CV data imported successfully!");
     } catch (err: unknown) {
-      const error = err as ImportCvError;
-      setImportErrorMsg(error.message || "Failed to import CV JSON.");
-      setFailedRawJson(error.rawText || "");
-      setIsImportGuideOpen(true);
+      alert(
+        (err as Error).message ||
+        "The uploaded file does not match the CV template. Please make sure your file matches the template from File > Download JSON Template.",
+      );
     }
   }
 
@@ -236,11 +224,11 @@ function App() {
     );
     const hasHeader = Boolean(
       hasName ||
-        generalInfo.email?.trim() ||
-        generalInfo.phone?.trim() ||
-        generalInfo.headline?.trim() ||
-        generalInfo.bio?.trim() ||
-        generalInfo.links?.some((l) => l.url?.trim()),
+      generalInfo.email?.trim() ||
+      generalInfo.phone?.trim() ||
+      generalInfo.headline?.trim() ||
+      generalInfo.bio?.trim() ||
+      generalInfo.links?.some((l) => l.url?.trim()),
     );
     const hasEducation = educationList.some(
       (e) => e.schoolName?.trim() || e.study?.trim(),
@@ -358,19 +346,6 @@ function App() {
         isOpen={isAiModalOpen}
         onClose={() => setIsAiModalOpen(false)}
         onKeyUpdated={(status) => setHasKey(status)}
-      />
-
-      <ImportGuideModal
-        isOpen={isImportGuideOpen}
-        onClose={() => setIsImportGuideOpen(false)}
-        errorMessage={importErrorMsg}
-        rawJsonContent={failedRawJson}
-        hasAiKey={hasKey}
-        onOpenAiKeyModal={() => setIsAiModalOpen(true)}
-        onImportSuccess={(data) => {
-          applyImportedData(data);
-          alert("CV data translated and imported successfully!");
-        }}
       />
     </>
   );
