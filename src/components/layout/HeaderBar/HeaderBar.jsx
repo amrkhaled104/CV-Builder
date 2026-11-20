@@ -15,6 +15,7 @@ export default function HeaderBar({
   onToggleReordering,
   onExportJson,
   onImportJson,
+  onDownloadTemplate,
   onOpenAtsModal,
   atsScore,
   hasAiKey = false,
@@ -207,7 +208,12 @@ export default function HeaderBar({
                 type="button"
                 className="file-menu-item"
                 role="menuitem"
-                onClick={() => fileInputRef.current?.click()}
+                onClick={() => {
+                  if (fileInputRef.current) {
+                    fileInputRef.current.value = "";
+                    fileInputRef.current.click();
+                  }
+                }}
               >
                 <svg
                   viewBox="0 0 24 24"
@@ -224,6 +230,30 @@ export default function HeaderBar({
                   <line x1="12" y1="3" x2="12" y2="15" />
                 </svg>
                 <span>Import JSON</span>
+              </button>
+
+              <button
+                type="button"
+                className="file-menu-item"
+                role="menuitem"
+                onClick={() => handleActionClick(onDownloadTemplate)}
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="16"
+                  height="16"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                  <line x1="12" y1="18" x2="12" y2="12" />
+                  <polyline points="9 15 12 18 15 15" />
+                </svg>
+                <span>Download JSON Template</span>
               </button>
 
               <div className="file-menu-divider" />
@@ -287,10 +317,9 @@ export default function HeaderBar({
           type="button"
           className="btn-header btn-header--ats"
           onClick={onOpenAtsModal}
-          title="Open ATS & Formatting Audit"
+          title="Open Rules & Formatting Audit"
         >
-          <span className="ats-dot" aria-hidden="true" />
-          <span>ATS {atsScore !== undefined ? `${atsScore}%` : "Audit"}</span>
+          <span>Rules {atsScore !== undefined ? `${atsScore}%` : "Audit"}</span>
         </button>
 
         <button

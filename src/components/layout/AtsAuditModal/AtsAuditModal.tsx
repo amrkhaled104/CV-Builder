@@ -38,7 +38,7 @@ export default function AtsAuditModal({
         <div className="ats-modal-header">
           <div className="ats-modal-title-wrap">
             <h2 id="ats-audit-title" className="ats-modal-title">
-              ATS & Guide Audit
+              Rules & Formatting Audit
             </h2>
             <span className={`ats-score-badge ${scoreBadgeClass}`}>
               {score} / 100
