@@ -200,7 +200,7 @@ function App() {
     } catch (err: unknown) {
       alert(
         (err as Error).message ||
-          "The uploaded file does not match the CV template. Please make sure your file matches the template from File > Download JSON Template.",
+        "The uploaded file does not match the CV template. Please make sure your file matches the template from File > Download JSON Template.",
       );
     }
   }
@@ -224,11 +224,11 @@ function App() {
     );
     const hasHeader = Boolean(
       hasName ||
-        generalInfo.email?.trim() ||
-        generalInfo.phone?.trim() ||
-        generalInfo.headline?.trim() ||
-        generalInfo.bio?.trim() ||
-        generalInfo.links?.some((l) => l.url?.trim()),
+      generalInfo.email?.trim() ||
+      generalInfo.phone?.trim() ||
+      generalInfo.headline?.trim() ||
+      generalInfo.bio?.trim() ||
+      generalInfo.links?.some((l) => l.url?.trim()),
     );
     const hasEducation = educationList.some(
       (e) => e.schoolName?.trim() || e.study?.trim(),
