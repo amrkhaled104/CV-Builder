@@ -4,7 +4,7 @@ export function createSampleData() {
   const generalInfo = {
     firstName: "Amr",
     lastName: "Khaled",
-    headline: "Software Engineer | Distributed Systems & Web Platforms",
+    headline: "Software Engineer",
     location: "Cairo, Egypt",
     email: "amr.khaled@example.com",
     phone: "+20 101 234 5678",
@@ -51,7 +51,7 @@ export function createSampleData() {
       grade: "",
       subTitle:
         "Completed rigorous coursework equivalent to a full undergraduate CS curriculum from Stanford and UW.",
-      linkText: "Curriculum Verification",
+      linkText: "Curriculum",
       linkUrl: "https://github.com/ossu/computer-science",
       bullets:
         "Coursework: Advanced Algorithms, Software Architecture, Distributed Systems Engineering",
