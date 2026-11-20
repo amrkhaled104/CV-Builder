@@ -301,6 +301,19 @@ export function runAtsAudit({
     });
   }
 
+  const hasAnyContent = Boolean(
+    fullName ||
+      generalInfo.email?.trim() ||
+      generalInfo.phone?.trim() ||
+      validWorkCount > 0 ||
+      validProjectsCount > 0 ||
+      validEducationCount > 0 ||
+      validSkillsCount > 0 ||
+      customSections.some((cs) =>
+        cs.items?.some((i) => i.title?.trim() || i.description?.trim()),
+      ),
+  );
+
   // 3. Proofreading & Punctuation (Joel Spolsky Rule: space after comma)
   const allTexts: string[] = [
     generalInfo.bio || "",
@@ -331,7 +344,7 @@ export function runAtsAudit({
       recommendation:
         "Joel Spolsky notes: 'Always put a space after a comma'. Consistent punctuation prevents hiring managers from hitting delete.",
     });
-  } else {
+  } else if (hasAnyContent) {
     issues.push({
       id: "proofreading-comma-space",
       type: "success",
@@ -489,8 +502,10 @@ export function runAtsAudit({
   const warningCount = issues.filter((i) => i.type === "warning").length;
   const passedCount = issues.filter((i) => i.type === "success").length;
 
-  let score = 100 - errorCount * 25 - warningCount * 10;
-  if (score < 20) score = 20;
+  let score = 0;
+  if (hasAnyContent) {
+    score = Math.max(0, Math.min(100, 100 - errorCount * 25 - warningCount * 10));
+  }
 
   return {
     score,
