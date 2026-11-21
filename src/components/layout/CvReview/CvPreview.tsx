@@ -125,18 +125,55 @@ function CvPreview({
     const el = internalRef.current;
     if (!el) return;
 
-    // Check if height exceeds ~297mm (approx 1120px at 96dpi)
+    // Check if height exceeds the printable page 1 threshold
     const checkOverflow = () => {
-      // 297mm in pixels at 96 DPI is ~1122px
-      const a4HeightPx = 1122;
-      setIsOverflowing(el.scrollHeight > a4HeightPx);
+      const guideLine = el.querySelector(".cv-page-guide") as HTMLElement | null;
+      // Printable boundary in pixels from top of cvPreview
+      const guideTop = guideLine
+        ? guideLine.offsetTop
+        : density === "compact"
+        ? 1095
+        : density === "spacious"
+        ? 1107
+        : 1101;
+
+      const contentChildren = Array.from(el.children).filter(
+        (c) =>
+          !c.classList.contains("cv-page-guide") &&
+          (c as HTMLElement).offsetHeight > 0
+      ) as HTMLElement[];
+
+      if (contentChildren.length === 0) {
+        setIsOverflowing(false);
+        return;
+      }
+
+      const lastChild = contentChildren[contentChildren.length - 1];
+      const bottomPadding =
+        density === "compact" ? 18 : density === "spacious" ? 30 : 24;
+      const contentBottom = Math.max(
+        lastChild.offsetTop + lastChild.offsetHeight,
+        el.scrollHeight - bottomPadding
+      );
+
+      setIsOverflowing(contentBottom > guideTop);
     };
 
     checkOverflow();
     const observer = new ResizeObserver(checkOverflow);
     observer.observe(el);
     return () => observer.disconnect();
-  }, [generalInfo, educationList, workList, projectList, skillList, customSections, sections, density, font]);
+  }, [
+    generalInfo,
+    educationList,
+    workList,
+    projectList,
+    skillList,
+    customSections,
+    sections,
+    density,
+    font,
+  ]);
 
   function formatDate(date: string) {
     if (!date) return "";

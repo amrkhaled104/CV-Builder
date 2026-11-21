@@ -9,7 +9,7 @@
   width: min(100%, 210mm);
   min-width: 0;
   margin: 14px auto 30px auto;
-  padding: 28px 36px;
+  padding: 24px 38px;
   background: #fff;
   color: #111;
   font-size: 14px;
@@ -43,13 +43,13 @@
    DENSITY PRESETS (To help achieve 1 page)
 ======================================== */
 .cvPreview.density-compact {
-  padding: 22px 30px;
+  padding: 18px 38px;
   font-size: 13px;
   line-height: 1.32;
 }
 
 .cvPreview.density-compact .cv-header {
-  margin-bottom: 10px;
+  margin-bottom: 7px;
 }
 
 .cvPreview.density-compact .cv-name {
@@ -57,24 +57,24 @@
 }
 
 .cvPreview.density-compact .cv-section-title {
-  margin: 10px 0 4px 0;
+  margin: 7px 0 3px 0;
   font-size: 18px;
 }
 
 .cvPreview.density-compact .entry {
-  margin-bottom: 7px;
+  margin-bottom: 5px;
 }
 
 .cvPreview.density-compact .bullet-list {
-  margin-top: 3px;
+  margin-top: 2px;
 }
 
 .cvPreview.density-compact .bullet-list li {
-  margin-bottom: 3px;
+  margin-bottom: 2px;
 }
 
 .cvPreview.density-spacious {
-  padding: 34px 40px;
+  padding: 30px 38px;
   font-size: 14.5px;
   line-height: 1.5;
 }
@@ -90,14 +90,22 @@
   position: absolute;
   left: 0;
   right: 0;
-  top: 297mm;
-  /* Standard A4 height */
+  top: 291mm;
+  /* Standard A4 printable height limit */
   border-top: 2px dashed #ef4444;
   pointer-events: none;
   z-index: 50;
   display: flex;
   justify-content: flex-end;
   padding-right: 12px;
+}
+
+.cvPreview.density-compact .cv-page-guide {
+  top: 290mm;
+}
+
+.cvPreview.density-spacious .cv-page-guide {
+  top: 293mm;
 }
 
 .cv-page-guide-badge {
@@ -581,7 +589,12 @@
     page-break-after: avoid !important;
   }
 
-  .entry,
+  .entry-header {
+    break-after: avoid !important;
+    page-break-after: avoid !important;
+  }
+
+  .bullet-list li,
   .skill-category,
   .cv-header {
     break-inside: avoid !important;
