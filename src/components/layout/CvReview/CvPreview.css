@@ -512,13 +512,15 @@
 ======================================== */
 @page {
   size: A4 portrait;
-  margin: 12mm 14mm;
+  margin: 6mm 10mm;
 }
 
 @media print {
   body {
     background: #fff !important;
     color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
 
   .preview-controls-bar,
@@ -542,6 +544,35 @@
     box-shadow: none !important;
     background: #fff !important;
     color: #000 !important;
+  }
+
+  .cvPreview .cv-header {
+    margin-top: 0 !important;
+    margin-bottom: 10px !important;
+  }
+
+  .cvPreview .cv-name {
+    margin-top: 0 !important;
+  }
+
+  .cvPreview.density-compact .cv-header {
+    margin-bottom: 7px !important;
+  }
+
+  .cvPreview.density-compact .cv-section-title {
+    margin: 7px 0 3px 0 !important;
+  }
+
+  .cvPreview.density-compact .entry {
+    margin-bottom: 5px !important;
+  }
+
+  .cvPreview.density-compact .bullet-list {
+    margin-top: 2px !important;
+  }
+
+  .cvPreview.density-compact .bullet-list li {
+    margin-bottom: 2px !important;
   }
 
   .cv-section-title {
