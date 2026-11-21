@@ -35,6 +35,27 @@ export default function HeaderBar({
   const handlePrint = useReactToPrint({
     contentRef: cvRef,
     documentTitle,
+    pageStyle: `
+      @page {
+        size: A4 portrait;
+        margin: 0mm;
+      }
+      @media print {
+        body {
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+          margin: 0 !important;
+          padding: 0 !important;
+        }
+        .cvPreview {
+          padding: 12mm 14mm !important;
+          margin: 0 !important;
+          box-sizing: border-box !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
+      }
+    `,
   });
 
   // Theme effect
