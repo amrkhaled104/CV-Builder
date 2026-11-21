@@ -512,17 +512,13 @@
 ======================================== */
 @page {
   size: A4 portrait;
-  margin: 0;
+  margin: 12mm 14mm;
 }
 
 @media print {
   body {
     background: #fff !important;
     color: #000 !important;
-    -webkit-print-color-adjust: exact !important;
-    print-color-adjust: exact !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 
   .preview-controls-bar,
@@ -537,10 +533,8 @@
   .cvPreview {
     width: 100% !important;
     max-width: 100% !important;
-    min-height: auto !important;
     margin: 0 !important;
-    padding: 12mm 14mm !important;
-    box-sizing: border-box !important;
+    padding: 0 !important;
     box-shadow: none !important;
     background: #fff !important;
     color: #000 !important;
