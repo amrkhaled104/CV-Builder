@@ -447,8 +447,8 @@ function CvPreview({
       >
         {/* Page 1 Guide line */}
         {showPageGuide && (
-          <div className="cv-page-guide" aria-hidden="true">
-            <span className="cv-page-guide-badge">Page 1 Limit (A4)</span>
+          <div className="cv-page-guide no-print" aria-hidden="true">
+            <span className="cv-page-guide-badge no-print">Page 1 Limit (A4)</span>
           </div>
         )}
 

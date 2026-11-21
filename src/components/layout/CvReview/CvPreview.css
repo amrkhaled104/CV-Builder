@@ -523,11 +523,15 @@
 
   .preview-controls-bar,
   .cv-page-guide,
+  .cv-page-guide-badge,
   .page-limit-pill,
   .cvPreview--empty,
   .header-bar,
-  .leftSidebarForm {
+  .leftSidebarForm,
+  .no-print {
     display: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
   }
 
   .cvPreview {
